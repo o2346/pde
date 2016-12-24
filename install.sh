@@ -35,21 +35,21 @@ sudo chown -R -v $USER ~/.ansible
 sudo apt install -y git
 
 cd ~/Downloads
-git clone http://github.com/whateverjp/cm
+git clone http://github.com/whateverjp/pde
 
 # switch playbook for master or test
 while getopts "de" OPT ; do
   case $OPT in
     d)  echo Branch: Develop
-        cd ~/Downloads/cm
+        cd ~/Downloads/pde
         git checkout develop
-        cd ~/Downloads/cm/pde/$OSDIR
+        cd ~/Downloads/pde/$OSDIR
         sh ansible.sh
         ;;
     e)  echo Branch: Develop
-        cd ~/Downloads/cm
+        cd ~/Downloads/pde
         git checkout develop
-        cd ~/Downloads/cm/pde/$OSDIR
+        cd ~/Downloads/pde/$OSDIR
         sh ansible.sh -e
         ;;
   esac
@@ -58,8 +58,8 @@ done
 # without arguments
 if [ $# -eq 0 ] ; then
   echo Branch: Master
-  sh ~/Downloads/cm/pde/$OSDIR/ansible.sh
-  rm -rf ~/Downloads/cm
+  sh ~/Downloads/pde/$OSDIR/ansible.sh
+  rm -rf ~/Downloads/pde
 fi
 
 # TODO for automatic switch by distro, command below would helpful
