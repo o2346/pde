@@ -62,5 +62,3 @@ if [ $# -eq 0 ] ; then
   rm -rf ~/Downloads/pde
 fi
 
-# TODO for automatic switch by distro, command below would helpful
-# lsb_release -a
