@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=firefox
+Comment=firefox start
+Exec=/usr/bin/firefox
+Terminal=false
+Type=Application
+

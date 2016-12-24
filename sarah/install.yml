@@ -1,0 +1,278 @@
+---
+- hosts: localhost
+  vars:
+    nodesetup: /tmp/node_setup.sh
+  become: no
+  tasks:
+
+#
+# Dotfiles
+#
+  - name: download dotfiles
+    git:
+      repo: https://gist.githubusercontent.com/whateverjp/f43ec7ea2687697cc1ad
+      dest: ~/.dotfiles
+  - name: deploy dotfiles
+    command: sh ~/.dotfiles/deploy.sh
+  - name: .vimperator option files
+    git:
+      repo: https://github.com/whateverjp/.vimperator
+      dest: ~/.vimperator
+  - name: copy .tmux.pd.conf
+    copy: >
+      src=./.tmux.pd.conf
+      dest=~/
+
+#
+# Desktop Themes
+#
+  - name: create ~/.themes directory if it doesn't exist
+    file:
+      path: ~/.themes
+      state: directory
+      mode: 0755
+  - name: desktop themes
+    unarchive: src={{ item }} dest=~/.themes copy=no
+    with_items:
+      # BlackMint
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/IQ3Q-WIFH-A9V3.zip
+      # Hacktivist 1.4
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/5UKU-H6JI-G3O6.zip
+      # Mint-X-Dark
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/8ZA5-UIX7-QXJ7.zip
+      # mint-x-mod
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/JBT7-9J4S-EAUH.zip
+      # Mint-Y-Gray
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/M9WI-K8ME-QKAK.zip
+      # Mint-Y-Yltra-Dark
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/PH79-PQF1-TYRD.zip
+      # Silk
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/YXTN-WFOX-R7ZC.zip
+      # Mint Y Dark Blue
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/W24H-LL4V-VPK7.zip
+      # Modern Mint Dark 1
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/AELJ-LXG0-O7NW.zip
+      # Loki Transparent Dark 1.1
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/L051-KB55-OTNG.zip
+
+#
+# Scripts
+#
+  - name: copy scrpts to /usr/local/bin
+    copy: >
+      src=./bin/
+      dest=/usr/local/bin
+      mode=755
+    become: true
+
+#
+# fcitx mozc
+#
+  - name: install ime, fcitx mozc
+    apt: name={{ item }} state=installed update_cache=yes install_recommends=yes
+    with_items:
+      - fcitx
+      - fcitx-mozc
+    become: true
+  - name: set fcitx as default, restarting is required
+    command: im-config -n fcitx
+
+#
+# Node.js Preinstallation
+#
+  - name: download preinstaller of nodejs
+    get_url:
+      url: https://deb.nodesource.com/setup_7.x
+      dest: "{{nodesetup}}"
+      mode: 0665
+  - name: preinstall nodejs
+    command: bash -E "{{nodesetup}}"
+    become: true
+    notify: delete node_setup
+
+#
+# main apps
+#
+  - name: uninstall packages
+    apt: name={{ item }} state=absent
+    with_items:
+      - ufw
+    become: true
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - vim-gnome
+      - emacs
+      - nodejs
+      - awscli
+      - htop
+      - nkf
+      - tmux
+      - xsel
+# https://sites.google.com/site/linuxnomemo/mint-use/virtualbox
+      - virtualbox
+      - virtualbox-qt
+      - virtualbox-dkms
+      - virtualbox-guest-additions-iso
+      - fontforge
+      - fonts-ricty-diminished
+      - fonts-migmix
+      - filezilla
+      - keepassx
+      - vlc
+      - zsh
+      - ffmpeg
+      - mp3splt
+      - wine
+      - tig
+      - chromium-browser
+      - clang #for NeoBundle
+      - ssh
+      - firewall-applet #replacement of ufw
+    become: true
+
+#
+# npm Global Problem fix
+# https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory
+#
+  - name: create Directory for global installation
+    file:
+      path: ~/.npm-global
+      state: directory
+      mode: 0755
+  - name: set directory of npm
+    command: npm config set prefix '~/.npm-global'
+  - name: path for global npm
+    lineinfile:
+      dest: ~/.profile
+      line: 'export PATH=~/.npm-global/bin:$PATH'
+  - name: source ~/.profile
+    shell: source ~/.profile | bash
+
+#
+# eslint
+#
+  - name: Install "eslint" node.js package globally.
+    npm:
+      name: eslint
+      global: yes
+
+#
+# NeoBundle
+#
+  - name: NeoBundle
+    shell: curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | bash
+
+#
+# vagrant
+#
+  - name: download Vagrant deb pack file with check (sh256sum)
+    get_url:
+      url: https://releases.hashicorp.com/vagrant/1.8.7/vagrant_1.8.7_x86_64.deb
+      dest: /home/{{ansible_user_id}}/Downloads/vagrant_1.8.7_x86_64.deb
+      sha256sum: 10c77b643b73dd3ad7a45a89d8ab95b58b79dc10e0cf6e760fe24abc436b2fdb
+      force: no
+    become: true
+  - name: Install vagrant from a deb package
+    apt:
+      deb: /home/{{ansible_user_id}}/Downloads/vagrant_1.8.7_x86_64.deb
+    become: true
+
+#
+# Onedrive client Install
+# https://memo.laughk.org/2016/12/22/0000.html
+# https://github.com/skilion/onedrive
+#
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      # https://ubuntuforums.org/showthread.php?t=1774516
+      - libcurl4-gnutls-dev
+      #- libcurl-dev
+      - libsqlite3-dev
+    become: true
+  - name: download for Onedrive
+    get_url:
+      url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
+      dest: /etc/apt/sources.list.d/d-apt.list
+    become: true
+  - name: apt-key add for Onedrive
+    apt_key:
+      url: "http://dlang.org/d-keyring.gpg"
+      state: present
+    become: true
+  - name: Run the equivalent of "apt-get update" as a separate step
+    apt:
+      update_cache: yes
+    become: true
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest allow_unauthenticated=yes
+    with_items:
+      - dmd-bin
+    become: true
+  - name: clone Onedrive
+    git:
+      repo: https://github.com/skilion/onedrive
+      dest: ~/Downloads/onedrive
+  - name: make all
+    make:
+      chdir: ~/Downloads/onedrive
+      target: ~/Downloads/onedrive/Makefile
+  - name: make install
+    command: make install
+    args:
+      chdir: /home/{{ansible_user_id}}/Downloads/onedrive
+    become: true
+  - name: create ~/.config/onedrive directory if it doesn't exist
+    file:
+      path: ~/.config/onedrive
+      state: directory
+      mode: 0755
+  - name: copy onedrive.conf
+    copy: >
+      src=/usr/local/etc/onedrive.conf
+      dest=~/.config/onedrive/config
+  - name: systemd onedrive enabled
+    command: systemctl --user enable onedrive
+  - name: systemd onedrive start
+    command: systemctl --user start onedrive
+
+#
+# misc Settings
+#
+  - name: zsh for login shell
+    user: name={{ansible_user_id}} shell=/bin/zsh
+    become: true
+  - name: copy autostart
+    copy: >
+      src=./autostart/
+      dest=~/.config/autostart
+
+#
+# FireWall Settings
+# http://linuxbsdos.com/2015/12/07/first-thing-to-do-after-installing-linux-mint-17-3/
+#
+  - name: start firewalld
+    service: name=firewalld state=running enabled=yes
+    become: true
+
+#
+# SSH Settings
+#
+  - name: Disallow root SSH access
+    lineinfile: dest=/etc/ssh/sshd_config
+              regexp="^PermitRootLogin"
+              line="PermitRootLogin no"
+              state=present
+    notify: restart ssh
+    become: true
+
+  handlers:
+  - name: restart ssh
+    service: name=sshd state=restarted
+    become: true
+  - name: delete node_setup
+    file:
+      name: "{{nodesetup}}"
+      state: absent
+
