@@ -62,7 +62,7 @@ done
 # without arguments
 if [ $# -eq 0 ] ; then
   echo Branch: Master
-  sh ~/Downloads/pde/$OSDIR/ansible.sh
-  rm -rf ~/Downloads/pde
+  cd ~/Downloads/pde/$OSDIR
+  sh ansible.sh
 fi
 
