@@ -35,7 +35,7 @@ PDE(Personalized Development Environment) is system configration for my work.
 **[WARNING]** This may be cause of Destruction of your environment since the provisioner will run administratively.  
 Use disposable machine such as VM.
 ```
-curl https://raw.githubusercontent.com/whateverjp/pde/install.sh | bash
+curl https://raw.githubusercontent.com/whateverjp/pde/master/install.sh | bash
 ```
 
 ## TODO After Provisioning
