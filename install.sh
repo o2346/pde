@@ -1,6 +1,10 @@
 #!/bin/bash
 
 getlinuxdir () {
+  # https://pc.casey.jp/archives/153904527
+  # doesn't work by command sh
+  # /bin/sh -> dash problem
+  # shell Syntax error: ( unexpected (expecting })
   declare -A dir
   dir=(["sarah"]="Sarah")
 
