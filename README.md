@@ -230,6 +230,7 @@ xinput --set-prop "Kensington Kensington Slimblade Trackball" "Device Accel Cons
 |mp3splt|||
 |imageMagick||installed|
 |dotfiles||original|
+|whois|||
 |~~sysv-rc-conf~~|||
 |~~diff-pdf~~|||
 |~~reattach-to-user-namespace~~|||
