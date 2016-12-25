@@ -129,6 +129,7 @@
       - clang #for NeoBundle
       - ssh
       - firewall-applet #replacement of ufw
+      - whois
     become: true
 
 #
