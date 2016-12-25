@@ -89,7 +89,22 @@ File Menu > Edit > Profile Preferenses > [As I like]
 * vmware player comes with GUI installer so It's likely NOT automatable  
 * download `.bundle` from
   * https://my.vmware.com/jp/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0
+    * main application
+  * https://my.vmware.com/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0|PLAYER-1200|drivers_tools
+    * SDK for enable vmrun command
+      *https://communities.vmware.com/thread/521189?start=0&tstart=0
 * run `sudo sh VMxxxx.bundle`
+
+#### CUI
+
+* `vmrun -T player start /path/vm.vmx`
+  * http://askubuntu.com/questions/342552/vmware-vix-vmrun-command-error-unable-to-connect-to-host-version-not-found
+
+### virtualbox
+
+#### CUI
+
+* `virtualbox startvm /path/hoge.vbox`
 
 ## Why I made this
 
@@ -104,7 +119,7 @@ File Menu > Edit > Profile Preferenses > [As I like]
 
 * Run on homebuilt computer
 * No [Vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in), Proprietary Free
-* Esey to switch Dark theme of Desktop
+* Easy to switch Dark theme of Desktop
   * Bright background colors are too hard for eyes
 * Friendly for Infrastructure as Code
 * Testable on VM
