@@ -248,13 +248,13 @@ xinput --set-prop "Kensington Kensington Slimblade Trackball" "Device Accel Cons
 
 Development mode. Checkout Branch "Develop" and play normal playbook
 ```
-wget https://raw.githubusercontent.com/whateverjp/pde/install.sh
-sh install.sh -d
+wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
+bash install.sh -d
 ```
 
 Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will played)
 ```
-wget https://raw.githubusercontent.com/whateverjp/pde/install.sh
-sh install.sh -e
+wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
+bash install.sh -e
 ```
 
