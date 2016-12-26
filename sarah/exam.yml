@@ -4,56 +4,10 @@
     nodesetup: /tmp/node_setup.sh
   become: no
   tasks:
-
-  - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - libcurl4-gnutls-dev
-      #- libcurl-dev
-      - libsqlite3-dev
-    become: true
-  - name: download for Onedrive
-    get_url:
-      url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
-      dest: /etc/apt/sources.list.d/d-apt.list
-    become: true
-  - name: apt-key add for Onedrive
-    apt_key:
-      url: "http://dlang.org/d-keyring.gpg"
-      state: present
-    become: true
-  - name: Run the equivalent of "apt-get update" as a separate step
-    apt:
-      update_cache: yes
-    become: true
-  - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest allow_unauthenticated=yes
-    with_items:
-      - dmd-bin
-    become: true
-  - name: clone Onedrive
-    git:
-      repo: https://github.com/skilion/onedrive
-      dest: ~/Downloads/onedrive
-  - name: make all
-    make:
-      chdir: ~/Downloads/onedrive
-      target: ~/Downloads/onedrive/Makefile
-  - name: make install
-    command: make install
-    args:
-      chdir: /home/{{ansible_user_id}}/Downloads/onedrive
-    become: true
-  - name: create ~/.config/onedrive directory if it doesn't exist
-    file:
-      path: ~/.config/onedrive
-      state: directory
-      mode: 0755
-  - name: copy onedrive.conf
+  - name: copy autostart
     copy: >
-      src=/usr/local/etc/onedrive.conf
-      dest=~/.config/onedrive/config
-  - name: systemd onedrive enabled
-    command: systemctl --user enable onedrive
-  - name: systemd onedrive start
-    command: systemctl --user start onedrive
+      src=./sources.list
+      dest=/etc/apt/sources.list
+      mode=0644
+    become: yes
+
