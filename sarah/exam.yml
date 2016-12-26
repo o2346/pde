@@ -4,7 +4,7 @@
     nodesetup: /tmp/node_setup.sh
   become: no
   tasks:
-  - name: copy autostart
+  - name: apt source list
     copy: >
       src=./sources.list
       dest=/etc/apt/sources.list
