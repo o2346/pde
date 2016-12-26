@@ -66,6 +66,16 @@
     become: true
 
 #
+# apt
+#
+  - name: apt source list
+    copy: >
+      src=./sources.list
+      dest=/etc/apt/sources.list
+      mode=0644
+    become: yes
+
+#
 # fcitx mozc
 #
   - name: install ime, fcitx mozc
@@ -266,6 +276,15 @@
               line="PermitRootLogin no"
               state=present
     notify: restart ssh
+    become: true
+
+#
+# dist-upgrade, autoremove
+#
+  - name: Update all packages to the latest version
+    apt:
+      upgrade: dist
+      autoremove: yes
     become: true
 
   handlers:
