@@ -258,3 +258,6 @@ wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
 bash install.sh -e
 ```
 
+## Thanks to
+
+* [Ubuntu Sources List Generator](https://repogen.simplylinux.ch/)
