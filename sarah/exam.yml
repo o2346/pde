@@ -4,56 +4,34 @@
     nodesetup: /tmp/node_setup.sh
   become: no
   tasks:
-
-  - name: install packages
+#cd /media/sf_pde/sarah
+#
+# Network Manager disable
+# http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired
+#
+  - name: disable service network-manager
+    service: name=network-manager state=stopped enabled=no
+    become: true
+# OS will break becouse of this
+# - name: uninstall packages
+#   apt: name={{ item }} state=absent
+#   with_items:
+#     - network-manager
+#   become: true
+  - name: add "{{ansible_user_id}}" into group netdev
+    user:
+      name: "{{ansible_user_id}}"
+      groups: netdev
+      append: yes
+    become: true
+  - name: install package wicd
     apt: name={{ item }} update_cache=yes state=latest
     with_items:
-      - libcurl4-gnutls-dev
-      #- libcurl-dev
-      - libsqlite3-dev
+      - wicd
     become: true
-  - name: download for Onedrive
-    get_url:
-      url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
-      dest: /etc/apt/sources.list.d/d-apt.list
+#
+# wicd Settings
+#
+  - name: start wicd
+    service: name=wicd state=running enabled=yes
     become: true
-  - name: apt-key add for Onedrive
-    apt_key:
-      url: "http://dlang.org/d-keyring.gpg"
-      state: present
-    become: true
-  - name: Run the equivalent of "apt-get update" as a separate step
-    apt:
-      update_cache: yes
-    become: true
-  - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest allow_unauthenticated=yes
-    with_items:
-      - dmd-bin
-    become: true
-  - name: clone Onedrive
-    git:
-      repo: https://github.com/skilion/onedrive
-      dest: ~/Downloads/onedrive
-  - name: make all
-    make:
-      chdir: ~/Downloads/onedrive
-      target: ~/Downloads/onedrive/Makefile
-  - name: make install
-    command: make install
-    args:
-      chdir: /home/{{ansible_user_id}}/Downloads/onedrive
-    become: true
-  - name: create ~/.config/onedrive directory if it doesn't exist
-    file:
-      path: ~/.config/onedrive
-      state: directory
-      mode: 0755
-  - name: copy onedrive.conf
-    copy: >
-      src=/usr/local/etc/onedrive.conf
-      dest=~/.config/onedrive/config
-  - name: systemd onedrive enabled
-    command: systemctl --user enable onedrive
-  - name: systemd onedrive start
-    command: systemctl --user start onedrive
