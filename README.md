@@ -1,6 +1,7 @@
 # PDE
 
 PDE(Personalized Development Environment) is system configration for my work.
+"P" in PDE may also stand for _"Provisioner of -"_.
 
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
@@ -32,11 +33,37 @@ PDE(Personalized Development Environment) is system configration for my work.
 
 1. Cleanly install Operating System any of shown above
 1. Run command shown below  
-**[WARNING]** This may be cause of Destruction of your environment since the provisioner will run administratively.  
-Use disposable machine such as VM.
+**[WARNING]** _This may be cause of Destruction of your environment since the provisioner will run administratively.  
+Use disposable machine such as VM_
 ```
 curl https://raw.githubusercontent.com/whateverjp/pde/master/install.sh | bash
 ```
+
+## Why I made this
+
+* Because I wanted my Development Environment disposable.
+* Every machines may crash unexpectedly. And no time to play with such crap.
+  * Totally new one should be brought immediately, reconstructed by Extremely Easy way.
+  * NO instance dependency
+* Nowadays VMs, auto-deployment tools are modern technology
+  * They do not has to be only for server machines though.
+* When my own PC comes with UNIX-like system, why not to do it.
+
+## Why Linux
+
+* Run on homebuilt computer
+* No [Vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in), Proprietary Free
+* Easy to switch Dark theme of Desktop
+  * Bright background colors are too hard for eyes
+* Friendly for Infrastructure as Code
+* Can be sandbox on VM
+* I'm totally tired of Windows. It suck.
+  + No Thanks
+  + virtualization is available if needed
+* I'm little tired of Mac also even if it was better than Windows.
+  + It forcibly asks like AppleID and password, "yes" or whatever at every turn such as lisence agreement or upgrade something etc.
+  + AppleID dependency
+  + Hardware lock-in
 
 ## TODO After Provisioning
 
@@ -54,12 +81,13 @@ The way of automation is not found yet for tasks shown below
 |ghosty|plugin||
 |octotree|plugin||
 
-### Set `` Alt+` `` to Toggle input method
+### Map `` Alt+` `` to Toggle input method
 
 * Sytem Preferenses > Keyboard > Shortcuts > General > Cycle through open windows of the same application > Keyboard Bindings
 * Set `` Super+\` ``
 
-It appears as unassigned, but likely set into `` Alt+` `` at default and conflicts.
+[Why do this]  
+`Cycle through open windows of the same application` appears as unassigned by default, but likely mapped into `` Alt+` ``  and conflicts.
 
 ### fcitx/Mozc
 
@@ -67,8 +95,6 @@ It appears as unassigned, but likely set into `` Alt+` `` at default and conflic
 Right Click Keyboard icon in taskbar > Configure > Input Method > + > mozc
 Right Click Keyboard icon in taskbar > Configure > Global Config > Trigger Input Method > Alt+`
 ```
-
-If IME doesn't work properly, reboot
 
 ### Gnome Terminal
 
@@ -86,52 +112,33 @@ File Menu > Edit > Profile Preferenses > [As I like]
 
 ### VMware
 
-* vmware player comes with GUI installer so It's likely NOT automatable  
+* Unfortunately vmware player comes with GUI installer
 * download `.bundle` from
   * https://my.vmware.com/jp/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0
     * main application
   * https://my.vmware.com/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0|PLAYER-1200|drivers_tools
-    * SDK for enable vmrun command
+    * SDK for enable `vmrun` command
       *https://communities.vmware.com/thread/521189?start=0&tstart=0
 * run `sudo sh VMxxxx.bundle`
 
-#### CUI
+#### Start VM over CUI
 
 * `vmrun -T player start /path/vm.vmx`
   * http://askubuntu.com/questions/342552/vmware-vix-vmrun-command-error-unable-to-connect-to-host-version-not-found
 
 ### virtualbox
 
-#### CUI
+#### Installation
+
+* Included in provisioner
+
+#### Start VM over CUI
 
 * `virtualbox startvm /path/hoge.vbox`
 
-## Why I made this
+## Slimblade Trackball Configration
 
-* Because I wanted my Development Environment disposable.
-* It need to be reconstructed by Extremely Easy way.
-* Every machines may crash unexpectedly. And no time to play with such crap.
-* When problem occurs at system, totally new one should be brought immediately.
-* Nowadays VM and auto-deployment is modern philosophy. That does not has to be just for server machines though.
-* There is no reason to hesitate automation of my own PC carries UNIX-like system.
-
-## Why Linux
-
-* Run on homebuilt computer
-* No [Vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in), Proprietary Free
-* Easy to switch Dark theme of Desktop
-  * Bright background colors are too hard for eyes
-* Friendly for Infrastructure as Code
-* Testable on VM
-* I'm totally tired of Windows. It suck.
-  + No Thanks
-  + virtualization is available if needed
-* I'm little tired of Mac also even if it was better than Windows.
-  + It forcibly asks like AppleID and password, "yes" or whatever at every turn such as lisence agreement or upgrade something etc.
-  + AppleID dependency
-  + Hardware lock-in
-
-## Slimblade Trackball
+Already included in provisioning, just for note below
 
 * check behaveior of devices
 ```
@@ -253,7 +260,7 @@ wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
 bash install.sh -d
 ```
 
-Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will played)
+Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will be played)
 ```
 wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
 bash install.sh -e
