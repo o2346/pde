@@ -20,7 +20,7 @@ PDE(Personalized Development Environment) is system configration for my work.
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Version</td>
-<td bgcolor="#FFFFFF" valign="top">1.0</td>
+<td bgcolor="#FFFFFF" valign="top">1.0.1</td>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Written in</td>
@@ -206,6 +206,7 @@ xinput --set-prop "Kensington Kensington Slimblade Trackball" "Device Accel Cons
 
 |Name|Kind|Misc|
 |----|----|----|
+|apt||Sites located in Japan are listed as closer ones on @sources.list@|
 |git|||
 |ansible|||
 |vim|||
