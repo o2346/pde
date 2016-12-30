@@ -6,6 +6,37 @@
   tasks:
 
 #
+# Network Manager disable
+# http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired
+#
+  - name: disable service network-manager
+    service: name=network-manager state=stopped enabled=no
+    become: true
+# OS will break becouse of this
+# - name: uninstall packages
+#   apt: name={{ item }} state=absent
+#   with_items:
+#     - network-manager
+#   become: true
+  - name: add "{{ansible_user_id}}" into group netdev
+    user:
+      name: "{{ansible_user_id}}"
+      groups: netdev
+      append: yes
+    become: true
+  - name: install package wicd
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - wicd
+    become: true
+#
+# wicd Settings
+#
+  - name: start wicd
+    service: name=wicd state=running enabled=yes
+    become: true
+
+#
 # Dotfiles
 #
   - name: download dotfiles
@@ -130,6 +161,7 @@
       - filezilla
       - keepassx
       - vlc
+      - k3b
       - zsh
       - ffmpeg
       - mp3splt
@@ -140,6 +172,8 @@
       - ssh
       - firewall-applet #replacement of ufw
       - whois
+      - exfat-fuse
+      - exfat-utils
     become: true
 
 #
