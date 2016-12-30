@@ -311,6 +311,12 @@
               state=present
     notify: restart ssh
     become: true
+  - name: create ~/.ssh directory if it doesn't exist
+    file:
+      path: ~/.ssh
+      state: directory
+      mode: 0755
+
 
 #
 # dist-upgrade, autoremove

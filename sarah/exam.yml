@@ -4,9 +4,9 @@
     nodesetup: /tmp/node_setup.sh
   become: no
   tasks:
-  - name: install package
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - exfat-fuse
-      - exfat-utils
-    become: true
+  - name: create ~/.ssh directory if it doesn't exist
+    file:
+      path: ~/.ssh
+      state: directory
+      mode: 0755
+
