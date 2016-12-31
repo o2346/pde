@@ -4,6 +4,9 @@
     nodesetup: /tmp/node_setup.sh
     gituser: hoge
     gitemail: hoge@fuga.email
+    font: 'MigMix 1M 16'
+    font_monospace: 'Ricty Diminished Regular 15'
+    font_titlebar: 'Migu 2M Bold 14'
   become: no
   tasks:
 
@@ -335,6 +338,20 @@
     command: git config --global user.email "{{ gituser }}"
   - name: git config email in global
     command: git config --global user.name "{{ gitemail }}"
+
+#
+# Fonts
+#
+  - name: Fonts for Default
+    command: gsettings set org.cinnamon.desktop.interface font-name "{{ font }}"
+  - name: Fonts for Desktop
+    command: gsettings set org.nemo.desktop font "{{ font }}"
+  - name: Fonts for Document
+    command: gsettings set org.gnome.desktop.interface document-font-name "{{ font }}"
+  - name: Fonts for monospace
+    command: gsettings set org.gnome.desktop.interface monospace-font-name "{{ font_monospace }}"
+  - name: Fonts for Window Titlebar
+    command: gsettings set org.cinnamon.desktop.wm.preferences titlebar-font "{{ font_titlebar }}"
 
   handlers:
   - name: restart ssh
