@@ -2,6 +2,8 @@
 - hosts: localhost
   vars:
     nodesetup: /tmp/node_setup.sh
+    gituser: hoge
+    gitemail: hoge@fuga.email
   become: no
   tasks:
 
@@ -317,7 +319,6 @@
       state: directory
       mode: 0755
 
-
 #
 # dist-upgrade, autoremove
 #
@@ -326,6 +327,14 @@
       upgrade: dist
       autoremove: yes
     become: true
+
+#
+# git configuration
+#
+  - name: git config username in global
+    command: git config --global user.email "{{ gituser }}"
+  - name: git config email in global
+    command: git config --global user.name "{{ gitemail }}"
 
   handlers:
   - name: restart ssh

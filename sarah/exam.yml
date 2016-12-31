@@ -2,11 +2,12 @@
 - hosts: localhost
   vars:
     nodesetup: /tmp/node_setup.sh
+    gituser: hoge
+    gitemail: hoge@fuga.email
   become: no
   tasks:
-  - name: create ~/.ssh directory if it doesn't exist
-    file:
-      path: ~/.ssh
-      state: directory
-      mode: 0755
+  - name: git config username in global
+    command: git config --global user.email "{{ gituser }}"
+  - name: git config email in global
+    command: git config --global user.name "{{ gitemail }}"
 
