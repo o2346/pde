@@ -1,0 +1,24 @@
+{
+  "webkit": {
+    "webprefs": {
+      "default_fixed_font_size": 17,
+      "default_font_size": 20,
+      "fonts": {
+        "fixed": {
+          "Zyyy": "MigMix 1M"
+        },
+        "sansserif": {
+          "Zyyy": "MigMix 1M"
+        },
+        "serif": {
+          "Zyyy": "MigMix 1M"
+        },
+        "standard": {
+          "Zyyy": "MigMix 1M"
+        }
+      },
+      "minimum_font_size": 16,
+      "minimum_logical_font_size": 16
+    }
+  }
+}

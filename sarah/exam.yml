@@ -1,29 +1,18 @@
 ---
 - hosts: localhost
   vars:
-    theme_window_borders: 'Mint-X-Dark'
-    theme_icons: 'gnome'
-    theme_controls: 'Mint-Y-Dark-Blue'
-    theme_mouse_pointer: 'DMZ-White'
-    theme_desktop: 'Modern Mint Dark'
   become: no
   tasks:
 #
-# Desktop Themes
+# Chomium setting ( gave up )
+# Preferences file is overwridden at startup and no way found to prevent
 #
-  - name: create ~/.themes directory if it doesn't exist
-    file:
-      path: ~/.themes
-      state: directory
-      mode: 0755
-  - name: Theme - Window borders
-    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
-  - name: Theme - Icons
-    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
-  - name: Theme - Controls
-    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
-  - name: Theme - Mouse Pointer
-    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
-  - name: Theme - Desktop
-    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
+# A file shown below is likely the target
+# ~/.config/chromium/Default/Preferences
+# The file would be installed with Chromium itself. It exists right after installation of Chomium.
+# - name: Chromium Setting - modify JSON by node
+#   command: node src/chromium.js
 
+# gnome terminal setting ( gave up, doesn't work )
+# gsettings list-recursively | grep -i org.gnome.Terminal
+# ~/.gconf/apps/gnome-terminal/profiles
