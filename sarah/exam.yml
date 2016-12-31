@@ -4,10 +4,21 @@
     nodesetup: /tmp/node_setup.sh
     gituser: hoge
     gitemail: hoge@fuga.email
+    font: 'MigMix 1M 16'
   become: no
   tasks:
-  - name: git config username in global
-    command: git config --global user.email "{{ gituser }}"
-  - name: git config email in global
-    command: git config --global user.name "{{ gitemail }}"
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - fonts-ricty-diminished
+      - fonts-migmix
+    become: true
+
+#
+# Fonts
+#
+  - name: Fonts for Default
+    command: gsettings set org.cinnamon.desktop.interface font-name "{{ font }}"
+  - name: Fonts for Desktop
+    command: gsettings set org.nemo.desktop font "{{ font }}"
 
