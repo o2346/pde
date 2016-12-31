@@ -78,6 +78,7 @@ The way of automation is not found yet for tasks shown below
 |dark theme|theme, darken|find any|
 |vimp|plugin||
 |abyss|vimp style|provisioner included|
+|[ft-deepdark](https://addons.mozilla.org/ja/firefox/addon/ft-deepdark/)|firefox theme|darken preferences page|
 |ghosty|plugin||
 |octotree|plugin||
 
@@ -188,7 +189,7 @@ xinput set-button-map "Kensington Kensington Slimblade Trackball" 3 3 1 5 4 6 7 
 
 * make slower mouse pointer. Default is too fast
 ```
-xinput --set-prop "Kensington Kensington Slimblade Trackball" "Device Accel Constant Deceleration" 5
+xinput --set-prop "Kensington Kensington Slimblade Trackball" "Device Accel Constant Deceleration" 4
 ```
   * http://superuser.com/questions/864646/how-to-make-the-mouse-movement-slower-in-linux-mint-rebecca
 
@@ -252,6 +253,10 @@ xinput --set-prop "Kensington Kensington Slimblade Trackball" "Device Accel Cons
 |~~macdown~~|||
 |~~atom~~|||
 
+## Customizing System Themes and Fonts
+
+* Provisioner Included
+
 ## Usase for development of playbook( Mint 18 Sarah )
 
 Development mode. Checkout Branch "Develop" and play normal playbook
@@ -269,3 +274,6 @@ bash install.sh -e
 ## Thanks to
 
 * [Ubuntu Sources List Generator](https://repogen.simplylinux.ch/)
+* [gsettings sample](https://github.com/teofilcojocariu/Linux-Mint-17-Init/blob/master/run/4-user.sh)
+* [How do I restart Cinnamon from the tty?](http://askubuntu.com/questions/143838/how-do-i-restart-cinnamon-from-the-tty)
+

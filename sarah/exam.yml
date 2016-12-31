@@ -6,6 +6,7 @@
 #
 # Chomium setting ( gave up )
 # Preferences file is overwridden at startup and no way found to prevent
+# related? https://wiki.archlinux.org/index.php/Chromium/Tips_and_tricks#Chromium_overrides.2Foverwrites_Preferences_file
 #
 # A file shown below is likely the target
 # ~/.config/chromium/Default/Preferences
