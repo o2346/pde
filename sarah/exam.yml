@@ -1,29 +1,29 @@
 ---
 - hosts: localhost
   vars:
-    font: 'MigMix 1M 16'
-    font_monospace: 'Ricty Diminished Regular 15'
-    font_titlebar: 'Migu 2M Bold 14'
+    theme_window_borders: 'Mint-X-Dark'
+    theme_icons: 'gnome'
+    theme_controls: 'Mint-Y-Dark-Blue'
+    theme_mouse_pointer: 'DMZ-White'
+    theme_desktop: 'Modern Mint Dark'
   become: no
   tasks:
-  - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - fonts-ricty-diminished
-      - fonts-migmix
-    become: true
-
 #
-# Fonts
+# Desktop Themes
 #
-  - name: Fonts for Default
-    command: gsettings set org.cinnamon.desktop.interface font-name "{{ font }}"
-  - name: Fonts for Desktop
-    command: gsettings set org.nemo.desktop font "{{ font }}"
-  - name: Fonts for Document
-    command: gsettings set org.gnome.desktop.interface document-font-name "{{ font }}"
-  - name: Fonts for monospace
-    command: gsettings set org.gnome.desktop.interface monospace-font-name "{{ font_monospace }}"
-  - name: Fonts for Window Titlebar
-    command: gsettings set org.cinnamon.desktop.wm.preferences titlebar-font "{{ font_titlebar }}"
+  - name: create ~/.themes directory if it doesn't exist
+    file:
+      path: ~/.themes
+      state: directory
+      mode: 0755
+  - name: Theme - Window borders
+    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
+  - name: Theme - Icons
+    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
+  - name: Theme - Controls
+    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
+  - name: Theme - Mouse Pointer
+    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
+  - name: Theme - Desktop
+    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
 

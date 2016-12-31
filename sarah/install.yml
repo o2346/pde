@@ -7,6 +7,11 @@
     font: 'MigMix 1M 16'
     font_monospace: 'Ricty Diminished Regular 15'
     font_titlebar: 'Migu 2M Bold 14'
+    theme_window_borders: 'Mint-X-Dark'
+    theme_icons: 'gnome'
+    theme_controls: 'Mint-Y-Dark-Blue'
+    theme_mouse_pointer: 'DMZ-White'
+    theme_desktop: 'Modern Mint Dark'
   become: no
   tasks:
 
@@ -82,14 +87,22 @@
       - https://cinnamon-spices.linuxmint.com/uploads/themes/M9WI-K8ME-QKAK.zip
       # Mint-Y-Yltra-Dark
       - https://cinnamon-spices.linuxmint.com/uploads/themes/PH79-PQF1-TYRD.zip
-      # Silk
-      - https://cinnamon-spices.linuxmint.com/uploads/themes/YXTN-WFOX-R7ZC.zip
       # Mint Y Dark Blue
       - https://cinnamon-spices.linuxmint.com/uploads/themes/W24H-LL4V-VPK7.zip
       # Modern Mint Dark 1
       - https://cinnamon-spices.linuxmint.com/uploads/themes/AELJ-LXG0-O7NW.zip
       # Loki Transparent Dark 1.1
       - https://cinnamon-spices.linuxmint.com/uploads/themes/L051-KB55-OTNG.zip
+  - name: Theme - Window borders
+    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
+  - name: Theme - Icons
+    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
+  - name: Theme - Controls
+    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
+  - name: Theme - Mouse Pointer
+    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
+  - name: Theme - Desktop
+    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
 
 #
 # Scripts
