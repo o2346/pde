@@ -12,6 +12,8 @@
     theme_controls: 'Mint-Y-Dark-Blue'
     theme_mouse_pointer: 'DMZ-White'
     theme_desktop: 'Modern Mint Dark'
+    monitorix: monitorix_3.9.0-izzy1_all.deb
+    downloads: /home/{{ansible_user_id}}/Downloads
   become: no
   tasks:
 
@@ -391,6 +393,41 @@
       name: "{{ansible_user_id}}"
       groups: vboxusers
       append: yes
+    become: true
+
+#
+# Monitorix
+#
+# Works without installation of libs listed below despite official instruction
+# http://www.monitorix.org/doc-debian.html
+# - name: install packages
+#   apt: name={{ item }} update_cache=yes state=latest
+#   with_items:
+#     - rrdtool
+#     - perl
+#     - libwww-perl
+#     - libmailtools-perl
+#     - libmime-lite-perl
+#     - librrds-perl
+#     - libdbi-perl
+#     - libxml-simple-perl
+#     - libhttp-server-simple-perl
+#     - libconfig-general-perl
+#     - libio-socket-ssl-perl
+#   become: true
+  - name: download Monitorix deb pack file with check (sh256sum)
+    get_url: >-
+      url=http://www.monitorix.org/{{ monitorix }}
+      dest={{ downloads }}/{{ monitorix }}
+      sha256sum=1020cdfed78edc33d4877df87f0d0f09246b1ccd54f9e2d7a7b0a83220be84a4
+      force=no
+    become: true
+  - name: Install Monitorix from a deb package
+    apt: >-
+      deb={{ downloads }}/{{ monitorix }}
+    become: true
+  - name: start monitorix
+    service: name=monitorix state=running enabled=yes
     become: true
 
   handlers:
