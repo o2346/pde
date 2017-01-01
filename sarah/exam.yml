@@ -3,15 +3,23 @@
   vars:
   become: no
   tasks:
-#
-# Virtualbox setting
-#
-  - name: add "{{ansible_user_id}}" into group netdev
-    user:
-      name: "{{ansible_user_id}}"
-      groups: vboxusers
-      append: yes
-    become: true
+  - name: list themes
+    command: ls ~/.themes
+    register: themes
+#  - name: debug result var
+#    debug: var=themes
+  - name: font size
+    replace: >-
+      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+      regexp='font-size.+$'
+      replace='font-size: 12pt;'
+    with_items: themes.stdout_lines
+  - name: font family
+    replace: >-
+      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+      regexp='font-family.+$'
+      replace='font-family: MigMix 1C;'
+    with_items: themes.stdout_lines
 #
 # Chomium setting ( gave up )
 # Preferences file is overwridden at startup and no way found to prevent
