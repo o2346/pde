@@ -366,6 +366,16 @@
   - name: Fonts for Window Titlebar
     command: gsettings set org.cinnamon.desktop.wm.preferences titlebar-font "{{ font_titlebar }}"
 
+#
+# Virtualbox setting
+#
+  - name: add "{{ansible_user_id}}" into group netdev
+    user:
+      name: "{{ansible_user_id}}"
+      groups: vboxusers
+      append: yes
+    become: true
+
   handlers:
   - name: restart ssh
     service: name=sshd state=restarted

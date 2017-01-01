@@ -4,6 +4,15 @@
   become: no
   tasks:
 #
+# Virtualbox setting
+#
+  - name: add "{{ansible_user_id}}" into group netdev
+    user:
+      name: "{{ansible_user_id}}"
+      groups: vboxusers
+      append: yes
+    become: true
+#
 # Chomium setting ( gave up )
 # Preferences file is overwridden at startup and no way found to prevent
 # related? https://wiki.archlinux.org/index.php/Chromium/Tips_and_tricks#Chromium_overrides.2Foverwrites_Preferences_file
