@@ -111,6 +111,10 @@ File Menu > Edit > Profile Preferenses > [As I like]
 |Change Colors|plugin||
 |Download Master|plugin||
 
+### How to Get rid of the login keyring password
+
+https://community.linuxmint.com/tutorial/view/916
+
 ### VMware
 
 * Unfortunately vmware player comes with GUI installer
