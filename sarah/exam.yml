@@ -41,10 +41,6 @@
       replace='font-family: MigMix 1C;'
     with_items: themes.stdout_lines
 
-# TODO Make active window font punctuate
-# https://www.google.co.jp/search?safe=off&num=16&q=mint+active+window+cinnamon+-matome.naver.jp+-cookpad.com+-itpro.nikkeibp.co.jp+-rakuten.co.jp+-weblio.jp
-# It requires to modify cinnamon.css and a little complicated
-
 #
 # Chomium setting ( gave up )
 # Preferences file is overwridden at startup and no way found to prevent
