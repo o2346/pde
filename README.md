@@ -146,6 +146,18 @@ https://community.linuxmint.com/tutorial/view/916
 
 * `virtualbox startvm /path/hoge.vbox`
 
+#### Enable Shared Folder and clipboard on guest Mint
+
+1. Menu > VMWare Tools someting
+1. Installer will be shown in guest
+1. Extract VMwareTools.x.x.x-xxxx.tar.gz to someware
+1. Directory `vmware-tools-distrib` will appear
+1. `cd /pathto/vmware-tools-distrib`
+1. `sudo ./vmware-install.pl -d`
+1. `sudo apt -y install open-vm-tools`
+1. `sudo apt -y install open-vm-tools-desktop`
+1. `sudo shutdown -r now`
+
 ## Slimblade Trackball Configration
 
 Already included in provisioning, just for note below
