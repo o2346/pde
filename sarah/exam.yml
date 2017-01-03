@@ -3,26 +3,47 @@
   vars:
     monitorix: monitorix_3.9.0-izzy1_all.deb
     downloads: /home/{{ansible_user_id}}/Downloads
+    theme_window_borders: 'mint-x-mod'
+    theme_icons: 'oxygen'
+    theme_controls: 'Mint-Y-Dark-Blue'
+    theme_mouse_pointer: 'DMZ-White'
+    theme_desktop: 'Modern Mint Dark'
   become: no
   tasks:
-  - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - chromium-browser
-    become: true
-  - name: copy autostart
-    copy: >
-      src=./autostart/
-      dest=~/.config/autostart
+#
+# Desktop Themes
+#
+  - name: Theme - Window borders
+    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
+  - name: Theme - Icons
+    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
+  - name: Theme - Controls
+    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
+  - name: Theme - Mouse Pointer
+    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
+  - name: Theme - Desktop
+    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
+  - name: list themes
+    command: ls ~/.themes
+    register: themes
+#  - name: debug result var
+#    debug: var=themes
+  - name: font size
+    replace: >-
+      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+      regexp='font-size.+$'
+      replace='font-size: 12pt;'
+    with_items: themes.stdout_lines
+  - name: font family
+    replace: >-
+      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+      regexp='font-family.+$'
+      replace='font-family: MigMix 1C;'
+    with_items: themes.stdout_lines
 
-#
-# Get rid of the keyring, annoying
-#
-  - name: Get rid of the keyring, annoying
-    apt: name={{ item }} state=absent
-    with_items:
-      - gnome-keyring
-    become: true
+# TODO Make active window font punctuate
+# https://www.google.co.jp/search?safe=off&num=16&q=mint+active+window+cinnamon+-matome.naver.jp+-cookpad.com+-itpro.nikkeibp.co.jp+-rakuten.co.jp+-weblio.jp
+# It requires to modify cinnamon.css and a little complicated
 
 #
 # Chomium setting ( gave up )
