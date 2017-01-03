@@ -430,6 +430,15 @@
     service: name=monitorix state=running enabled=yes
     become: true
 
+#
+# Get rid of the keyring, annoying
+#
+  - name: Get rid of the keyring, annoying
+    apt: name={{ item }} state=absent
+    with_items:
+      - gnome-keyring
+    become: true
+
   handlers:
   - name: restart ssh
     service: name=sshd state=restarted

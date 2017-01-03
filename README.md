@@ -111,9 +111,14 @@ File Menu > Edit > Profile Preferenses > [As I like]
 |Change Colors|plugin||
 |Download Master|plugin||
 
-### How to Get rid of the login keyring password
+## How to Get rid of the login keyring password
 
 https://community.linuxmint.com/tutorial/view/916
+
+* The instruction shown above requires GUI unfortunately
+* For Substitution,
+  * `sudo apt remove gnome-keyring`
+  * Already written in playbook and it works
 
 ### VMware
 
@@ -213,6 +218,15 @@ xinput --set-prop "Kensington Kensington Slimblade Trackball" "Device Accel Cons
   * https://ubuntuforums.org/showthread.php?t=1530652
   * http://askubuntu.com/questions/457815/how-can-i-run-a-sh-script-targeting-x11-settings-on-login
   * https://www.xmisao.com/2013/04/24/cron-reboot-implementations.html
+
+## How to Get rid of the login keyring password
+
+https://community.linuxmint.com/tutorial/view/916
+
+* The instruction shown above requires GUI unfortunately
+* For Substitution,
+  * `sudo apt remove gnome-keyring`
+  * Already written in playbook and it works
 
 ## List of Tools
 
