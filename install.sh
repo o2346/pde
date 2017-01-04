@@ -1,5 +1,36 @@
 #!/bin/bash
 
+vmx() {
+  echo vmx called
+}
+
+
+vbox() {
+  echo vbox called
+}
+
+
+vmopt() {
+  VBOX=`ls /dev | grep vbox`
+  VMX=`ls /dev | grep vmci`
+
+  if [ -n "$VBOX" -a -n "$VMX" ]; then
+    echo "[ERROR] this is likely a host machine. abort"
+    return 1
+  fi
+
+  if [ -n "$VBOX" ]; then
+    vbox
+    return 0
+  fi
+
+  if [ -n "$VMX" ]; then
+    vmx
+    return 0
+  fi
+
+}
+
 getlinuxdir () {
   # https://pc.casey.jp/archives/153904527
   # doesn't work by command sh
@@ -27,6 +58,15 @@ getosdir () {
     return "$(expr substr $(uname -s) 1 10)"
   fi
 }
+
+while getopts "v" OPT ; do
+  case $OPT in
+    v)  echo Virtual Machine Optimization mode
+        vmopt
+        ;;
+  esac
+  exit 0
+done
 
 OSDIR=`getosdir`
 USER=`whoami`
