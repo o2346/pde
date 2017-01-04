@@ -30,37 +30,33 @@ getosdir () {
 }
 
 vmx() {
-  echo "[Hypervisor Detection] Seemed to be running on VMware Player, proceeding..."
+  echo "[Hypervisor Detection] $1 is the one virtualizes this machine. proceeding..."
   sh `getosdir`/guest/vmware.sh
 }
 
-
 vbox() {
-  echo "[Hypervisor Detection] Virtualbox is the one virtualizes this machine. proceeding..."
+  echo "[Hypervisor Detection] $1 is the one virtualizes this machine. proceeding..."
   sh `getosdir`/guest/virtualbox.sh
 }
 
-
 vmopt() {
-  VBOX=`ls /dev | grep vbox`
-  VMX=`ls /dev | grep vmci`
+  HYPERV=`sudo dmidecode -s system-product-name`
 
-  if [ -n "$VBOX" -a -n "$VMX" ]; then
-    echo "[ERROR] this is likely a host machine. abort"
-    return 1
-  fi
-
-  if [ -n "$VBOX" ]; then
-    vbox
+  if [ "$HYPERV" = "VirtualBox" ]; then
+    vbox $HYPERV
     return 0
   fi
 
-  if [ -n "$VMX" ]; then
-    vmx
+  if [ "$HYPERV" = "VMware Virtual Platform" ]; then
+    vmx $HYPERV
     return 0
   fi
+
+  echo "[ERROR] This machine likely has none of Hypervisor. abort"
+  return 1
 
 }
+
 while getopts "v" OPT ; do
   case $OPT in
     v)  echo Virtual Machine Optimization mode
