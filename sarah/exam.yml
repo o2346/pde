@@ -1,45 +1,18 @@
 ---
 - hosts: localhost
   vars:
-    monitorix: monitorix_3.9.0-izzy1_all.deb
-    downloads: /home/{{ansible_user_id}}/Downloads
-    theme_window_borders: 'mint-x-mod'
-    theme_icons: 'oxygen'
-    theme_controls: 'Mint-Y-Dark-Blue'
-    theme_mouse_pointer: 'DMZ-White'
-    theme_desktop: 'Modern Mint Dark'
   become: no
   tasks:
+
 #
-# Desktop Themes
+# Dotfiles
 #
-  - name: Theme - Window borders
-    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
-  - name: Theme - Icons
-    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
-  - name: Theme - Controls
-    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
-  - name: Theme - Mouse Pointer
-    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
-  - name: Theme - Desktop
-    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
-  - name: list themes
-    command: ls ~/.themes
-    register: themes
-#  - name: debug result var
-#    debug: var=themes
-  - name: font size
-    replace: >-
-      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
-      regexp='font-size.+$'
-      replace='font-size: 12pt;'
-    with_items: themes.stdout_lines
-  - name: font family
-    replace: >-
-      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
-      regexp='font-family.+$'
-      replace='font-family: MigMix 1C;'
-    with_items: themes.stdout_lines
+  - name: download dotfiles
+    git:
+      repo: https://gist.githubusercontent.com/whateverjp/f43ec7ea2687697cc1ad
+      dest: ~/Documents/.dotfiles
+  - name: deploy dotfiles
+    command: sh ~/Documents/.dotfiles/deploy.sh
 
 #
 # Chomium setting ( gave up )

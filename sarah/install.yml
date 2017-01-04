@@ -96,9 +96,9 @@
   - name: download dotfiles
     git:
       repo: https://gist.githubusercontent.com/whateverjp/f43ec7ea2687697cc1ad
-      dest: ~/.dotfiles
+      dest: ~/Documents/.dotfiles
   - name: deploy dotfiles
-    command: sh ~/.dotfiles/deploy.sh
+    command: sh ~/Documents/.dotfiles/deploy.sh
   - name: .vimperator option files
     git:
       repo: https://github.com/whateverjp/.vimperator
