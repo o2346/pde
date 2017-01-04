@@ -29,9 +29,31 @@ PDE(Personalized Development Environment) is system configration for my work.
 </tr>
 </table>
 
+## What is this
+
+Automatic provisioning of a Personal Computer like [Server provisioning](https://en.wikipedia.org/wiki/Provisioning#Server_provisioning) as main function.  
+Secondary Guest Operating System setup helper. Use of Guest is a sandbox in order to develop PDE itself.
+
+* Provisioner
+  * [install packages](#list_of_tools)
+  * remove packages that unnecessary([example](#remove_keyring)) or malfunction([example](http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired))
+  * configure settings
+    * desktop themes
+    * fonts
+    * [trackball behaveior](#trackball)
+  * dotfiles
+* Guest OS setup helper
+  * for example, install VMware Tool to enable sharing options
+  * VMware Workstation Player and VirtualBox are supported
+  * Hypervisor detection. Automatically find witch virtualization software provides current OS then run appropreate script
+
+* Some other tasks required to be automated but still in progress, is indicated in [TODO-list](#todo)
+
 ## Usase
 
-1. Cleanly install Operating System any of shown above
+### Provisoner
+
+1. Install Operating System any of listed above
 1. Run command shown below  
 **[WARNING]** _This may be cause of Destruction of your environment since the provisioner will run administratively.  
 Use disposable machine such as VM_
@@ -39,33 +61,53 @@ Use disposable machine such as VM_
 curl https://raw.githubusercontent.com/whateverjp/pde/master/install.sh | bash
 ```
 
+### Guest OS setup helper
+
+```
+wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
+bash install.sh -v
+```
+
+### for development of playbook( Mint 18 Sarah )
+
+Development mode. Checkout Branch "Develop" and play normal playbook
+```
+wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
+bash install.sh -d
+```
+
+Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will be played instead of normal playbook)
+```
+wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
+bash install.sh -e
+```
+
 ## Why I made this
 
-* Because I wanted my Development Environment disposable.
+* Because I wanted my development environment disposable.
 * Every machines may crash unexpectedly. And no time to play with such crap.
   * Totally new one should be brought immediately, reconstructed by Extremely Easy way.
-  * NO instance dependency
-* Nowadays VMs, auto-deployment tools are modern technology
+  * no instance dependency
+* Nowadays virtualization and auto-deployment tool things are modern technology
   * They do not has to be only for server machines though.
-* When my own PC comes with UNIX-like system, why not to do it.
+* When my own PC comes with UNIX-like system, why not to do it
 
-## Why Linux
+## Why Linux instead of Windows/macOS
 
-* Run on homebuilt computer
+* Friendly with Infrastructure as Code
 * No [Vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in), Proprietary Free
-* Easy to switch Dark theme of Desktop
-  * Bright background colors are too hard for eyes
-* Friendly for Infrastructure as Code
-* Can be sandbox on VM
+* Run on both homebuilt computer and VM
+* UNIX-like
 * I'm totally tired of Windows. It suck.
   + No Thanks
   + virtualization is available if needed
-* I'm little tired of Mac also even if it was better than Windows.
-  + It forcibly asks like AppleID and password, "yes" or whatever at every turn such as lisence agreement or upgrade something etc.
+* I'm little tired of Mac even if it was better than Windows
+  + It forcibly asks like AppleID and password, press "yes" or whatever at every turn such as lisence agreement or upgrade something etc.
+  + many popups to force restart or ask something like moron. Annoying
   + AppleID dependency
   + Hardware lock-in
 
-## TODO After Provisioning
+## <a name="todo"> TODO - Tasks requires Manual Operation
 
 The way of automation is not found yet for tasks shown below
 
@@ -74,10 +116,9 @@ The way of automation is not found yet for tasks shown below
 |name|kind|discription|
 |---|---|---|
 |stylish|plugin, darken|https://www.xmisao.com/2014/08/08/dark-firefox.html|
-|Midnight Surfing - Global Dark Style|stylish-style, darken|https://userstyles.org/styles/23516/midnight-surfing-global-dark-style|
-|dark theme|theme, darken|find any|
-|vimp|plugin||
-|abyss|vimp style|provisioner included|
+|[Midnight Surfing - Global Dark Style](https://userstyles.org/styles/23516/midnight-surfing-global-dark-style)|stylish-style, darken||
+|[vimp](https://www.google.co.jp/search?q=vimperator)|plugin||
+|[abyss](https://github.com/revivre/Vimperator/blob/master/colors/abyss.vimp)|vimp style|provisioner included|
 |[ft-deepdark](https://addons.mozilla.org/ja/firefox/addon/ft-deepdark/)|firefox theme|darken preferences page|
 |ghosty|plugin||
 |octotree|plugin||
@@ -104,63 +145,24 @@ File Menu > Edit > Preferenses > Enable nmemonics on
 File Menu > Edit > Profile Preferenses > [As I like]
 ```
 
-### chrome
+### chromium
 
 |name|kind|discription|
 |---|---|---|
-|Change Colors|plugin||
+|[Dark Reader](https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)|plugin|Darken pages|
+|~~Change Colors~~|plugin|Darken pages|
 |Download Master|plugin||
 
-## How to Get rid of the login keyring password
-
-https://community.linuxmint.com/tutorial/view/916
-
-* The instruction shown above requires GUI unfortunately
-* For Substitution,
-  * `sudo apt remove gnome-keyring`
-  * Already written in playbook and it works
-
-### VMware
+### Installation of VMware
 
 * Unfortunately vmware player comes with GUI installer
 * download `.bundle` from
-  * https://my.vmware.com/jp/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0
-    * main application
-  * https://my.vmware.com/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0|PLAYER-1200|drivers_tools
-    * SDK for enable `vmrun` command
-      *https://communities.vmware.com/thread/521189?start=0&tstart=0
-* run `sudo sh VMxxxx.bundle`
+  * [player](https://my.vmware.com/jp/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0)
+  * [VIX, to enable `vmrun` ](https://my.vmware.com/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0|PLAYER-1200|drivers_tools)
+    * [vmrun missing in the VMware-Player-12.0.0-2985596.x86_64.bundle](https://communities.vmware.com/thread/521189?start=0&tstart=0)
+* `sudo sh VMxxxx.bundle` for each `.bundle` files
 
-#### Start VM over CUI
-
-* `vmrun -T player start /path/vm.vmx`
-  * http://askubuntu.com/questions/342552/vmware-vix-vmrun-command-error-unable-to-connect-to-host-version-not-found
-
-### virtualbox
-
-#### Installation
-
-* Included in provisioner
-
-#### Start VM over CUI
-
-* `virtualbox startvm /path/hoge.vbox`
-
-#### Enable Shared Folder and clipboard on guest Mint
-
-1. Menu > VMWare Tools someting
-1. Installer will be shown in guest
-1. Extract VMwareTools.x.x.x-xxxx.tar.gz to someware
-1. Directory `vmware-tools-distrib` will appear
-1. `cd /pathto/vmware-tools-distrib`
-1. `sudo ./vmware-install.pl -d`
-1. `sudo apt -y install open-vm-tools`
-1. `sudo apt -y install open-vm-tools-desktop`
-1. `sudo shutdown -r now`
-
-## Slimblade Trackball Configration
-
-Already included in provisioning, just for note below
+## <a name="trackball"> Slimblade Trackball Configration
 
 * check behaveior of devices
 ```
@@ -231,16 +233,16 @@ xinput --set-prop "Kensington Kensington Slimblade Trackball" "Device Accel Cons
   * http://askubuntu.com/questions/457815/how-can-i-run-a-sh-script-targeting-x11-settings-on-login
   * https://www.xmisao.com/2013/04/24/cron-reboot-implementations.html
 
-## How to Get rid of the login keyring password
+## <a name="remove_keyring"> How to Get rid of the login keyring password
 
 https://community.linuxmint.com/tutorial/view/916
 
 * The instruction shown above requires GUI unfortunately
 * For Substitution,
   * `sudo apt remove gnome-keyring`
-  * Already written in playbook and it works
+  * It is already meant in playbook and it works
 
-## List of Tools
+## <a name="list_of_tools"> List of Tools
 
 |Name|Kind|Misc|
 |----|----|----|
@@ -282,24 +284,6 @@ https://community.linuxmint.com/tutorial/view/916
 |~~diffmerge~~|||
 |~~macdown~~|||
 |~~atom~~|||
-
-## Customizing System Themes and Fonts
-
-* Provisioner Included
-
-## Usase for development of playbook( Mint 18 Sarah )
-
-Development mode. Checkout Branch "Develop" and play normal playbook
-```
-wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
-bash install.sh -d
-```
-
-Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will be played)
-```
-wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
-bash install.sh -e
-```
 
 ## Thanks to
 
