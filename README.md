@@ -80,6 +80,7 @@ The way of automation is not found yet for tasks shown below
 |abyss|vimp style|provisioner included|
 |ghosty|plugin||
 |octotree|plugin||
+|[google for default search engine](https://www.linuxmint.com/searchengines/anse.php?sen=Google&c=y)|||
 
 ### Map `` Alt+` `` to Toggle input method
 
