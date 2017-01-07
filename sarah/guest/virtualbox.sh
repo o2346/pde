@@ -1,5 +1,6 @@
 #!/bin/bash
 
 echo "Virtualbox called"
-printf "Nothing to do. Abort\n"
+sudo usermod -G vboxsf -a `whoami`
+sudo reboot
 
