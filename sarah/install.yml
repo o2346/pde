@@ -244,8 +244,6 @@
       - ssh
       - firewall-applet #replacement of ufw
       - whois
-      - exfat-fuse
-      - exfat-utils
     become: true
 
 #
