@@ -12,6 +12,8 @@
     theme_controls: 'Mint-Y-Dark-Blue'
     theme_mouse_pointer: 'DMZ-White'
     theme_desktop: 'Modern Mint Dark'
+    monitorix: monitorix_3.9.0-izzy1_all.deb
+    downloads: /home/{{ansible_user_id}}/Downloads
   become: no
   tasks:
 #
@@ -51,13 +53,6 @@
 
 #
 # Chomium setting ( gave up )
-    theme_controls: 'Mint-Y-Dark-Blue'
-    theme_mouse_pointer: 'DMZ-White'
-    theme_desktop: 'Modern Mint Dark'
-    monitorix: monitorix_3.9.0-izzy1_all.deb
-    downloads: /home/{{ansible_user_id}}/Downloads
-  become: no
-  tasks:
 
 #
 # Network Manager disable
