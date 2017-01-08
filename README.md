@@ -40,7 +40,7 @@ Secondary Guest Operating System setup helper.
   * configure settings
     * desktop themes
     * fonts
-    * [trackball behaveior](sara/doc/trackball.md)
+    * [trackball behaveior](sarah/doc/trackball.md)
   * dotfiles
 * Guest OS setup helper
   * Use of guest machine is a sandbox in order to develop PDE itself.
@@ -165,6 +165,6 @@ File Menu > Edit > Profile Preferenses > [As I like]
 
 ## misc
 
-[misc](sarah/doc/misc.md)
-[List of Tools](sarah/doc/misc.md#list_of_tools)
+* [misc](sarah/doc/misc.md)
+* [List of Tools](sarah/doc/misc.md#list_of_tools)
 
