@@ -166,5 +166,6 @@ File Menu > Edit > Profile Preferenses > [As I like]
 ## misc
 
 * [misc](sarah/doc/misc.md)
-* [List of Tools](sarah/doc/misc.md#list_of_tools)
+* [List of Tools][list_of_tools]
+[list_of_tools]: sarah/doc/misc.md
 
