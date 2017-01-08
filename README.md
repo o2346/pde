@@ -167,5 +167,5 @@ File Menu > Edit > Profile Preferenses > [As I like]
 
 * [misc](sarah/doc/misc.md)
 * [List of Tools][list_of_tools]
-[list_of_tools]: sarah/doc/misc.md
+[list_of_tools]: https://github.com/whateverjp/pde/blob/develop/sarah/doc/misc.md
 
