@@ -35,8 +35,8 @@ Automatic provisioning of a Personal Computer like [Server provisioning](https:/
 Secondary Guest Operating System setup helper. 
 
 * Provisioner
-  * [install packages](#list_of_tools)
-  * remove packages that unnecessary([example](#remove_keyring)) or malfunction([example](http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired))
+  * [install packages][list_of_tools]
+  * remove packages that unnecessary([example][remove_keyring]) or malfunction([example](http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired))
   * configure settings
     * desktop themes
     * fonts
@@ -89,8 +89,8 @@ bash install.sh -e
 
 * Because I wanted my development environment disposable.
 * Every machines may crash unexpectedly. And no time to play with such crap.
-  * Totally new one should be brought immediately, reconstructed by Extremely Easy way.
-  * no instance dependency
+  * Totally new one should be brought immediately by extremely easy way
+  * No instance dependency
 * Nowadays virtualization and auto-deployment tool things are modern technology
   * They do not has to be only for server machines though.
 * When my own PC comes with UNIX-like system, why not to do it
@@ -167,9 +167,8 @@ File Menu > Edit > Profile Preferenses > [As I like]
 
 ## misc
 
-* [misc](sarah/doc/misc.md)
-  * [remove_keyring][remove_keyring]
-  * [List of Tools][list_of_tools]
+* [remove_keyring][remove_keyring]
+* [List of Tools][list_of_tools]
 
 [remove_keyring]: sarah/doc/misc.md#remove_keyring
 [list_of_tools]: sarah/doc/misc.md#list_of_tools
