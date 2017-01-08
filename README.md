@@ -29,9 +29,32 @@ PDE(Personalized Development Environment) is system configration for my work.
 </tr>
 </table>
 
+## What is this
+
+Automatic provisioning of a Personal Computer like [Server provisioning](https://en.wikipedia.org/wiki/Provisioning#Server_provisioning) as main function.  
+Secondary Guest Operating System setup helper. 
+
+* Provisioner
+  * [install packages][list_of_tools]
+  * remove packages that unnecessary([example][remove_keyring]) or malfunction([example](http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired))
+  * configure settings
+    * desktop themes
+    * fonts
+    * [trackball behaveior](sarah/doc/trackball.md)
+  * dotfiles
+* Guest OS setup helper
+  * Use of guest machine is a sandbox in order to develop PDE itself.
+  * for example, install VMware Tool to enable sharing options
+  * VMware Workstation Player and VirtualBox are supported
+  * Hypervisor detection. Automatically find witch virtualization software provides current OS then run appropreate script
+
+* Some other tasks expected to be included in provisioner but still in progress, is indicated in [TODO-list](#todo)
+
 ## Usase
 
-1. Cleanly install Operating System any of shown above
+### Provisoner
+
+1. Install Operating System any of listed above
 1. Run command shown below  
 **[WARNING]** _This may be cause of Destruction of your environment since the provisioner will run administratively.  
 Use disposable machine such as VM_
@@ -39,33 +62,55 @@ Use disposable machine such as VM_
 curl https://raw.githubusercontent.com/whateverjp/pde/master/install.sh | bash
 ```
 
+### Guest OS setup helper
+
+__on Guest Machine__ , run
+
+```
+wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
+bash install.sh -v
+```
+
+### for development of playbook( Mint 18 Sarah )
+
+Development mode. Checkout Branch "Develop" and play normal playbook
+```
+wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
+bash install.sh -d
+```
+
+Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will be played instead of normal playbook)
+```
+wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
+bash install.sh -e
+```
+
 ## Why I made this
 
-* Because I wanted my Development Environment disposable.
+* Because I wanted my development environment disposable.
 * Every machines may crash unexpectedly. And no time to play with such crap.
-  * Totally new one should be brought immediately, reconstructed by Extremely Easy way.
-  * NO instance dependency
-* Nowadays VMs, auto-deployment tools are modern technology
+  * Totally new one should be brought immediately by extremely easy way
+  * No instance dependency
+* Nowadays virtualization and auto-deployment tool things are modern technology
   * They do not has to be only for server machines though.
-* When my own PC comes with UNIX-like system, why not to do it.
+* When my own PC comes with UNIX-like system, why not to do it
 
-## Why Linux
+## Why Linux instead of Windows/macOS
 
-* Run on homebuilt computer
+* Friendly with Infrastructure as Code
 * No [Vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in), Proprietary Free
-* Easy to switch Dark theme of Desktop
-  * Bright background colors are too hard for eyes
-* Friendly for Infrastructure as Code
-* Can be sandbox on VM
+* Run on both homebuilt computer and VM
+* UNIX-like
 * I'm totally tired of Windows. It suck.
   + No Thanks
   + virtualization is available if needed
-* I'm little tired of Mac also even if it was better than Windows.
-  + It forcibly asks like AppleID and password, "yes" or whatever at every turn such as lisence agreement or upgrade something etc.
+* I'm little tired of Mac even if it was better than Windows
+  + It forcibly asks like AppleID and password, press "yes" or whatever at every turn such as lisence agreement or upgrade something etc.
+  + many popups to force restart or ask something like moron. Annoying
   + AppleID dependency
   + Hardware lock-in
 
-## TODO After Provisioning
+## <a name="todo"> TODO - Tasks requires Manual Operation
 
 The way of automation is not found yet for tasks shown below
 
@@ -74,10 +119,10 @@ The way of automation is not found yet for tasks shown below
 |name|kind|discription|
 |---|---|---|
 |stylish|plugin, darken|https://www.xmisao.com/2014/08/08/dark-firefox.html|
-|Midnight Surfing - Global Dark Style|stylish-style, darken|https://userstyles.org/styles/23516/midnight-surfing-global-dark-style|
-|dark theme|theme, darken|find any|
-|vimp|plugin||
-|abyss|vimp style|provisioner included|
+|[Midnight Surfing - Global Dark Style](https://userstyles.org/styles/23516/midnight-surfing-global-dark-style)|stylish-style, darken||
+|[vimp](https://www.google.co.jp/search?q=vimperator)|plugin||
+|[abyss](https://github.com/revivre/Vimperator/blob/master/colors/abyss.vimp)|vimp style||
+|[ft-deepdark](https://addons.mozilla.org/ja/firefox/addon/ft-deepdark/)|firefox theme|darken preferences page|
 |ghosty|plugin||
 |octotree|plugin||
 |[google for default search engine](https://www.linuxmint.com/searchengines/anse.php?sen=Google&c=y)|||
@@ -88,7 +133,7 @@ The way of automation is not found yet for tasks shown below
 * Set `` Super+\` ``
 
 [Why do this]  
-`Cycle through open windows of the same application` appears as unassigned by default, but likely mapped into `` Alt+` ``  and conflicts.
+`Cycle through open windows of the same application` appears as unassigned in GUI by default, but likely mapped into `` Alt+` ``  and conflicts.
 
 ### fcitx/Mozc
 
@@ -104,169 +149,28 @@ File Menu > Edit > Preferenses > Enable nmemonics on
 File Menu > Edit > Profile Preferenses > [As I like]
 ```
 
-### chrome
+### chromium
 
 |name|kind|discription|
 |---|---|---|
-|Change Colors|plugin||
+|[Dark Reader](https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)|plugin|Darken pages|
+|~~Change Colors~~|plugin|Darken pages|
 |Download Master|plugin||
 
-### VMware
+### Installation of VMware
 
 * Unfortunately vmware player comes with GUI installer
 * download `.bundle` from
-  * https://my.vmware.com/jp/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0
-    * main application
-  * https://my.vmware.com/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0|PLAYER-1200|drivers_tools
-    * SDK for enable `vmrun` command
-      *https://communities.vmware.com/thread/521189?start=0&tstart=0
-* run `sudo sh VMxxxx.bundle`
+  * [player](https://my.vmware.com/jp/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0)
+  * [VIX](https://my.vmware.com/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0|PLAYER-1200|drivers_tools)
+    * this is for command [`vmrun`](https://communities.vmware.com/thread/521189?start=0&tstart=0) functional
+* `sudo sh VMxxxx.bundle` for each `.bundle` files
 
-#### Start VM over CUI
+## misc
 
-* `vmrun -T player start /path/vm.vmx`
-  * http://askubuntu.com/questions/342552/vmware-vix-vmrun-command-error-unable-to-connect-to-host-version-not-found
+* [remove_keyring][remove_keyring]
+* [List of Tools][list_of_tools]
 
-### virtualbox
+[remove_keyring]: sarah/doc/misc.md#remove_keyring
+[list_of_tools]: sarah/doc/misc.md#list_of_tools
 
-#### Installation
-
-* Included in provisioner
-
-#### Start VM over CUI
-
-* `virtualbox startvm /path/hoge.vbox`
-
-## Slimblade Trackball Configration
-
-Already included in provisioning, just for note below
-
-* check behaveior of devices
-```
-xev
-```
-
-* by checking on xev, default button mapping was found as shown below
-```
-2|8
--o-
-1|3
-```
-
-* `1` for Left click, `3` for Right click. Not sure how north side buttons `2` and `8` are mapped.
-* `4` for Counter-clockwise, `5` for Clockwise on the ball.
-
-* get current status
-```
-xinput get-button-map "Kensington Kensington Slimblade Trackball"
-```
-
-* default order is likely `1 2 3 4 . . . 12` according to command above
-
-* set for Right handed and same action on North buttons
-```
-xinput set-button-map "Kensington Kensington Slimblade Trackball" 1 1 3 4 5 6 7 3 9 10 11 12
-```
-
-* then mapping should be as shown below
-```
-1|3
--o-
-1|3
-```
-
-* set for Left handed and reverse scroll wheel ( This is my standard )
-```
-xinput set-button-map "Kensington Kensington Slimblade Trackball" 3 3 1 5 4 6 7 1 9 10 11 12
-```
-
-* then mapping should be as shown below
-```
-3|1
--o-
-3|1
-```
-
-* make slower mouse pointer. Default is too fast
-```
-xinput --set-prop "Kensington Kensington Slimblade Trackball" "Device Accel Constant Deceleration" 5
-```
-  * http://superuser.com/questions/864646/how-to-make-the-mouse-movement-slower-in-linux-mint-rebecca
-
-* note:
-  * Configration of the button-map will reset to default on every reboot.
-  * Unfortunately crontab does not work anyway.
-  * Therefore, `~/.config/autostart/trackball.desktop` was defined
-  * The mapping will reset when SlimBlade unplugged and need to reload custom map at reconnected.
-    * Specified shellscript seemingly can be called from udev but @xinput@ unfunctional on the script
-    * Sorry but manually run script located at @/usr/local/bin/trackball.sh@ every time for now
-
-* thanks to
-  * [Thread: Slimblade Trackball mouse configuration problem](https://ubuntuforums.org/showthread.php?t=1325968)
-  * [UbuntuでKensington SlimBlade Trackballのボタン設定を変える](http://camellia.thyme.jp/blog/)
-  * http://askubuntu.com/questions/598195/how-to-add-a-script-to-startup-applications-from-the-command-line
-  * http://unix.stackexchange.com/questions/255875/how-to-start-cron-in-linux-mint-17-3
-  * https://ubuntuforums.org/showthread.php?t=1530652
-  * http://askubuntu.com/questions/457815/how-can-i-run-a-sh-script-targeting-x11-settings-on-login
-  * https://www.xmisao.com/2013/04/24/cron-reboot-implementations.html
-
-## List of Tools
-
-|Name|Kind|Misc|
-|----|----|----|
-|apt||Sites located in Japan are listed as closer ones on @sources.list@|
-|git|||
-|ansible|||
-|vim|||
-|emacs|||
-|node.js|||
-|awscli|||
-|htop|||
-|nkf|||
-|tmux|||
-|virtualbox|||
-|filezilla|||
-|keepassx|||
-|vlc|||
-|zsh|||
-|chromium|||
-|vagrant|||
-|ffmpeg|||
-|wine|||
-|fontforge|||
-|NeoBundle|||
-|vmware|||
-|mp3splt|||
-|imageMagick||installed|
-|dotfiles||original|
-|whois|||
-|~~sysv-rc-conf~~|||
-|~~diff-pdf~~|||
-|~~reattach-to-user-namespace~~|||
-|~~chrome~~||chromium|
-|~~dropbox~~|||
-|~~skitch~~|||
-|~~google-japanese-ime~~||mozc|
-|~~sourcetree~~||no Linux version|
-|~~p4merge~~|||
-|~~diffmerge~~|||
-|~~macdown~~|||
-|~~atom~~|||
-
-## Usase for development of playbook( Mint 18 Sarah )
-
-Development mode. Checkout Branch "Develop" and play normal playbook
-```
-wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
-bash install.sh -d
-```
-
-Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will be played)
-```
-wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
-bash install.sh -e
-```
-
-## Thanks to
-
-* [Ubuntu Sources List Generator](https://repogen.simplylinux.ch/)

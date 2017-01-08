@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 getlinuxdir () {
   # https://pc.casey.jp/archives/153904527
   # doesn't work by command sh
@@ -27,6 +28,43 @@ getosdir () {
     return "$(expr substr $(uname -s) 1 10)"
   fi
 }
+
+vmx() {
+  echo "[Hypervisor Detection] $1 is the one virtualizes this machine. proceeding..."
+  sh `getosdir`/guest/vmware.sh
+}
+
+vbox() {
+  echo "[Hypervisor Detection] $1 is the one virtualizes this machine. proceeding..."
+  sh `getosdir`/guest/virtualbox.sh
+}
+
+vmopt() {
+  HYPERV=`sudo dmidecode -s system-product-name`
+
+  if [ "$HYPERV" = "VirtualBox" ]; then
+    vbox $HYPERV
+    return 0
+  fi
+
+  if [ "$HYPERV" = "VMware Virtual Platform" ]; then
+    vmx $HYPERV
+    return 0
+  fi
+
+  echo "[ERROR] This machine likely has none of Hypervisor. abort"
+  return 1
+
+}
+
+while getopts "v" OPT ; do
+  case $OPT in
+    v)  echo Virtual Machine Optimization mode
+        vmopt
+        ;;
+  esac
+  exit 0
+done
 
 OSDIR=`getosdir`
 USER=`whoami`

@@ -2,9 +2,20 @@
 - hosts: localhost
   vars:
     nodesetup: /tmp/node_setup.sh
+    gituser: hoge
+    gitemail: hoge@fuga.email
+    font: 'MigMix 1M 16'
+    font_monospace: 'Ricty Diminished Regular 15'
+    font_titlebar: 'Migu 2M Bold 14'
+    theme_window_borders: 'mint-x-mod'
+    theme_icons: 'oxygen'
+    theme_controls: 'Mint-Y-Dark-Blue'
+    theme_mouse_pointer: 'DMZ-White'
+    theme_desktop: 'Modern Mint Dark'
+    monitorix: monitorix_3.9.0-izzy1_all.deb
+    downloads: /home/{{ansible_user_id}}/Downloads
   become: no
   tasks:
-
 #
 # Network Manager disable
 # http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired
@@ -42,9 +53,9 @@
   - name: download dotfiles
     git:
       repo: https://gist.githubusercontent.com/whateverjp/f43ec7ea2687697cc1ad
-      dest: ~/.dotfiles
+      dest: ~/Documents/.dotfiles
   - name: deploy dotfiles
-    command: sh ~/.dotfiles/deploy.sh
+    command: sh ~/Documents/.dotfiles/deploy.sh
   - name: .vimperator option files
     git:
       repo: https://github.com/whateverjp/.vimperator
@@ -53,6 +64,15 @@
     copy: >
       src=./.tmux.pd.conf
       dest=~/
+
+#
+# Get rid of the keyring, annoying
+#
+  - name: Get rid of the keyring, annoying
+    apt: name={{ item }} state=absent
+    with_items:
+      - gnome-keyring
+    become: true
 
 #
 # Desktop Themes
@@ -77,14 +97,74 @@
       - https://cinnamon-spices.linuxmint.com/uploads/themes/M9WI-K8ME-QKAK.zip
       # Mint-Y-Yltra-Dark
       - https://cinnamon-spices.linuxmint.com/uploads/themes/PH79-PQF1-TYRD.zip
-      # Silk
-      - https://cinnamon-spices.linuxmint.com/uploads/themes/YXTN-WFOX-R7ZC.zip
       # Mint Y Dark Blue
       - https://cinnamon-spices.linuxmint.com/uploads/themes/W24H-LL4V-VPK7.zip
       # Modern Mint Dark 1
       - https://cinnamon-spices.linuxmint.com/uploads/themes/AELJ-LXG0-O7NW.zip
-      # Loki Transparent Dark 1.1
-      - https://cinnamon-spices.linuxmint.com/uploads/themes/L051-KB55-OTNG.zip
+  - name: Theme - Window borders
+    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
+  - name: Theme - Icons
+    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
+  - name: Theme - Controls
+    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
+  - name: Theme - Mouse Pointer
+    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
+  - name: Theme - Desktop
+    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
+  - name: list themes
+    command: ls ~/.themes
+    register: themes
+#  - name: debug result var
+#    debug: var=themes
+  - name: font size
+    replace: >-
+      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+      regexp='font-size.+$'
+      replace='font-size: 12pt;'
+    with_items: themes.stdout_lines
+  - name: font family
+    replace: >-
+      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+      regexp='font-family.+$'
+      replace='font-family: MigMix 1C;'
+    with_items: themes.stdout_lines
+#
+# Desktop Themes
+#
+  - name: Theme - Window borders
+    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
+  - name: Theme - Icons
+    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
+  - name: Theme - Controls
+    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
+  - name: Theme - Mouse Pointer
+    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
+  - name: Theme - Desktop
+    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
+  - name: list themes
+    command: ls ~/.themes
+    register: themes
+#  - name: debug result var
+#    debug: var=themes
+  - name: font size
+    replace: >-
+      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+      regexp='font-size.+$'
+      replace='font-size: 12pt;'
+    with_items: themes.stdout_lines
+  - name: font family
+    replace: >-
+      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+      regexp='font-family.+$'
+      replace='font-family: MigMix 1C;'
+    with_items: themes.stdout_lines
+
+# TODO Make active window font punctuate
+# https://www.google.co.jp/search?safe=off&num=16&q=mint+active+window+cinnamon+-matome.naver.jp+-cookpad.com+-itpro.nikkeibp.co.jp+-rakuten.co.jp+-weblio.jp
+# It requires to modify cinnamon.css and a little complicated
+
+#
+# Chomium setting ( gave up )
 
 #
 # Scripts
@@ -172,8 +252,6 @@
       - ssh
       - firewall-applet #replacement of ufw
       - whois
-      - exfat-fuse
-      - exfat-utils
     become: true
 
 #
@@ -311,6 +389,11 @@
               state=present
     notify: restart ssh
     become: true
+  - name: create ~/.ssh directory if it doesn't exist
+    file:
+      path: ~/.ssh
+      state: directory
+      mode: 0755
 
 #
 # dist-upgrade, autoremove
@@ -319,6 +402,73 @@
     apt:
       upgrade: dist
       autoremove: yes
+    become: true
+
+#
+# git configuration
+#
+  - name: git config username in global
+    command: git config --global user.email "{{ gituser }}"
+  - name: git config email in global
+    command: git config --global user.name "{{ gitemail }}"
+
+#
+# Fonts
+#
+  - name: Fonts for Default
+    command: gsettings set org.cinnamon.desktop.interface font-name "{{ font }}"
+  - name: Fonts for Desktop
+    command: gsettings set org.nemo.desktop font "{{ font }}"
+  - name: Fonts for Document
+    command: gsettings set org.gnome.desktop.interface document-font-name "{{ font }}"
+  - name: Fonts for monospace
+    command: gsettings set org.gnome.desktop.interface monospace-font-name "{{ font_monospace }}"
+  - name: Fonts for Window Titlebar
+    command: gsettings set org.cinnamon.desktop.wm.preferences titlebar-font "{{ font_titlebar }}"
+
+#
+# Virtualbox setting
+#
+  - name: add "{{ansible_user_id}}" into group netdev
+    user:
+      name: "{{ansible_user_id}}"
+      groups: vboxusers
+      append: yes
+    become: true
+
+#
+# Monitorix
+#
+# Works without installation of libs listed below despite official instruction
+# http://www.monitorix.org/doc-debian.html
+# - name: install packages
+#   apt: name={{ item }} update_cache=yes state=latest
+#   with_items:
+#     - rrdtool
+#     - perl
+#     - libwww-perl
+#     - libmailtools-perl
+#     - libmime-lite-perl
+#     - librrds-perl
+#     - libdbi-perl
+#     - libxml-simple-perl
+#     - libhttp-server-simple-perl
+#     - libconfig-general-perl
+#     - libio-socket-ssl-perl
+#   become: true
+  - name: download Monitorix deb pack file with check (sh256sum)
+    get_url: >-
+      url=http://www.monitorix.org/{{ monitorix }}
+      dest={{ downloads }}/{{ monitorix }}
+      sha256sum=1020cdfed78edc33d4877df87f0d0f09246b1ccd54f9e2d7a7b0a83220be84a4
+      force=no
+    become: true
+  - name: Install Monitorix from a deb package
+    apt: >-
+      deb={{ downloads }}/{{ monitorix }}
+    become: true
+  - name: start monitorix
+    service: name=monitorix state=running enabled=yes
     become: true
 
   handlers:
