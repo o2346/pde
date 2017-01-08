@@ -32,7 +32,7 @@ PDE(Personalized Development Environment) is system configration for my work.
 ## What is this
 
 Automatic provisioning of a Personal Computer like [Server provisioning](https://en.wikipedia.org/wiki/Provisioning#Server_provisioning) as main function.  
-Secondary Guest Operating System setup helper. Use of Guest is a sandbox in order to develop PDE itself.
+Secondary Guest Operating System setup helper. 
 
 * Provisioner
   * [install packages](#list_of_tools)
@@ -40,14 +40,15 @@ Secondary Guest Operating System setup helper. Use of Guest is a sandbox in orde
   * configure settings
     * desktop themes
     * fonts
-    * [trackball behaveior](#trackball)
+    * [trackball behaveior](doc/trackball.md)
   * dotfiles
 * Guest OS setup helper
+  * Use of guest machine is a sandbox in order to develop PDE itself.
   * for example, install VMware Tool to enable sharing options
   * VMware Workstation Player and VirtualBox are supported
   * Hypervisor detection. Automatically find witch virtualization software provides current OS then run appropreate script
 
-* Some other tasks required to be automated but still in progress, is indicated in [TODO-list](#todo)
+* Some other tasks expected to be included in provisioner but still in progress, is indicated in [TODO-list](#todo)
 
 ## Usase
 
@@ -118,7 +119,7 @@ The way of automation is not found yet for tasks shown below
 |stylish|plugin, darken|https://www.xmisao.com/2014/08/08/dark-firefox.html|
 |[Midnight Surfing - Global Dark Style](https://userstyles.org/styles/23516/midnight-surfing-global-dark-style)|stylish-style, darken||
 |[vimp](https://www.google.co.jp/search?q=vimperator)|plugin||
-|[abyss](https://github.com/revivre/Vimperator/blob/master/colors/abyss.vimp)|vimp style|provisioner included|
+|[abyss](https://github.com/revivre/Vimperator/blob/master/colors/abyss.vimp)|vimp style||
 |[ft-deepdark](https://addons.mozilla.org/ja/firefox/addon/ft-deepdark/)|firefox theme|darken preferences page|
 |ghosty|plugin||
 |octotree|plugin||
@@ -129,7 +130,7 @@ The way of automation is not found yet for tasks shown below
 * Set `` Super+\` ``
 
 [Why do this]  
-`Cycle through open windows of the same application` appears as unassigned by default, but likely mapped into `` Alt+` ``  and conflicts.
+`Cycle through open windows of the same application` appears as unassigned in GUI by default, but likely mapped into `` Alt+` ``  and conflicts.
 
 ### fcitx/Mozc
 
