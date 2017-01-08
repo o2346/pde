@@ -166,6 +166,9 @@ File Menu > Edit > Profile Preferenses > [As I like]
 ## misc
 
 * [misc](sarah/doc/misc.md)
+* [remove_keyring][remove_keyring]
 * [List of Tools][list_of_tools]
-[list_of_tools]: https://github.com/whateverjp/pde/blob/develop/sarah/doc/misc.md
+
+[remove_keyring]: sarah/doc/misc.md#remove_keyring
+[list_of_tools]: https://github.com/whateverjp/pde/blob/develop/sarah/doc/misc.md#list_of_tools
 
