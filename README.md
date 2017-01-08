@@ -64,6 +64,8 @@ curl https://raw.githubusercontent.com/whateverjp/pde/master/install.sh | bash
 
 ### Guest OS setup helper
 
+__on Guest Machine__ , run
+
 ```
 wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
 bash install.sh -v
@@ -159,15 +161,16 @@ File Menu > Edit > Profile Preferenses > [As I like]
 * Unfortunately vmware player comes with GUI installer
 * download `.bundle` from
   * [player](https://my.vmware.com/jp/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0)
-  * [VIX, to enable `vmrun` ](https://my.vmware.com/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0|PLAYER-1200|drivers_tools)
-    * [vmrun missing in the VMware-Player-12.0.0-2985596.x86_64.bundle](https://communities.vmware.com/thread/521189?start=0&tstart=0)
+  * [VIX](https://my.vmware.com/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0|PLAYER-1200|drivers_tools)
+    * this is for command [`vmrun`](https://communities.vmware.com/thread/521189?start=0&tstart=0) functional
 * `sudo sh VMxxxx.bundle` for each `.bundle` files
 
 ## misc
 
 * [misc](sarah/doc/misc.md)
-  * [remove_keyring][sarah/doc/misc.md#remove_keyring]
+  * [remove_keyring][remove_keyring]
   * [List of Tools][list_of_tools]
 
+[remove_keyring]: sarah/doc/misc.md#remove_keyring
 [list_of_tools]: sarah/doc/misc.md#list_of_tools
 
