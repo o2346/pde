@@ -2,6 +2,7 @@
 # mount VMware Tools iso beforehand
 
 sudo apt update
+sudo apt-get install -y build-essential
 
 sudo apt install -y ansible
 sudo chown -R -v `whoami` ~/.ansible
@@ -23,3 +24,4 @@ sudo apt -y install open-vm-tools
 sudo apt -y install open-vm-tools-desktop
 
 sudo shutdown -r now
+
