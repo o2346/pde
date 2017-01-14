@@ -48,7 +48,7 @@ Secondary Guest Operating System setup helper.
   * VMware Workstation Player and VirtualBox are supported
   * Hypervisor detection. Automatically find witch virtualization software provides current OS then run appropreate script
 
-* Some other tasks expected to be included in provisioner but still in progress, is indicated in [TODO-list](#todo)
+* Some other tasks expected to be included in provisioner but still in progress, are indicated in [TODO-list](#todo)
 
 ## Usase
 
@@ -62,7 +62,7 @@ Use disposable machine such as VM_
 curl https://raw.githubusercontent.com/whateverjp/pde/master/install.sh | bash
 ```
 
-### Guest OS setup helper
+### <a name="helper">Guest OS setup helper
 
 __on Guest Machine__ , run
 
@@ -99,7 +99,7 @@ bash install.sh -e
 
 * Friendly with Infrastructure as Code
 * No [Vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in), Proprietary Free
-* Run on both homebuilt computer and VM
+* Run on both [homebuilt computer](https://en.wikipedia.org/wiki/Homebuilt_computer) and VM
 * UNIX-like
 * I'm totally tired of Windows. It suck.
   + No Thanks
