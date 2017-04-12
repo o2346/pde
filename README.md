@@ -169,6 +169,8 @@ File Menu > Edit > Profile Preferenses > [As I like]
 
 * [remove_keyring][remove_keyring]
 * [List of Tools][list_of_tools]
+* [printer](http://support.brother.co.jp/j/b/downloadhowto.aspx?c=jp&lang=ja&prod=dcpj137n&os=128&dlid=dlf100517_000&flang=1001&type3=561)
+* [DraftSight](https://www.3ds.com/ja/products-services/draftsight-cad-software/free-download/)
 
 [remove_keyring]: sarah/doc/misc.md#remove_keyring
 [list_of_tools]: sarah/doc/misc.md#list_of_tools
