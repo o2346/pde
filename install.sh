@@ -57,42 +57,43 @@ vmopt() {
 
 }
 
-while getopts "v" OPT ; do
-  case $OPT in
-    v)  echo Virtual Machine Optimization mode
-        vmopt
-        ;;
-  esac
-  exit 0
-done
+preinstall(){
+  sudo apt update
+
+  sudo apt install -y ansible
+  sudo chown -R -v $USER ~/.ansible
+
+  sudo apt install -y git
+
+  cd ~/Downloads
+  git clone http://github.com/whateverjp/pde
+
+}
 
 OSDIR=`getosdir`
 USER=`whoami`
 
-sudo apt update
-
-sudo apt install -y ansible
-sudo chown -R -v $USER ~/.ansible
-
-sudo apt install -y git
-
-cd ~/Downloads
-git clone http://github.com/whateverjp/pde
 
 # switch playbook for master or test
-while getopts "de" OPT ; do
+while getopts "dev" OPT ; do
   case $OPT in
     d)  echo Branch: Develop
+        preinstall
         cd ~/Downloads/pde
         git checkout develop
         cd ~/Downloads/pde/$OSDIR
         sh ansible.sh
         ;;
     e)  echo Branch: Develop
+        preinstall
         cd ~/Downloads/pde
         git checkout develop
         cd ~/Downloads/pde/$OSDIR
         sh ansible.sh -e
+        ;;
+    v)  echo Virtual Machine Optimization mode
+        vmopt
+        exit 0
         ;;
   esac
 done

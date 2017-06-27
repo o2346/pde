@@ -353,7 +353,7 @@
       mode: 0755
   - name: copy onedrive.conf
     copy: >
-      src=/usr/local/etc/onedrive.conf
+      src=~/Downloads/onedrive/config
       dest=~/.config/onedrive/config
   - name: systemd onedrive enabled
     command: systemctl --user enable onedrive
