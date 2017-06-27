@@ -21,7 +21,7 @@ PDE(Personalized Development Environment) is system configration for my work.
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Version</td>
-<td bgcolor="#FFFFFF" valign="top">1.0.2</td>
+<td bgcolor="#FFFFFF" valign="top">1.0.3</td>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Written in</td>
@@ -48,7 +48,7 @@ Secondary Guest Operating System setup helper.
   * VMware Workstation Player and VirtualBox are supported
   * Hypervisor detection. Automatically find witch virtualization software provides current OS then run appropreate script
 
-* Some other tasks expected to be included in provisioner but still in progress, is indicated in [TODO-list](#todo)
+* Some other tasks expected to be included in provisioner but still in progress, are indicated in [TODO-list](#todo)
 
 ## Usase
 
@@ -62,7 +62,7 @@ Use disposable machine such as VM_
 curl https://raw.githubusercontent.com/whateverjp/pde/master/install.sh | bash
 ```
 
-### Guest OS setup helper
+### <a name="helper">Guest OS setup helper
 
 __on Guest Machine__ , run
 
@@ -99,7 +99,7 @@ bash install.sh -e
 
 * Friendly with Infrastructure as Code
 * No [Vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in), Proprietary Free
-* Run on both homebuilt computer and VM
+* Run on both [homebuilt computer](https://en.wikipedia.org/wiki/Homebuilt_computer) and VM
 * UNIX-like
 * I'm totally tired of Windows. It suck.
   + No Thanks
@@ -170,6 +170,8 @@ File Menu > Edit > Profile Preferenses > [As I like]
 
 * [remove_keyring][remove_keyring]
 * [List of Tools][list_of_tools]
+* [printer](http://support.brother.co.jp/j/b/downloadhowto.aspx?c=jp&lang=ja&prod=dcpj137n&os=128&dlid=dlf100517_000&flang=1001&type3=561)
+* [DraftSight](https://www.3ds.com/ja/products-services/draftsight-cad-software/free-download/)
 
 [remove_keyring]: sarah/doc/misc.md#remove_keyring
 [list_of_tools]: sarah/doc/misc.md#list_of_tools

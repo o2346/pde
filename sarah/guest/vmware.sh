@@ -2,6 +2,8 @@
 # mount VMware Tools iso beforehand
 
 sudo apt update
+#sudo apt dist-upgrade -y
+#sudo apt install -y build-essential linux-headers-$(uname -r)
 
 sudo apt install -y ansible
 sudo chown -R -v `whoami` ~/.ansible
@@ -17,9 +19,10 @@ cd /media/`whoami`/VMware\ Tools
 
 tar -zxvf `ls | grep *.tar.gz` -C ~/Downloads/
 
-sudo ~/Downloads/vmware-tools-distrib/vmware-install.pl -d
+sudo perl ~/Downloads/vmware-tools-distrib/vmware-install.pl -d
 
-sudo apt -y install open-vm-tools
-sudo apt -y install open-vm-tools-desktop
+sudo apt install -y open-vm-tools
+sudo apt install -y open-vm-tools-desktop
 
 sudo shutdown -r now
+
