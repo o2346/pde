@@ -479,6 +479,26 @@
     service: name=monitorix state=running enabled=yes
     become: true
 
+#
+# pip
+#
+  - name: install pip(s)
+    pip: name={{ item }} extra_args="-U"
+    with_items:
+      - pip
+      - setuptools
+      - csvkit
+    become: true
+
+  - name: sitecustomize.py
+    blockinfile:
+      dest: /etc/python2.7/sitecustomize.py
+      insertafter: '^# install the apport exception handler if available'
+      content: |
+        import sys
+        sys.setdefaultencoding('utf-8')
+    become: true
+
   handlers:
   - name: restart ssh
     service: name=sshd state=restarted
