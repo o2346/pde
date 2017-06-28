@@ -252,6 +252,7 @@
       - ssh
       - firewall-applet #replacement of ufw
       - whois
+      - tree
     become: true
 
 #
