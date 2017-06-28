@@ -253,6 +253,13 @@
       - firewall-applet #replacement of ufw
       - whois
       - tree
+      #You are using pip version 8.1.1, however version 9.0.1 is available.
+      #You should consider upgrading via the 'pip install --upgrade pip' command.
+      - python-pip
+      # https://github.com/pypa/setuptools/issues/937
+      # sudo pip install -U setuptools
+      # sudo pip install csvkit
+      # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
     become: true
 
 #
