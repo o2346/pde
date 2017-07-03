@@ -1,43 +1,24 @@
 ---
 - hosts: localhost
   vars:
-    monitorix: monitorix_3.9.0-izzy1_all.deb
     downloads: /home/{{ansible_user_id}}/Downloads
   become: no
   tasks:
-
-#
-# Monitorix
-#
-# Works without installation of libs listed below despite official instruction
-# http://www.monitorix.org/doc-debian.html
-# - name: install packages
-#   apt: name={{ item }} update_cache=yes state=latest
-#   with_items:
-#     - rrdtool
-#     - perl
-#     - libwww-perl
-#     - libmailtools-perl
-#     - libmime-lite-perl
-#     - librrds-perl
-#     - libdbi-perl
-#     - libxml-simple-perl
-#     - libhttp-server-simple-perl
-#     - libconfig-general-perl
-#     - libio-socket-ssl-perl
-#   become: true
-  - name: download Monitorix deb pack file with check (sh256sum)
-    get_url: >-
-      url=http://www.monitorix.org/{{ monitorix }}
-      dest={{ downloads }}/{{ monitorix }}
-      sha256sum=1020cdfed78edc33d4877df87f0d0f09246b1ccd54f9e2d7a7b0a83220be84a4
-      force=no
-    become: true
-  - name: Install Monitorix from a deb package
-    apt: >-
-      deb={{ downloads }}/{{ monitorix }}
-    become: true
-  - name: start monitorix
-    service: name=monitorix state=running enabled=yes
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - mailutils
+      - exim4
     become: true
 
+
+#
+# mail command settings
+#
+  - name: copy exim4 cfg file
+    copy: >
+      src=./src/update-exim4.conf.conf
+      dest=/etc/exim4/update-exim4.conf.conf
+    become: true
+  - shell: update-exim4.conf
+    become: true

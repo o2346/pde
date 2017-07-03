@@ -252,6 +252,14 @@
       - ssh
       - firewall-applet #replacement of ufw
       - whois
+      - tree
+      #You are using pip version 8.1.1, however version 9.0.1 is available.
+      #You should consider upgrading via the 'pip install --upgrade pip' command.
+      - python-pip
+      # https://github.com/pypa/setuptools/issues/937
+      # sudo pip install -U setuptools
+      # sudo pip install csvkit
+      # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
     become: true
 
 #
@@ -469,6 +477,37 @@
     become: true
   - name: start monitorix
     service: name=monitorix state=running enabled=yes
+    become: true
+
+#
+# pip
+#
+  - name: install pip(s)
+    pip: name={{ item }} extra_args="-U"
+    with_items:
+      - pip
+      - setuptools
+      - csvkit
+    become: true
+
+  - name: sitecustomize.py
+    blockinfile:
+      dest: /etc/python2.7/sitecustomize.py
+      insertafter: '^# install the apport exception handler if available'
+      content: |
+        import sys
+        sys.setdefaultencoding('utf-8')
+    become: true
+
+#
+# mail command settings
+#
+  - name: copy exim4 cfg file
+    copy: >
+      src=./src/update-exim4.conf.conf
+      dest=/etc/exim4/update-exim4.conf.conf
+    become: true
+  - shell: update-exim4.conf
     become: true
 
   handlers:
