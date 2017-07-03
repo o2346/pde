@@ -499,6 +499,17 @@
         sys.setdefaultencoding('utf-8')
     become: true
 
+#
+# mail command settings
+#
+  - name: copy exim4 cfg file
+    copy: >
+      src=./src/update-exim4.conf.conf
+      dest=/etc/exim4/update-exim4.conf.conf
+    become: true
+  - shell: update-exim4.conf
+    become: true
+
   handlers:
   - name: restart ssh
     service: name=sshd state=restarted
