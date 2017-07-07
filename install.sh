@@ -1,17 +1,16 @@
 #!/bin/bash
 
-
 getlinuxdir () {
   # https://pc.casey.jp/archives/153904527
   # doesn't work by command sh
   # /bin/sh -> dash problem
   # shell Syntax error: ( unexpected (expecting })
   declare -A dir
-  dir=(["sarah"]="Sarah" ["sarah"]="serena")
+  dir=(["Sarah"]="sarah" ["serena"]="sarah")
 
   for type in ${!dir[@]} ; do
-    if echo `lsb_release -a` | grep -q ${dir[$type]} ; then
-      echo $type
+    if echo `lsb_release -a` | grep -q $type ; then
+      echo ${dir[$type]}
     fi
   done
 }
