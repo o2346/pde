@@ -502,6 +502,12 @@
 #
 # mail command settings
 #
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - mailutils
+      - exim4
+    become: true
   - name: copy exim4 cfg file
     copy: >
       src=./src/update-exim4.conf.conf
