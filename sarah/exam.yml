@@ -19,20 +19,19 @@
       force=no
     become: true
   - name: Unzip Android Studio
-    command: unzip {{ downloads }}/{{ android_studio_name }}
+    command: unzip -o {{ downloads }}/{{ android_studio_name }}
     args:
         chdir: /usr/local/
     become: true
-#  - name: Install Monitorix from a deb package
-#    apt: >-
-#      deb={{ downloads }}/{{ monitorix }}
-#    become: true
-#  - name: Android add repository
-#    command: apt-add-repository ppa:paolorotolo/android-studio -y
-#    become: true
-#  - name: install packages
-#    apt: name={{ item }} update_cache=yes state=latest
-#    with_items:
-#      - android-studio
-#    become: true
+  - name: kvm install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+     - kvm
+     - virt-manager
+     - libvirt-bin
+     - bridge-utils
+    become: true
+  - name: start libvirt-bin
+    service: name=libvirt-bin state=running enabled=yes
+    become: true
 
