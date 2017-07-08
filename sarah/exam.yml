@@ -60,6 +60,7 @@
   - name: adduser
     user: >-
       name={{ansible_user_id}}
-      groups=root,libvirtd
+      groups=root,libvirtd,kvm
+      append=true
     become: true
 
