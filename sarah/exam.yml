@@ -2,23 +2,37 @@
 - hosts: localhost
   vars:
     downloads: /home/{{ansible_user_id}}/Downloads
+    android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
+    android_studio_name: android-studio-ide-162.4069837-linux.zip
+    android_studio_checksum: 1383cfd47441e5f820b6257a1bdd683e0e980bc76c7f2027ef84dc2e6ad2f17f
   become: no
   tasks:
-  - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - mailutils
-      - exim4
-    become: true
-
 
 #
-# mail command settings
-#
-  - name: copy exim4 cfg file
-    copy: >
-      src=./src/update-exim4.conf.conf
-      dest=/etc/exim4/update-exim4.conf.conf
+# Android
+#https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+  - name: download Android Studio (sh256sum)
+    get_url: >-
+      url={{ android_studio_url }}/{{ android_studio_name }}
+      dest={{ downloads }}
+      sha256sum={{android_studio_checksum}}
+      force=no
     become: true
-  - shell: update-exim4.conf
+  - name: Unzip Android Studio
+    command: unzip {{ downloads }}/{{ android_studio_name }}
+    args:
+        chdir: /usr/local/
     become: true
+#  - name: Install Monitorix from a deb package
+#    apt: >-
+#      deb={{ downloads }}/{{ monitorix }}
+#    become: true
+#  - name: Android add repository
+#    command: apt-add-repository ppa:paolorotolo/android-studio -y
+#    become: true
+#  - name: install packages
+#    apt: name={{ item }} update_cache=yes state=latest
+#    with_items:
+#      - android-studio
+#    become: true
+
