@@ -14,6 +14,9 @@
     theme_desktop: 'Modern Mint Dark'
     monitorix: monitorix_3.9.0-izzy1_all.deb
     downloads: /home/{{ansible_user_id}}/Downloads
+    android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
+    android_studio_name: android-studio-ide-162.4069837-linux.zip
+    android_studio_checksum: 1383cfd47441e5f820b6257a1bdd683e0e980bc76c7f2027ef84dc2e6ad2f17f
   become: no
   tasks:
 #
@@ -502,6 +505,12 @@
 #
 # mail command settings
 #
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - mailutils
+      - exim4
+    become: true
   - name: copy exim4 cfg file
     copy: >
       src=./src/update-exim4.conf.conf
@@ -509,6 +518,34 @@
     become: true
   - shell: update-exim4.conf
     become: true
+
+#
+# Android
+#https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+  - name: download Android Studio (sh256sum)
+    get_url: >-
+      url={{ android_studio_url }}/{{ android_studio_name }}
+      dest={{ downloads }}
+      sha256sum={{android_studio_checksum}}
+      force=no
+    become: true
+  - name: Unzip Android Studio
+    command: unzip -o {{ downloads }}/{{ android_studio_name }}
+    args:
+        chdir: /usr/local/
+    become: true
+  - name: kvm install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+     - kvm
+     - virt-manager
+     - libvirt-bin
+     - bridge-utils
+    become: true
+  - name: start libvirt-bin
+    service: name=libvirt-bin state=running enabled=yes
+    become: true
+
 
   handlers:
   - name: restart ssh
