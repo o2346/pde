@@ -100,6 +100,7 @@ done
 # without arguments
 if [ $# -eq 0 ] ; then
   echo Branch: Master OSDIR=$OSDIR
+  preinstall
   cd ~/Downloads/pde/$OSDIR
   sh ~/Downloads/pde/$OSDIR/ansible.sh
 fi
