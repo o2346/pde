@@ -6,7 +6,7 @@ getlinuxdir () {
   # /bin/sh -> dash problem
   # shell Syntax error: ( unexpected (expecting })
   declare -A dir
-  dir=(["Sarah"]="sarah" ["serena"]="sarah")
+  dir=(["Sarah"]="sarah" ["serena"]="sarah" ["LinuxMint"]="sarah")
 
   for type in ${!dir[@]} ; do
     if echo `lsb_release -a` | grep -q $type ; then
@@ -30,12 +30,12 @@ getosdir () {
 
 vmx() {
   echo "[Hypervisor Detection] $1 is the one virtualizes this machine. proceeding..."
-  sh `getosdir`/guest/vmware.sh
+  sh ~/Downloads/pde/`getosdir`/guest/vmware.sh
 }
 
 vbox() {
   echo "[Hypervisor Detection] $1 is the one virtualizes this machine. proceeding..."
-  sh `getosdir`/guest/virtualbox.sh
+  sh ~/Downloads/pde/`getosdir`/guest/virtualbox.sh
 }
 
 vmopt() {
@@ -76,21 +76,21 @@ USER=`whoami`
 # switch playbook for master or test
 while getopts "dev" OPT ; do
   case $OPT in
-    d)  echo Branch: Develop
+    d)  echo Branch: Develop OSDIR=$OSDIR
         preinstall
         cd ~/Downloads/pde
         git checkout develop
         cd ~/Downloads/pde/$OSDIR
-        sh ansible.sh
+        sh ~/Downloads/pde/$OSDIR/ansible.sh
         ;;
-    e)  echo Branch: Develop
+    e)  echo Branch: Develop OSDIR=$OSDIR
         preinstall
         cd ~/Downloads/pde
         git checkout develop
         cd ~/Downloads/pde/$OSDIR
-        sh ansible.sh -e
+        sh ~/Downloads/pde/$OSDIR/ansible.sh -e
         ;;
-    v)  echo Virtual Machine Optimization mode
+    v)  echo Virtual Machine Optimization mode OSDIR=$OSDIR
         vmopt
         exit 0
         ;;
@@ -99,8 +99,8 @@ done
 
 # without arguments
 if [ $# -eq 0 ] ; then
-  echo Branch: Master
+  echo Branch: Master OSDIR=$OSDIR
   cd ~/Downloads/pde/$OSDIR
-  sh ansible.sh
+  sh ~/Downloads/pde/$OSDIR/ansible.sh
 fi
 
