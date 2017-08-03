@@ -1,0 +1,45 @@
+---
+- hosts: localhost
+  vars:
+  become: no
+  tasks:
+
+  - name: The system stupidly awaits something named user debian-gdm. Disable it
+    lineinfile:
+      path: /etc/systemd/system.conf
+      regexp: "^#DefaultTimeoutStartSec"
+      line: 'DefaultTimeoutStartSec=1s'
+    lineinfile:
+      path: /etc/systemd/system.conf
+      regexp: "^#DefaultTimeoutStopSec"
+      line: 'DefaultTimeoutStopSec=1s'
+
+#
+# ssh
+#
+#  - name: List Installed packages
+#    shell: "dpkg -l | awk '{print $2;}'"
+#    register: packages_installed
+#    changed_when: false
+#  - name: install ssh
+#    apt: name={{ item }} state=installed update_cache=yes
+#    with_items:
+#      - openssh-server
+#    when: item not in packages_installed.stdout_lines
+  - name: Allow root SSH access
+    lineinfile: dest=/etc/ssh/sshd_config
+              regexp="^PermitRootLogin"
+              line="PermitRootLogin yes"
+              state=present
+    notify: restart ssh
+    become: true
+  - name: create ~/.ssh directory if it doesn't exist
+    file:
+      path: ~/.ssh
+      state: directory
+      mode: 0755
+
+  handlers:
+  - name: restart ssh
+    service: name=ssh state=restarted
+    become: true
