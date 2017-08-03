@@ -1,0 +1,558 @@
+---
+- hosts: localhost
+  vars:
+    nodesetup: /tmp/node_setup.sh
+    gituser: hoge
+    gitemail: hoge@fuga.email
+    font: 'MigMix 1M 16'
+    font_monospace: 'Ricty Diminished Regular 15'
+    font_titlebar: 'Migu 2M Bold 14'
+    theme_window_borders: 'mint-x-mod'
+    theme_icons: 'oxygen'
+    theme_controls: 'Mint-Y-Dark-Blue'
+    theme_mouse_pointer: 'DMZ-White'
+    theme_desktop: 'Modern Mint Dark'
+    monitorix: monitorix_3.9.0-izzy1_all.deb
+    downloads: /home/{{ansible_user_id}}/Downloads
+    android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
+    android_studio_name: android-studio-ide-162.4069837-linux.zip
+    android_studio_checksum: 1383cfd47441e5f820b6257a1bdd683e0e980bc76c7f2027ef84dc2e6ad2f17f
+  become: no
+  tasks:
+#
+# Network Manager disable
+# http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired
+#
+  - name: disable service network-manager
+    service: name=network-manager state=stopped enabled=no
+    become: true
+# OS will break becouse of this
+# - name: uninstall packages
+#   apt: name={{ item }} state=absent
+#   with_items:
+#     - network-manager
+#   become: true
+  - name: add "{{ansible_user_id}}" into group netdev
+    user:
+      name: "{{ansible_user_id}}"
+      groups: netdev
+      append: yes
+    become: true
+  - name: install package wicd
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - wicd
+    become: true
+#
+# wicd Settings
+#
+  - name: start wicd
+    service: name=wicd state=running enabled=yes
+    become: true
+
+#
+# Dotfiles
+#
+  - name: download dotfiles
+    git:
+      repo: https://gist.githubusercontent.com/whateverjp/f43ec7ea2687697cc1ad
+      dest: ~/Documents/.dotfiles
+  - name: deploy dotfiles
+    command: sh ~/Documents/.dotfiles/deploy.sh
+  - name: .vimperator option files
+    git:
+      repo: https://github.com/whateverjp/.vimperator
+      dest: ~/.vimperator
+  - name: copy .tmux.pd.conf
+    copy: >
+      src=./.tmux.pd.conf
+      dest=~/
+
+#
+# Get rid of the keyring, annoying
+#
+  - name: Get rid of the keyring, annoying
+    apt: name={{ item }} state=absent
+    with_items:
+      - gnome-keyring
+    become: true
+
+#
+# Desktop Themes
+#
+  - name: create ~/.themes directory if it doesn't exist
+    file:
+      path: ~/.themes
+      state: directory
+      mode: 0755
+  - name: desktop themes
+    unarchive: src={{ item }} dest=~/.themes copy=no
+    with_items:
+      # BlackMint
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/IQ3Q-WIFH-A9V3.zip
+      # Hacktivist 1.4
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/5UKU-H6JI-G3O6.zip
+      # Mint-X-Dark
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/8ZA5-UIX7-QXJ7.zip
+      # mint-x-mod
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/JBT7-9J4S-EAUH.zip
+      # Mint-Y-Gray
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/M9WI-K8ME-QKAK.zip
+      # Mint-Y-Yltra-Dark
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/PH79-PQF1-TYRD.zip
+      # Mint Y Dark Blue
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/W24H-LL4V-VPK7.zip
+      # Modern Mint Dark 1
+      - https://cinnamon-spices.linuxmint.com/uploads/themes/AELJ-LXG0-O7NW.zip
+  - name: Theme - Window borders
+    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
+  - name: Theme - Icons
+    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
+  - name: Theme - Controls
+    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
+  - name: Theme - Mouse Pointer
+    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
+  - name: Theme - Desktop
+    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
+  - name: list themes
+    command: ls ~/.themes
+    register: themes
+#  - name: debug result var
+#    debug: var=themes
+  - name: font size
+    replace: >-
+      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+      regexp='font-size.+$'
+      replace='font-size: 12pt;'
+    with_items: themes.stdout_lines
+  - name: font family
+    replace: >-
+      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+      regexp='font-family.+$'
+      replace='font-family: MigMix 1C;'
+    with_items: themes.stdout_lines
+#
+# Desktop Themes
+#
+  - name: Theme - Window borders
+    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
+  - name: Theme - Icons
+    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
+  - name: Theme - Controls
+    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
+  - name: Theme - Mouse Pointer
+    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
+  - name: Theme - Desktop
+    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
+  - name: list themes
+    command: ls ~/.themes
+    register: themes
+#  - name: debug result var
+#    debug: var=themes
+  - name: font size
+    replace: >-
+      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+      regexp='font-size.+$'
+      replace='font-size: 12pt;'
+    with_items: themes.stdout_lines
+  - name: font family
+    replace: >-
+      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+      regexp='font-family.+$'
+      replace='font-family: MigMix 1C;'
+    with_items: themes.stdout_lines
+
+# TODO Make active window font punctuate
+# https://www.google.co.jp/search?safe=off&num=16&q=mint+active+window+cinnamon+-matome.naver.jp+-cookpad.com+-itpro.nikkeibp.co.jp+-rakuten.co.jp+-weblio.jp
+# It requires to modify cinnamon.css and a little complicated
+
+#
+# Chomium setting ( gave up )
+
+#
+# Scripts
+#
+  - name: copy scrpts to /usr/local/bin
+    copy: >
+      src=./bin/
+      dest=/usr/local/bin
+      mode=755
+    become: true
+
+#
+# apt
+#
+  - name: apt source list
+    copy: >
+      src=./sources.list
+      dest=/etc/apt/sources.list
+      mode=0644
+    become: yes
+
+#
+# fcitx mozc
+#
+  - name: install ime, fcitx mozc
+    apt: name={{ item }} state=installed update_cache=yes install_recommends=yes
+    with_items:
+      - fcitx
+      - fcitx-mozc
+    become: true
+  - name: set fcitx as default, restarting is required
+    command: im-config -n fcitx
+
+#
+# Node.js Preinstallation
+#
+  - name: download preinstaller of nodejs
+    get_url:
+      url: https://deb.nodesource.com/setup_7.x
+      dest: "{{nodesetup}}"
+      mode: 0665
+  - name: preinstall nodejs
+    command: bash -E "{{nodesetup}}"
+    become: true
+    notify: delete node_setup
+
+#
+# main apps
+#
+  - name: uninstall packages
+    apt: name={{ item }} state=absent
+    with_items:
+      - ufw
+    become: true
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - vim-gnome
+      - emacs
+      - nodejs
+      - awscli
+      - htop
+      - nkf
+      - tmux
+      - xsel
+# https://sites.google.com/site/linuxnomemo/mint-use/virtualbox
+      - virtualbox
+      - virtualbox-qt
+      - virtualbox-dkms
+      - virtualbox-guest-additions-iso
+      - fontforge
+      - fonts-ricty-diminished
+      - fonts-migmix
+      - filezilla
+      - keepassx
+      - vlc
+      - k3b
+      - zsh
+      - ffmpeg
+      - mp3splt
+      - wine
+      - tig
+      - chromium-browser
+      - clang #for NeoBundle
+      - ssh
+      - firewall-applet #replacement of ufw
+      - whois
+      - tree
+      #You are using pip version 8.1.1, however version 9.0.1 is available.
+      #You should consider upgrading via the 'pip install --upgrade pip' command.
+      - python-pip
+      # https://github.com/pypa/setuptools/issues/937
+      # sudo pip install -U setuptools
+      # sudo pip install csvkit
+      # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
+    become: true
+
+#
+# npm Global Problem fix
+# https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory
+#
+  - name: create Directory for global installation
+    file:
+      path: ~/.npm-global
+      state: directory
+      mode: 0755
+  - name: set directory of npm
+    command: npm config set prefix '~/.npm-global'
+  - name: path for global npm
+    lineinfile:
+      dest: ~/.profile
+      line: 'export PATH=~/.npm-global/bin:$PATH'
+  - name: source ~/.profile
+    shell: source ~/.profile | bash
+
+#
+# eslint
+#
+  - name: Install "eslint" node.js package globally.
+    npm:
+      name: eslint
+      global: yes
+
+#
+# NeoBundle
+#
+  - name: NeoBundle
+    shell: curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | bash
+
+#
+# vagrant
+#
+  - name: download Vagrant deb pack file with check (sh256sum)
+    get_url:
+      url: https://releases.hashicorp.com/vagrant/1.8.7/vagrant_1.8.7_x86_64.deb
+      dest: /home/{{ansible_user_id}}/Downloads/vagrant_1.8.7_x86_64.deb
+      sha256sum: 10c77b643b73dd3ad7a45a89d8ab95b58b79dc10e0cf6e760fe24abc436b2fdb
+      force: no
+    become: true
+  - name: Install vagrant from a deb package
+    apt:
+      deb: /home/{{ansible_user_id}}/Downloads/vagrant_1.8.7_x86_64.deb
+    become: true
+
+#
+# Onedrive client Install
+# https://memo.laughk.org/2016/12/22/0000.html
+# https://github.com/skilion/onedrive
+#
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      # https://ubuntuforums.org/showthread.php?t=1774516
+      - libcurl4-gnutls-dev
+      #- libcurl-dev
+      - libsqlite3-dev
+    become: true
+  - name: download for Onedrive
+    get_url:
+      url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
+      dest: /etc/apt/sources.list.d/d-apt.list
+    become: true
+  - name: apt-key add for Onedrive
+    apt_key:
+      url: "http://dlang.org/d-keyring.gpg"
+      state: present
+    become: true
+  - name: Run the equivalent of "apt-get update" as a separate step
+    apt:
+      update_cache: yes
+    become: true
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest allow_unauthenticated=yes
+    with_items:
+      - dmd-bin
+    become: true
+  - name: clone Onedrive
+    git:
+      repo: https://github.com/skilion/onedrive
+      dest: ~/Downloads/onedrive
+  - name: make all
+    make:
+      chdir: ~/Downloads/onedrive
+      target: ~/Downloads/onedrive/Makefile
+  - name: make install
+    command: make install
+    args:
+      chdir: /home/{{ansible_user_id}}/Downloads/onedrive
+    become: true
+  - name: create ~/.config/onedrive directory if it doesn't exist
+    file:
+      path: ~/.config/onedrive
+      state: directory
+      mode: 0755
+  - name: copy onedrive.conf
+    copy: >
+      src=~/Downloads/onedrive/config
+      dest=~/.config/onedrive/config
+  - name: systemd onedrive enabled
+    command: systemctl --user enable onedrive
+  - name: systemd onedrive start
+    command: systemctl --user start onedrive
+
+#
+# misc Settings
+#
+  - name: zsh for login shell
+    user: name={{ansible_user_id}} shell=/bin/zsh
+    become: true
+  - name: copy autostart
+    copy: >
+      src=./autostart/
+      dest=~/.config/autostart
+
+#
+# FireWall Settings
+# http://linuxbsdos.com/2015/12/07/first-thing-to-do-after-installing-linux-mint-17-3/
+#
+  - name: start firewalld
+    service: name=firewalld state=running enabled=yes
+    become: true
+
+#
+# SSH Settings
+#
+  - name: Disallow root SSH access
+    lineinfile: dest=/etc/ssh/sshd_config
+              regexp="^PermitRootLogin"
+              line="PermitRootLogin no"
+              state=present
+    notify: restart ssh
+    become: true
+  - name: create ~/.ssh directory if it doesn't exist
+    file:
+      path: ~/.ssh
+      state: directory
+      mode: 0755
+
+#
+# dist-upgrade, autoremove
+#
+  - name: Update all packages to the latest version
+    apt:
+      upgrade: dist
+      autoremove: yes
+    become: true
+
+#
+# git configuration
+#
+  - name: git config username in global
+    command: git config --global user.email "{{ gituser }}"
+  - name: git config email in global
+    command: git config --global user.name "{{ gitemail }}"
+
+#
+# Fonts
+#
+  - name: Fonts for Default
+    command: gsettings set org.cinnamon.desktop.interface font-name "{{ font }}"
+  - name: Fonts for Desktop
+    command: gsettings set org.nemo.desktop font "{{ font }}"
+  - name: Fonts for Document
+    command: gsettings set org.gnome.desktop.interface document-font-name "{{ font }}"
+  - name: Fonts for monospace
+    command: gsettings set org.gnome.desktop.interface monospace-font-name "{{ font_monospace }}"
+  - name: Fonts for Window Titlebar
+    command: gsettings set org.cinnamon.desktop.wm.preferences titlebar-font "{{ font_titlebar }}"
+
+#
+# Virtualbox setting
+#
+  - name: add "{{ansible_user_id}}" into group netdev
+    user:
+      name: "{{ansible_user_id}}"
+      groups: vboxusers
+      append: yes
+    become: true
+
+#
+# Monitorix
+#
+# Works without installation of libs listed below despite official instruction
+# http://www.monitorix.org/doc-debian.html
+# - name: install packages
+#   apt: name={{ item }} update_cache=yes state=latest
+#   with_items:
+#     - rrdtool
+#     - perl
+#     - libwww-perl
+#     - libmailtools-perl
+#     - libmime-lite-perl
+#     - librrds-perl
+#     - libdbi-perl
+#     - libxml-simple-perl
+#     - libhttp-server-simple-perl
+#     - libconfig-general-perl
+#     - libio-socket-ssl-perl
+#   become: true
+  - name: download Monitorix deb pack file with check (sh256sum)
+    get_url: >-
+      url=http://www.monitorix.org/{{ monitorix }}
+      dest={{ downloads }}/{{ monitorix }}
+      sha256sum=1020cdfed78edc33d4877df87f0d0f09246b1ccd54f9e2d7a7b0a83220be84a4
+      force=no
+    become: true
+  - name: Install Monitorix from a deb package
+    apt: >-
+      deb={{ downloads }}/{{ monitorix }}
+    become: true
+  - name: start monitorix
+    service: name=monitorix state=running enabled=yes
+    become: true
+
+#
+# pip
+#
+  - name: install pip(s)
+    pip: name={{ item }} extra_args="-U"
+    with_items:
+      - pip
+      - setuptools
+      - csvkit
+    become: true
+
+  - name: sitecustomize.py
+    blockinfile:
+      dest: /etc/python2.7/sitecustomize.py
+      insertafter: '^# install the apport exception handler if available'
+      content: |
+        import sys
+        sys.setdefaultencoding('utf-8')
+    become: true
+
+#
+# mail command settings
+#
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - mailutils
+      - exim4
+    become: true
+  - name: copy exim4 cfg file
+    copy: >
+      src=./src/update-exim4.conf.conf
+      dest=/etc/exim4/update-exim4.conf.conf
+    become: true
+  - shell: update-exim4.conf
+    become: true
+
+#
+# Android
+#https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+  - name: download Android Studio (sh256sum)
+    get_url: >-
+      url={{ android_studio_url }}/{{ android_studio_name }}
+      dest={{ downloads }}
+      sha256sum={{android_studio_checksum}}
+      force=no
+    become: true
+  - name: Unzip Android Studio
+    command: unzip -o {{ downloads }}/{{ android_studio_name }}
+    args:
+        chdir: /usr/local/
+    become: true
+  - name: kvm install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+     - kvm
+     - virt-manager
+     - libvirt-bin
+     - bridge-utils
+    become: true
+  - name: start libvirt-bin
+    service: name=libvirt-bin state=running enabled=yes
+    become: true
+
+
+  handlers:
+  - name: restart ssh
+    service: name=sshd state=restarted
+    become: true
+  - name: delete node_setup
+    file:
+      name: "{{nodesetup}}"
+      state: absent
+

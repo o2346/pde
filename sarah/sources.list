@@ -1,0 +1,18 @@
+#------------------------------------------------------------------------------#
+#                            OFFICIAL UBUNTU REPOS                             #
+#------------------------------------------------------------------------------#
+
+
+###### Ubuntu Main Repos
+deb http://ftp.jaist.ac.jp/pub/Linux/ubuntu/ xenial main universe multiverse
+deb-src http://ftp.jaist.ac.jp/pub/Linux/ubuntu/ xenial main universe multiverse
+
+###### Ubuntu Update Repos
+deb http://ftp.jaist.ac.jp/pub/Linux/ubuntu/ xenial-security main universe multiverse
+deb http://ftp.jaist.ac.jp/pub/Linux/ubuntu/ xenial-updates main universe multiverse
+deb http://ftp.jaist.ac.jp/pub/Linux/ubuntu/ xenial-proposed main universe multiverse
+deb http://ftp.jaist.ac.jp/pub/Linux/ubuntu/ xenial-backports main universe multiverse
+deb-src http://ftp.jaist.ac.jp/pub/Linux/ubuntu/ xenial-security main universe multiverse
+deb-src http://ftp.jaist.ac.jp/pub/Linux/ubuntu/ xenial-updates main universe multiverse
+deb-src http://ftp.jaist.ac.jp/pub/Linux/ubuntu/ xenial-proposed main universe multiverse
+deb-src http://ftp.jaist.ac.jp/pub/Linux/ubuntu/ xenial-backports main universe multiverse

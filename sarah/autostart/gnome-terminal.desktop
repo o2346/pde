@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=gnome-terminal
+Comment=gnome-terminal start
+Exec=/usr/bin/gnome-terminal
+Type=Application
+
