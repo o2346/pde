@@ -1,19 +1,23 @@
 ---
-- hosts: localhost
+- hosts: "{{ given_host | default('localhost') }}"
   vars:
   become: no
   tasks:
 
-  - name: The system stupidly awaits something named user debian-gdm. Disable it
-    lineinfile:
-      path: /etc/systemd/system.conf
-      regexp: "^#DefaultTimeoutStartSec"
-      line: 'DefaultTimeoutStartSec=1s'
-    lineinfile:
-      path: /etc/systemd/system.conf
-      regexp: "^#DefaultTimeoutStopSec"
-      line: 'DefaultTimeoutStopSec=1s'
-
+#
+# solve shutdown problem
+# https://unix.stackexchange.com/questions/273876/a-stop-job-is-running-for-session-c2-of-user
+  - name: The system stupidly awaits and saying like "stop job is running.." at shutdown. Disable it
+    replace:
+      dest: /etc/systemd/system.conf
+      regexp: '{{ item.regexp }}'
+      replace: '{{ item.replace }}'
+    with_items:
+    - regexp: '^#DefaultTimeoutStartSec.+$'
+      replace: 'DefaultTimeoutStartSec=1s'
+    - regexp: '^#DefaultTimeoutStopSec.+$'
+      replace: 'DefaultTimeoutStopSec=1s'
+    notify: restart system daemon
 #
 # ssh
 #
@@ -26,6 +30,10 @@
 #    with_items:
 #      - openssh-server
 #    when: item not in packages_installed.stdout_lines
+  - name: start ssh
+    service: name=ssh state=started enabled=yes
+    become: true
+    notify: restart ssh
   - name: Allow root SSH access
     lineinfile: dest=/etc/ssh/sshd_config
               regexp="^PermitRootLogin"
@@ -41,5 +49,8 @@
 
   handlers:
   - name: restart ssh
-    service: name=ssh state=restarted
+    service: name=ssh state=restarted enabled=yes
+    become: true
+  - name: restart system daemon
+    command: systemctl daemon-reload
     become: true
