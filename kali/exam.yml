@@ -52,6 +52,14 @@
       state: directory
       mode: 0755
 
+#
+# disable screen saver & auto screen turn off
+# https://askubuntu.com/questions/67355/how-do-i-completely-turn-off-screensaver-and-power-management
+  - name: disable auto screen turn off
+    command: gsettings set org.gnome.settings-daemon.plugins.power idle-dim false
+  - name: disable auto screen turn off
+    command: gsettings set org.gnome.desktop.session idle-delay 0
+
   handlers:
   - name: restart ssh
     service: name=ssh state=restarted enabled=yes
