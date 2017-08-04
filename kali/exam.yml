@@ -19,17 +19,22 @@
       replace: 'DefaultTimeoutStopSec=1s'
     notify: restart system daemon
 #
-# ssh
+# auto login
 #
-#  - name: List Installed packages
-#    shell: "dpkg -l | awk '{print $2;}'"
-#    register: packages_installed
-#    changed_when: false
-#  - name: install ssh
-#    apt: name={{ item }} state=installed update_cache=yes
-#    with_items:
-#      - openssh-server
-#    when: item not in packages_installed.stdout_lines
+  - name: auto login
+    replace:
+      dest: /etc/gdm3/daemon.conf
+      regexp: '{{ item.regexp }}'
+      replace: '{{ item.replace }}'
+    with_items:
+    - regexp: '^#\s*AutomaticLoginEnable.+$'
+      replace: 'AutomaticLoginEnable = true'
+    - regexp: '^#\s*AutomaticLogin.+$'
+      replace: 'AutomaticLogin = root'
+    notify: restart system daemon
+#
+# ssh
+# https://linuxconfig.org/how-to-install-ssh-secure-shell-service-on-kali-linux
   - name: start ssh
     service: name=ssh state=started enabled=yes
     become: true
