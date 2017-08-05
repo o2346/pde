@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: "{{ given_host | default('localhost') }}"
   vars:
     downloads: /home/{{ansible_user_id}}/Downloads
     android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
@@ -38,6 +38,7 @@
      - qemu-kvm
      - kvm
      - virt-manager
+     - ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
      - libvirt-bin
      - bridge-utils
     become: true
