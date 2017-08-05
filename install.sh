@@ -65,7 +65,7 @@ preinstall(){
   sudo apt install -y git
 
   cd ~/Downloads
-  git clone http://github.com/whateverjp/pde
+  git clone https://github.com/whateverjp/pde
 
 }
 
