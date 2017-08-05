@@ -74,7 +74,7 @@ USER=`whoami`
 
 
 # switch playbook for master or test
-while getopts "dev" OPT ; do
+while getopts "devi" OPT ; do
   case $OPT in
     d)  echo Branch: Develop OSDIR=$OSDIR
         preinstall
@@ -93,6 +93,14 @@ while getopts "dev" OPT ; do
     v)  echo Virtual Machine Optimization mode OSDIR=$OSDIR
         vmopt
         exit 0
+        ;;
+    i)  echo init mode
+        preinstall
+        cd ~/Downloads/pde
+        git checkout develop
+        cd ~/Downloads/pde/$OSDIR
+        echo INIT
+        sh ansible.sh -i
         ;;
   esac
 done

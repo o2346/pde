@@ -1,9 +1,12 @@
 #!/bin/bash
-
-while getopts "e" OPT ; do
+cd `dirname $0`
+while getopts "ei" OPT ; do
   case $OPT in
     e)  echo Entering Examinational mode
         ansible-playbook exam.yml -kK --connection=local
+        ;;
+    i)  echo playing init mode
+        ansible-playbook init.yml -kK --connection=local
         ;;
   esac
 done
