@@ -6,7 +6,7 @@ getlinuxdir () {
   # /bin/sh -> dash problem
   # shell Syntax error: ( unexpected (expecting })
   declare -A dir
-  dir=(["Sarah"]="sarah" ["serena"]="sarah" ["LinuxMint"]="sarah" ["kali"]="kali")
+  dir=(["LinuxMint"]="sarah" ["kali"]="kali")
 
   for type in ${!dir[@]} ; do
     if echo `lsb_release -a` | grep -q $type ; then
@@ -80,6 +80,7 @@ while getopts "devi" OPT ; do
         preinstall
         cd ~/Downloads/pde
         git checkout develop
+        git pull
         cd ~/Downloads/pde/$OSDIR
         sh ~/Downloads/pde/$OSDIR/ansible.sh
         ;;
@@ -87,6 +88,7 @@ while getopts "devi" OPT ; do
         preinstall
         cd ~/Downloads/pde
         git checkout develop
+        git pull
         cd ~/Downloads/pde/$OSDIR
         sh ~/Downloads/pde/$OSDIR/ansible.sh -e
         ;;
@@ -98,9 +100,12 @@ while getopts "devi" OPT ; do
         preinstall
         cd ~/Downloads/pde
         git checkout develop
+        git pull
         cd ~/Downloads/pde/$OSDIR
         echo INIT
-        sh ansible.sh -i
+        echo `pwd`
+        echo $OSDIR
+        sh ~/Downloads/pde/$OSDIR/ansible.sh -i
         ;;
   esac
 done

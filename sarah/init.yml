@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ given_host | default('all') }}"
+- hosts: "{{ given_host | default('localhost') }}"
   tasks:
   - name: echo hosts
     debug:
