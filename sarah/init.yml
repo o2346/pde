@@ -1,15 +1,17 @@
 ---
 - hosts: "{{ given_host | default('localhost') }}"
   tasks:
-  - name: echo hosts
-    debug:
-      msg: "System:{{ inventory_hostname }} user:{{ ansible_user_id }}"
 
-  - name: command uname
-    command: uname
-    register: uname_result
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - ssh
+    become: true
+  - name: command ifconfig
+    command: ip a
+    register: ipa_result
     changed_when: False
 
-  - debug: var=uname_result.stdout_lines # stdout => stdout_lines
-    when: uname_result | success
+  - debug: var=ipa_result.stdout_lines # stdout => stdout_lines
+    when: ipa_result | success
 
