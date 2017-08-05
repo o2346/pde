@@ -253,6 +253,7 @@
       - chromium-browser
       - clang #for NeoBundle
       - ssh
+      - sshpass
       - firewall-applet #replacement of ufw
       - whois
       - tree
