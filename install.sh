@@ -6,7 +6,7 @@ getlinuxdir () {
   # /bin/sh -> dash problem
   # shell Syntax error: ( unexpected (expecting })
   declare -A dir
-  dir=(["Sarah"]="sarah" ["serena"]="sarah" ["LinuxMint"]="sarah")
+  dir=(["Sarah"]="sarah" ["serena"]="sarah" ["LinuxMint"]="sarah" ["kali"]="kali")
 
   for type in ${!dir[@]} ; do
     if echo `lsb_release -a` | grep -q $type ; then
