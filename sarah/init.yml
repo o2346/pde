@@ -2,11 +2,53 @@
 - hosts: "{{ given_host | default('localhost') }}"
   tasks:
 
+  - name: List Installed packages
+    shell: "dpkg -l | awk '{print $2;}'"
+    register: packages_installed
+    changed_when: false
+#
+# Network Manager disable
+# http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired
+#
+  - name: disable service network-manager
+    service: name=network-manager state=stopped enabled=no
+    become: true
+# OS will break becouse of this
+# - name: uninstall packages
+#   apt: name={{ item }} state=absent
+#   with_items:
+#     - network-manager
+#   become: true
+  - name: add "{{ansible_user_id}}" into group netdev
+    user:
+      name: "{{ansible_user_id}}"
+      groups: netdev
+      append: yes
+    become: true
+  - name: install package wicd
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - wicd
+    become: true
+    when: item not in packages_installed.stdout_lines
+#
+# wicd Settings
+#
+  - name: start wicd
+    service: name=wicd state=running enabled=yes
+    become: true
+  - name: restart wicd
+    service: name=wicd state=restarted
+    become: true
   - name: install packages
     apt: name={{ item }} update_cache=yes state=latest
     with_items:
       - ssh
     become: true
+    when: item not in packages_installed.stdout_lines
+#
+# ssh
+#
   - name: command ifconfig
     command: ip a
     register: ipa_result
