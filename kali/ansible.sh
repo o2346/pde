@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ -z `which ansible` ]; then
+  curl https://raw.githubusercontent.com/whateverjp/pde/develop/kali/sources.list > /etc/apt/sources.list
+  apt update
+  apt install -y ansible
+  sudo chown -R -v $USER ~/.ansible
+fi
+
 while getopts "e" OPT ; do
   case $OPT in
     e)  echo Entering Examinational mode

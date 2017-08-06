@@ -57,10 +57,11 @@ vmopt() {
 }
 
 preinstall(){
-  sudo apt update
-
-  sudo apt install -y ansible
-  sudo chown -R -v $USER ~/.ansible
+  if [ -z `which ansible` ]; then
+    sudo apt update
+    sudo apt install -y ansible
+    sudo chown -R -v $USER ~/.ansible
+  fi
 
   sudo apt install -y git
 
