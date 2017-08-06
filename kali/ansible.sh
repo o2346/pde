@@ -7,10 +7,13 @@ if [ -z `which ansible` ]; then
   sudo chown -R -v $USER ~/.ansible
 fi
 
-while getopts "e" OPT ; do
+while getopts "ei" OPT ; do
   case $OPT in
     e)  echo Entering Examinational mode
         ansible-playbook exam.yml -kK --connection=local
+        ;;
+    i)  echo Entering Examinational mode
+        ansible-playbook init.yml -kK --connection=local
         ;;
   esac
 done
