@@ -60,6 +60,16 @@
   - name: disable auto screen turn off
     command: gsettings set org.gnome.desktop.session idle-delay 0
 
+#
+# show ip address
+#
+  - name: command to obtain ip address
+    command: ip a
+    register: ipa_result
+    changed_when: False
+  - debug: var=ipa_result.stdout_lines # stdout => stdout_lines
+    when: ipa_result | success
+
   handlers:
   - name: restart ssh
     service: name=ssh state=restarted enabled=yes

@@ -49,7 +49,7 @@
 #
 # ssh
 #
-  - name: command ifconfig
+  - name: command to obtain ip address
     command: ip a
     register: ipa_result
     changed_when: False
