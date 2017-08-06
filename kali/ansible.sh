@@ -1,6 +1,7 @@
 #!/bin/bash
 
 if [ -z `which ansible` ]; then
+  # https://www.linkedin.com/pulse/kali-linux-fix-unable-locate-package-eyripidis-stefanidis
   curl https://raw.githubusercontent.com/whateverjp/pde/develop/kali/sources.list > /etc/apt/sources.list
   apt update
   apt install -y ansible
