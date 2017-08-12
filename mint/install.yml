@@ -266,6 +266,7 @@
       # sudo pip install -U setuptools
       # sudo pip install csvkit
       # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
+      - inotify-tools
     become: true
 
 #
