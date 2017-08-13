@@ -56,7 +56,7 @@ vmopt() {
 
 }
 
-preinstall(){
+preinstall_apt() {
   if [ -z `which ansible` ]; then
     sudo apt update
     sudo apt install -y ansible
@@ -68,6 +68,31 @@ preinstall(){
   cd ~/Downloads
   git clone https://github.com/whateverjp/pde
 
+}
+
+preinstall_dnf() {
+  echo hoge
+}
+
+preinstall_brew() {
+  sudo xcodebuild -license
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  brew update
+  brew install ansible
+  brew install git
+}
+
+preinstall() {
+  if [ "$(uname)" = "Darwin" ]; then
+    echo "preinstall for macos"
+    preinstall_brew
+  elif which apt 2>/dev/null; then
+    # Do something under GNU/Linux platform
+    preinstall_apt
+  elif which dnf 2>/dev/null; then
+    # Do something under GNU/Linux platform
+    preinstall_dnf
+  fi
 }
 
 OSDIR=`getosdir`
