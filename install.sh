@@ -81,8 +81,12 @@ preinstall_brew() {
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew update
   fi
-  brew install ansible
-  brew install git
+  if [ -z `which ansible` ]; then
+    brew install ansible
+  fi
+  if [ -z `which git` ]; then
+    brew install git
+  fi
 
   cd ~/Downloads
   git clone https://github.com/whateverjp/pde
