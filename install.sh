@@ -18,7 +18,7 @@ getlinuxdir () {
 getosdir () {
   if [ "$(uname)" = "Darwin" ]; then
     # Do something under Mac OS X platform
-    echo "$(uname)"
+    echo "darwin"
   elif [ "$(uname)" = "Linux" ]; then
     # Do something under GNU/Linux platform
     echo `getlinuxdir`
@@ -75,11 +75,18 @@ preinstall_dnf() {
 }
 
 preinstall_brew() {
-  sudo xcodebuild -license
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-  brew update
+
+  if which brew 2>/dev/null; then
+    sudo xcodebuild -license
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    brew update
+  fi
   brew install ansible
   brew install git
+
+  cd ~/Downloads
+  git clone https://github.com/whateverjp/pde
+
 }
 
 preinstall() {
