@@ -76,7 +76,7 @@ preinstall_dnf() {
 
 preinstall_brew() {
 
-  if which brew 2>/dev/null; then
+  if [ -z `which brew` ]; then
     sudo xcodebuild -license
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew update
