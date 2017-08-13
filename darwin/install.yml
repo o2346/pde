@@ -1,0 +1,5 @@
+---
+- hosts: "{{ given_host | default('localhost') }}"
+  vars:
+  become: no
+  tasks:
