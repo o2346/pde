@@ -513,6 +513,7 @@
     become: true
   - shell: update-exim4.conf
     become: true
+# tail -f /var/log/exim4/mainlog
 
 #
 # Android
