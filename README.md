@@ -165,6 +165,11 @@ File Menu > Edit > Profile Preferenses > [As I like]
     * this is for command [`vmrun`](https://communities.vmware.com/thread/521189?start=0&tstart=0) functional
 * `sudo sh VMxxxx.bundle` for each `.bundle` files
 
+###
+
+screensaver
+power management
+
 ## misc
 
 * [remove_keyring][remove_keyring]
