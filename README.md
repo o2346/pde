@@ -155,6 +155,8 @@ File Menu > Edit > Profile Preferenses > [As I like]
 |[Dark Reader](https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)|plugin|Darken pages|
 |~~Change Colors~~|plugin|Darken pages|
 |Download Master|plugin||
+|go to chrome://settings/ and click "Use GTK+ theme".||
+|fonts||
 
 ### Installation of VMware
 
