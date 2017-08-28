@@ -33,6 +33,7 @@ brew install macvim --override-system-vim
 
 brew install tmux
 brew install reattach-to-user-namespace
+brew install rename
 brew cask install iterm2
 
 brew cask install google-chrome
@@ -82,3 +83,33 @@ vim +NeoBundleInstall +qall
 brew install node
 npm install -g eslint
 
+
+# s003 mac-in-office% brew list
+# ansible                         glib                            libusb                          qt5
+# arp-scan                        gmp                             libusb-compat                   readline
+# arping                          gnutls                          libyaml                         reattach-to-user-namespace
+# atk                             gobject-introspection           little-cms2                     rename
+# autoconf                        graphite2                       macvim                          sane-backends
+# automake                        gtk+                            make                            sc
+# awscli                          harfbuzz                        makedepend                      shared-mime-info
+# brew-file                       hicolor-icon-theme              nasm                            sqlite
+# c-ares                          htop                            net-snmp                        sshpass
+# cairo                           icu4c                           nettle                          tig
+# cmake                           imagemagick                     nkf                             tmux
+# cscope                          intltool                        nmap                            trash
+# czmq                            jasper                          node                            tree
+# d-bus                           jpeg                            node@6                          utf8proc
+# dbus                            lame                            openjpeg                        vte
+# diff-pdf                        libevent                        openssl                         webp
+# doxygen                         libffi                          openssl@1.1                     wget
+# ffmpeg                          libgcrypt                       p11-kit                         wine
+# fontconfig                      libgpg-error                    pango                           wireshark
+# fontforge                       libgphoto2                      pcre                            wxmac
+# freetype                        libicns                         pixman                          x264
+# fswatch                         libnet                          pkg-config                      xvid
+# gd                              libpng                          poppler                         xz
+# gdbm                            libsodium                       py2cairo                        zeromq
+# gdk-pixbuf                      libtasn1                        pygobject                       zsh
+# geoip                           libtiff                         pygtk
+# gettext                         libtool                         python
+# git                             libunistring                    qt
