@@ -153,7 +153,6 @@ File Menu > Edit > Profile Preferenses > [As I like]
 |name|kind|discription|
 |---|---|---|
 |[Dark Reader](https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)|plugin|Darken pages|
-|~~Change Colors~~|plugin|Darken pages|
 |Download Master|plugin||
 |go to chrome://settings/ and click "Use GTK+ theme".||
 |fonts||
@@ -167,10 +166,14 @@ File Menu > Edit > Profile Preferenses > [As I like]
     * this is for command [`vmrun`](https://communities.vmware.com/thread/521189?start=0&tstart=0) functional
 * `sudo sh VMxxxx.bundle` for each `.bundle` files
 
-###
+### others
 
-screensaver
-power management
+* screensaver
+* power management
+
+### /etc/fstab
+
+configure as necessary
 
 ## misc
 
