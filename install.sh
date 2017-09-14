@@ -6,11 +6,19 @@ getlinuxdir () {
   # /bin/sh -> dash problem
   # shell Syntax error: ( unexpected (expecting })
   declare -A dir
-  dir=(["LinuxMint"]="mint" ["kali"]="kali")
+  dir=(["LinuxMint"]="mint" ["kali"]="kali" ["CentOS_release_6"]="centos6")
 
   for type in ${!dir[@]} ; do
-    if echo `lsb_release -a` | grep -q $type ; then
+    if echo `cat /etc/issue` | sed -e 's/\s/_/g' | grep -q $type ; then
       echo ${dir[$type]}
+      return 0
+    fi
+  done
+
+  for type in ${!dir[@]} ; do
+    if echo `lsb_release -a 2>/dev/null` | sed -e 's/\s/_/g' | grep -q $type ; then
+      echo ${dir[$type]}
+      return 0
     fi
   done
 }
