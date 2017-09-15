@@ -5,38 +5,10 @@
   tasks:
 
 #
-# solve shutdown problem
-# https://unix.stackexchange.com/questions/273876/a-stop-job-is-running-for-session-c2-of-user
-  - name: The system stupidly awaits and saying like "stop job is running.." at shutdown. Disable it
-    replace:
-      dest: /etc/systemd/system.conf
-      regexp: '{{ item.regexp }}'
-      replace: '{{ item.replace }}'
-    with_items:
-    - regexp: '^#DefaultTimeoutStartSec.+$'
-      replace: 'DefaultTimeoutStartSec=1s'
-    - regexp: '^#DefaultTimeoutStopSec.+$'
-      replace: 'DefaultTimeoutStopSec=1s'
-    notify: restart system daemon
-#
-# auto login
-#
-  - name: auto login
-    replace:
-      dest: /etc/gdm3/daemon.conf
-      regexp: '{{ item.regexp }}'
-      replace: '{{ item.replace }}'
-    with_items:
-    - regexp: '^#\s*AutomaticLoginEnable.+$'
-      replace: 'AutomaticLoginEnable = true'
-    - regexp: '^#\s*AutomaticLogin.+$'
-      replace: 'AutomaticLogin = root'
-    notify: restart system daemon
-#
 # ssh
-# https://linuxconfig.org/how-to-install-ssh-secure-shell-service-on-kali-linux
+#
   - name: start ssh
-    service: name=ssh state=started enabled=yes
+    service: name=sshd state=started enabled=yes
     become: true
     notify: restart ssh
   - name: Allow root SSH access
@@ -52,18 +24,7 @@
       state: directory
       mode: 0755
 
-#
-# disable screen saver & auto screen turn off
-# https://askubuntu.com/questions/67355/how-do-i-completely-turn-off-screensaver-and-power-management
-  - name: disable auto screen turn off
-    command: gsettings set org.gnome.settings-daemon.plugins.power idle-dim false
-  - name: disable auto screen turn off
-    command: gsettings set org.gnome.desktop.session idle-delay 0
-
   handlers:
   - name: restart ssh
-    service: name=ssh state=restarted enabled=yes
-    become: true
-  - name: restart system daemon
-    command: systemctl daemon-reload
+    service: name=sshd state=restarted enabled=yes
     become: true
