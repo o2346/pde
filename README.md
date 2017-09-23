@@ -180,6 +180,7 @@ configure as necessary
 * [remove_keyring][remove_keyring]
 * [List of Tools][list_of_tools]
 * [printer](http://support.brother.co.jp/j/b/downloadhowto.aspx?c=jp&lang=ja&prod=dcpj137n&os=128&dlid=dlf100517_000&flang=1001&type3=561)
+  * .deb packages
 * [DraftSight](https://www.3ds.com/ja/products-services/draftsight-cad-software/free-download/)
 
 [remove_keyring]: sarah/doc/misc.md#remove_keyring
