@@ -13,7 +13,7 @@ PDE(Personalized Development Environment) is system configration for my work.
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Operating system</td>
-<td bgcolor="#FFFFFF" valign="top"><a href="http://www.linuxmint.com/rel_sarah_cinnamon.php">Linux Mint 18 Cinnamon 64-bit</a></td>
+<td bgcolor="#FFFFFF" valign="top"><a href="https://linuxmint.com/">Linux Mint 18 Cinnamon 64-bit</a></td>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Development status</td>
@@ -21,7 +21,7 @@ PDE(Personalized Development Environment) is system configration for my work.
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Version</td>
-<td bgcolor="#FFFFFF" valign="top">1.1.2</td>
+<td bgcolor="#FFFFFF" valign="top">1.2</td>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Written in</td>
@@ -40,7 +40,7 @@ Secondary Guest Operating System setup helper.
   * configure settings
     * desktop themes
     * fonts
-    * [trackball behaveior](sarah/doc/trackball.md)
+    * [trackball behaveior](mint/doc/trackball.md)
   * dotfiles
 * Guest OS setup helper
   * Use of guest machine is a sandbox in order to develop PDE itself.
@@ -71,7 +71,7 @@ wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
 bash install.sh -v
 ```
 
-### for development of playbook( Mint 18 Sarah )
+### for development of playbook
 
 Development mode. Checkout Branch "Develop" and play normal playbook
 ```
@@ -183,6 +183,6 @@ configure as necessary
   * .deb packages
 * [DraftSight](https://www.3ds.com/ja/products-services/draftsight-cad-software/free-download/)
 
-[remove_keyring]: sarah/doc/misc.md#remove_keyring
-[list_of_tools]: sarah/doc/misc.md#list_of_tools
+[remove_keyring]: mint/doc/misc.md#remove_keyring
+[list_of_tools]: mint/doc/misc.md#list_of_tools
 
