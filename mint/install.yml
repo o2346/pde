@@ -269,6 +269,8 @@
       - inotify-tools
       - guile-2.0
       - guile-2.0-dev
+      - w3m
+      - w3m-img
     become: true
 
 #
