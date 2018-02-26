@@ -572,6 +572,12 @@
       append=true
     become: true
 
+# w3m
+  - name: create ~/.w3m directory if it doesn't exist
+    file:
+      path: ~/.w3m
+      state: directory
+
 #
 # dist-upgrade, autoremove
 #
