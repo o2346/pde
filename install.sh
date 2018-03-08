@@ -74,7 +74,7 @@ preinstall_apt() {
   sudo apt install -y git
 
   cd ~/Downloads
-  git clone https://github.com/whateverjp/pde
+  git clone https://github.com/o2346/pde
 
 }
 
@@ -97,7 +97,7 @@ preinstall_brew() {
   fi
 
   cd ~/Downloads
-  git clone https://github.com/whateverjp/pde
+  git clone https://github.com/o2346/pde
 
 }
 
