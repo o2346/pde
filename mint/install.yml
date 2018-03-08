@@ -12,7 +12,7 @@
     theme_controls: 'Mint-Y-Dark-Blue'
     theme_mouse_pointer: 'DMZ-White'
     theme_desktop: 'Modern Mint Dark'
-    monitorix: monitorix_3.9.0-izzy1_all.deb
+    monitorix: monitorix_3.10.0-izzy1_all.deb
     downloads: /home/{{ansible_user_id}}/Downloads
     android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
     android_studio_name: android-studio-ide-162.4069837-linux.zip
