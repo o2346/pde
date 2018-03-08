@@ -75,7 +75,7 @@ bash install.sh -v
 
 Development mode. Checkout Branch "Develop" and play normal playbook
 ```
-wget https://raw.githubusercontent.com/o2346/pde/master/install.sh
+wget https://raw.githubusercontent.com/o2346/pde/develop/install.sh
 bash install.sh -d
 ```
 
