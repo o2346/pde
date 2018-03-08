@@ -468,7 +468,7 @@
     get_url: >-
       url=http://www.monitorix.org/{{ monitorix }}
       dest={{ downloads }}/{{ monitorix }}
-      sha256sum=1020cdfed78edc33d4877df87f0d0f09246b1ccd54f9e2d7a7b0a83220be84a4
+      sha256sum=3fb8b4a4f7aeeeafccc6dc5b232f82d5761be80fe8e82008bc768f805fe5a744
       force=no
     become: true
   - name: Install Monitorix from a deb package
