@@ -262,6 +262,7 @@
       - guile-2.0-dev
       - w3m
       - w3m-img
+      - pdftk
     become: true
     when: not ansible_check_mode
 
