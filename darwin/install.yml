@@ -42,6 +42,7 @@
       - name: doxygen
       - name: emacs
       - name: ffmpeg
+        install_options: with-tools
       - name: fontconfig
       - name: fontforge
       - name: freetype
