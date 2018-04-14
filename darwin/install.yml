@@ -75,8 +75,9 @@
       - name: webp
       - name: wget
       - name: wine
-      - name: wireshark
-        install_options: with-qt
+      # consider it's really necessary
+      # - name: wireshark
+      #   install_options: with-qt
       - name: wxmac
       - name: yasm
 
@@ -106,3 +107,26 @@
       HOMEBREW_CASK_OPTS: "--appdir=/Applications"
     with_items: '{{ homebrew_cask_packages }}'
 
+  - name: vagrant plugin install
+    command: vagrant plugin install vagrant-aws
+
+  - name: show hidden files and directorys
+    command: defaults write com.apple.finder AppleShowAllFiles TRUE
+  - name: show hidden files and directorys
+    command: killall Finder
+
+  - name: NeoBundle
+    shell: curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | bash
+  - name: NeoBundle
+    command: vim +NeoBundleInstall +qall
+
+#
+# eslint
+#
+  - name: Install "eslint" node.js package globally.
+    npm:
+      name: eslint
+      global: yes
+
+# ricty font
+# curl -L 'https://gist.github.com/ysaotome/7286145/raw/installing_ricty_on_MacOSX.sh' | bash
