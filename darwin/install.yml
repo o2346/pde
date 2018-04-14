@@ -155,3 +155,9 @@
       src=../mint/.tmux.pd.conf
       dest=~/
     when: not has_dotfiles.stat.exists
+
+# w3m
+  - name: download .w3m
+    git:
+      repo: https://github.com/o2346/.w3m
+      dest: ~/Documents/.w3m
