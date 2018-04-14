@@ -16,7 +16,20 @@
       - name: atom
       - name: google-chrome
       - name: firefox
-
+      - name: diffmerge
+      - name: google-japanese-ime
+      - name: p4merge
+      - name: vlc
+      - name: dropbox
+      - name: iterm2
+      - name: skitch
+      - name: xquartz
+      - name: filezilla
+      - name: keepassx
+      - name: sourcetree
+      - name: libreoffice
+      - name: geekbench
+      - name: macdown
     homebrew_packages:
       - name: awscli
       - name: python
@@ -24,6 +37,45 @@
       - name: tig
       - name: tmux
       - name: zsh
+      - name: cmake
+      - name: diff-pdf
+      - name: doxygen
+      - name: emacs
+      - name: ffmpeg
+      - name: fontconfig
+      - name: fontforge
+      - name: freetype
+      - name: gnu-sed
+      - name: gnutls
+      - name: htop
+      - name: jasper
+      - name: jpeg
+      - name: lame
+      - name: macvim
+      - name: mp3splt
+      - name: nasm
+      - name: net-snmp
+      - name: nettle
+      - name: nkf
+      - name: nmap
+      - name: node
+      - name: openssl
+      - name: python
+      - name: readline
+      - name: reattach-to-user-namespace
+      - name: sqlite
+      - name: texi2html
+      - name: trash
+      - name: tree
+      - name: utf8proc
+      - name: w3m
+      - name: webp
+      - name: wget
+      - name: wine
+      - name: wireshark
+      - name: wxmac
+      - name: yasm
+
   become: no
   tasks:
   - name: homebrew update
