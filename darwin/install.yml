@@ -52,6 +52,7 @@
       - name: jpeg
       - name: lame
       - name: macvim
+        install_options: override-system-vim
       - name: mp3splt
       - name: nasm
       - name: net-snmp
@@ -63,6 +64,7 @@
       - name: python
       - name: readline
       - name: reattach-to-user-namespace
+      - name: rename
       - name: sqlite
       - name: texi2html
       - name: trash
@@ -73,6 +75,7 @@
       - name: wget
       - name: wine
       - name: wireshark
+        install_options: with-qt
       - name: wxmac
       - name: yasm
 
@@ -99,4 +102,5 @@
     homebrew:
       name: '{{ item.name }}'
       state: '{{ item.state | default("present") }}'
+      install_options: '{{ item.install_options | default("present") }}'
     with_items: '{{ homebrew_packages }}'
