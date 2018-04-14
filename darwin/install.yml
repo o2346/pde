@@ -91,6 +91,13 @@
       state: present
     with_items: '{{ homebrew_taps }}'
 
+  - name: homebrew packages install
+    homebrew:
+      name: '{{ item.name }}'
+      state: '{{ item.state | default("present") }}'
+      install_options: '{{ item.install_options | default("present") }}'
+    with_items: '{{ homebrew_packages }}'
+
   - name: homebrew cask packages install
     homebrew_cask: name={{ item.name }} state=installed
     # ※1 GUIツールをインストールする場所を `/Application` に固定
@@ -98,9 +105,3 @@
       HOMEBREW_CASK_OPTS: "--appdir=/Applications"
     with_items: '{{ homebrew_cask_packages }}'
 
-  - name: homebrew packages install
-    homebrew:
-      name: '{{ item.name }}'
-      state: '{{ item.state | default("present") }}'
-      install_options: '{{ item.install_options | default("present") }}'
-    with_items: '{{ homebrew_packages }}'
