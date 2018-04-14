@@ -85,6 +85,7 @@ preinstall_dnf() {
 preinstall_brew() {
 
   if [ -z `which brew` ]; then
+    # appleid required beforhand
     # is this better?
     # xcode-select --install
     sudo xcodebuild -license
