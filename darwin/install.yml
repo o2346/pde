@@ -8,6 +8,7 @@
       - homebrew/versions
       - homebrew/boneyard
       - homebrew/binary
+      - sanemat/font # ricty
 
     homebrew_cask_packages:
       - name: appcleaner
@@ -129,4 +130,28 @@
       global: yes
 
 # ricty font
+  - name: ricty font
+    commamd: cp -f /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
+  - name: ricty font
+    commamd: fc-cache -vf
 # curl -L 'https://gist.github.com/ysaotome/7286145/raw/installing_ricty_on_MacOSX.sh' | bash
+
+#
+# Dotfiles
+#
+  - name: check if .dotfiles exists
+    stat: path=~/Documents/.dotfiles
+    register: has_dotfiles
+  - name: download dotfiles
+    git:
+      repo: https://gist.githubusercontent.com/whateverjp/6ea3445379a6cdf87037c1be97ef7b16
+      dest: ~/Documents/.dotfiles
+    when: not has_dotfiles.stat.exists
+  - name: deploy dotfiles
+    command: sh ~/Documents/.dotfiles/deploy.sh
+    when: not has_dotfiles.stat.exists
+  - name: copy .tmux.pd.conf
+    copy: >
+      src=../mint/.tmux.pd.conf
+      dest=~/
+    when: not has_dotfiles.stat.exists
