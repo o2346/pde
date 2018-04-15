@@ -145,8 +145,9 @@
   - name: install NeoBundle
     command: bash "{{tmp_dir.stdout}}"/install.sh
     when: not ansible_check_mode
-  - name: NeoBundleInstall
-    command: vim +NeoBundleInstall +qall
+    # not idempotent yet
+    #- name: NeoBundleInstall
+    #- command: vim +NeoBundleInstall +qall
 
 #
 # eslint
@@ -188,6 +189,12 @@
     git:
       repo: https://github.com/o2346/.w3m
       dest: ~/Documents/.w3m
+
+  # happy-scripts
+  - name: download happy-scritps
+    git:
+      repo: https://github.com/o2346/happy-scripts
+      dest: ~/Documents/happy-scripts
 
 # login shell
   - name: zsh for login shell
