@@ -100,6 +100,7 @@
       state: '{{ item.state | default("present") }}'
       install_options: '{{ item.install_options | default("present") }}'
     with_items: '{{ homebrew_packages }}'
+    when: not ansible_check_mode
 
   - name: homebrew cask packages install
     homebrew_cask: name={{ item.name }} state=installed
@@ -107,15 +108,18 @@
     environment:
       HOMEBREW_CASK_OPTS: "--appdir=/Applications"
     with_items: '{{ homebrew_cask_packages }}'
+    when: not ansible_check_mode
 
 
-  - name: installs latest available version ovirt-engine-sdk
-    gem:
-      name: ovirt-engine-sdk
-      state: latest
-    become: true
-  - name: vagrant plugin install
-    command: vagrant plugin install vagrant-aws
+    # error occurd & not resolved
+    #  - name: installs latest available version ovirt-engine-sdk
+    #    gem:
+    #      name: ovirt-engine-sdk
+    #      state: latest
+    #    become: true
+    #  - name: vagrant plugin install
+    #    command: vagrant plugin install vagrant-aws
+    #    become: true
 
   - name: show hidden files and directorys
     command: defaults write com.apple.finder AppleShowAllFiles TRUE
@@ -137,7 +141,7 @@
 
 # ricty font
   - name: ricty font
-    command: cp -f /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
+    shell: cp -f /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
   - name: ricty font
     command: fc-cache -vf
 # curl -L 'https://gist.github.com/ysaotome/7286145/raw/installing_ricty_on_MacOSX.sh' | bash
