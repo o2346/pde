@@ -100,7 +100,7 @@
   - name: homebrew packages install
     homebrew:
       name: '{{ item.name }}'
-      state: '{{ item.state | default("present") }}'
+      state: '{{ item.state | default("latest") }}'
       install_options: '{{ item.install_options | default("None") }}'
     with_items: '{{ homebrew_packages }}'
     when: not ansible_check_mode
@@ -194,3 +194,7 @@
     user: name={{ansible_user_id}} shell=/bin/zsh
     become: true
 
+  - name: brew upgrade
+    homebrew:
+      upgrade_all: yes
+    when: not ansible_check_mode
