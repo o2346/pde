@@ -51,7 +51,6 @@
       - name: jpeg
       - name: lame
       - name: macvim
-        install_options: with-override-system-vim
       - name: mp3splt
       - name: nasm
       - name: net-snmp
@@ -118,6 +117,9 @@
     register: tmp_dir
   - debug: msg='{{tmp_dir.stdout}}'
     when: not ansible_check_mode
+
+  - name: macvim
+    command: brew install macvim --override-system-vim
 
     # error occurd & not resolved
     #  - name: installs latest available version ovirt-engine-sdk
