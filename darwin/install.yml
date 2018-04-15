@@ -21,7 +21,6 @@
       - name: dropbox
       - name: iterm2
       - name: skitch
-      - name: xquartz
       - name: filezilla
       - name: keepassx
       - name: sourcetree
@@ -94,6 +93,10 @@
     with_items: '{{ homebrew_taps }}'
     when: not ansible_check_mode
 
+  # xquartz must be installed before diff-pdf
+  - name: homebrew cask packages install
+    homebrew_cask: name=xquartz state=installed
+
   - name: homebrew packages install
     homebrew:
       name: '{{ item.name }}'
@@ -113,7 +116,8 @@
   - name: make temp folder
     command: mktemp -d
     register: tmp_dir
-  - debug: msg="{{tmp_dir.stdout}}"
+  - debug: msg='{{tmp_dir.stdout}}'
+    when: not ansible_check_mode
 
     # error occurd & not resolved
     #  - name: installs latest available version ovirt-engine-sdk
@@ -130,12 +134,14 @@
   - name: show hidden files and directorys
     command: killall Finder
 
-  - name: download NeoBundle↲
+  - name: download NeoBundle
     get_url:
       url: https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
       dest: '{{tmp_dir.stdout}}'
+    when: not ansible_check_mode
   - name: install NeoBundle
     command: bash "{{tmp_dir.stdout}}"/install.sh
+    when: not ansible_check_mode
   - name: NeoBundleInstall
     command: vim +NeoBundleInstall +qall
 
