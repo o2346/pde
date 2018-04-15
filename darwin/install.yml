@@ -88,12 +88,14 @@
   - name: homebrew update
     homebrew:
       update_homebrew: yes
+    when: not ansible_check_mode
 
   - name: homebrew tap
     homebrew_tap:
       name: '{{ item }}'
       state: present
     with_items: '{{ homebrew_taps }}'
+    when: not ansible_check_mode
 
   - name: homebrew packages install
     homebrew:
@@ -132,9 +134,9 @@
 
 # ricty font
   - name: ricty font
-    commamd: cp -f /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
+    command: cp -f /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
   - name: ricty font
-    commamd: fc-cache -vf
+    command: fc-cache -vf
 # curl -L 'https://gist.github.com/ysaotome/7286145/raw/installing_ricty_on_MacOSX.sh' | bash
 
 #
@@ -162,3 +164,9 @@
     git:
       repo: https://github.com/o2346/.w3m
       dest: ~/Documents/.w3m
+
+# login shell
+  - name: zsh for login shell
+    user: name={{ansible_user_id}} shell=/bin/zsh
+    become: true
+
