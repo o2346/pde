@@ -21,7 +21,7 @@
       - name: dropbox
       - name: iterm2
       - name: skitch
-      - name: filezilla
+        # Error: undefined method `release' for OS::Mac:Module - name: filezilla
       - name: keepassx
       - name: sourcetree
       - name: libreoffice
@@ -119,7 +119,7 @@
     when: not ansible_check_mode
 
   - name: macvim
-    command: brew install macvim --override-system-vim
+    command: brew reinstall macvim --override-system-vim
 
     # error occurd & not resolved
     #  - name: installs latest available version ovirt-engine-sdk
