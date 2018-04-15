@@ -132,8 +132,8 @@
 
   - name: download NeoBundle↲
     get_url:
-    url: https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
-    dest: '{{tmp_dir.stdout}}'
+      url: https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
+      dest: '{{tmp_dir.stdout}}'
   - name: install NeoBundle
     command: bash "{{tmp_dir.stdout}}"/install.sh
   - name: NeoBundleInstall
