@@ -29,6 +29,7 @@ update playbook for macOS
 
 1. initial setup of the macOS
 1. make it online
+1. full install xcode to avoid macvim installation on brew
 1. register appleid on the machine
 1. execute entry point of this sysytem
 1. ssh configurations
