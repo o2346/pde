@@ -94,7 +94,7 @@
     when: not ansible_check_mode
 
   # xquartz must be installed before diff-pdf
-  - name: homebrew cask packages install
+  - name: install xquartz
     homebrew_cask: name=xquartz state=installed
 
   - name: homebrew packages install
