@@ -25,6 +25,24 @@ update playbook for macOS
 
 ## History
 
+### procedure
+
+1. initial setup of the macOS
+1. make it online
+1. register appleid on the machine
+1. execute entry point of this sysytem
+1. ssh configurations
+1. configurations for each objects
+  1. iterm2
+  1. plugins for firefox
+  1. plugins for chrome
+  1. trackball
+  1. hhkb
+  1. magicpad & apple keyborad
+  1. auto startup some apps when macOS launched
+
+---
+
 developed on macbook, prepare testing on clean mac mini
 
 ---
