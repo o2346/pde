@@ -10,8 +10,8 @@
 |Start date|2018-04-14|
 |Due date|2018-04-15|
 |estimated|12hours|
-|% Done|10%|
-|worked|1hours|
+|% Done|30%|
+|worked|5hours|
 
 ## Description
 
@@ -24,6 +24,8 @@ update playbook for macOS
 |||<!--OTHER_ISSUE;;-->
 
 ## History
+
+developed on macbook, prepare testing on clean mac mini
 
 ---
 *this document has been generated & accessed from computer program, named "icol"*
