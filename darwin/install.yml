@@ -63,6 +63,7 @@
       - name: readline
       - name: reattach-to-user-namespace
       - name: rename
+      - name: ricty
       - name: sqlite
       - name: texi2html
       - name: trash
