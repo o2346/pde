@@ -98,7 +98,7 @@
     homebrew:
       name: '{{ item.name }}'
       state: '{{ item.state | default("present") }}'
-      install_options: '{{ item.install_options | default("present") }}'
+      install_options: '{{ item.install_options | default("None") }}'
     with_items: '{{ homebrew_packages }}'
     when: not ansible_check_mode
 
@@ -110,6 +110,10 @@
     with_items: '{{ homebrew_cask_packages }}'
     when: not ansible_check_mode
 
+  - name: make temp folder
+    command: mktemp -d
+    register: tmp_dir
+  - debug: msg="{{tmp_dir.stdout}}"
 
     # error occurd & not resolved
     #  - name: installs latest available version ovirt-engine-sdk
@@ -126,9 +130,13 @@
   - name: show hidden files and directorys
     command: killall Finder
 
-  - name: NeoBundle
-    shell: curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | bash
-  - name: NeoBundle
+  - name: download NeoBundle↲
+    get_url:
+    url: https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
+    dest: '{{tmp_dir.stdout}}'
+  - name: install NeoBundle
+    command: bash "{{tmp_dir.stdout}}"/install.sh
+  - name: NeoBundleInstall
     command: vim +NeoBundleInstall +qall
 
 #
