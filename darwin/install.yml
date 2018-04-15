@@ -108,6 +108,12 @@
       HOMEBREW_CASK_OPTS: "--appdir=/Applications"
     with_items: '{{ homebrew_cask_packages }}'
 
+
+  - name: installs latest available version ovirt-engine-sdk
+    gem:
+      name: ovirt-engine-sdk
+      state: latest
+    become: true
   - name: vagrant plugin install
     command: vagrant plugin install vagrant-aws
 
