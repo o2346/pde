@@ -51,7 +51,7 @@
       - name: jpeg
       - name: lame
       - name: macvim
-        install_options: override-system-vim
+        install_options: with-override-system-vim
       - name: mp3splt
       - name: nasm
       - name: net-snmp
