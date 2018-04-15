@@ -38,6 +38,7 @@
       - name: tig
       - name: tmux
       - name: zsh
+      - name: imagemagick
       - name: cmake
       - name: diff-pdf
       - name: doxygen
