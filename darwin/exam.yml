@@ -3,3 +3,30 @@
   vars:
   become: no
   tasks:
+  # ホスト毎にループバックアドレスとゲートウェイを出力する
+  #- debug: msg="System {{ inventory_hostname }} has uuid {{ ansible_product_uuid }}"
+
+  - debug: msg="System {{ inventory_hostname }} has gateway {{ ansible_default_ipv4.gateway }}"
+    when: ansible_default_ipv4.gateway is defined
+
+  - shell: /usr/bin/uptime
+    register: result
+  - debug: var=result
+
+  - name: Display all variables/facts known for a host
+    debug: var=hostvars[inventory_hostname]
+
+  - name: make temp folder
+    command: mktemp -d
+    register: tmp_dir
+  - debug: msg="{{tmp_dir.stdout}}"
+
+  - name: download NeoBundle
+    get_url:
+      url: https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
+      dest: '{{tmp_dir.stdout}}'
+  - name: install NeoBundle
+    command: bash "{{tmp_dir.stdout}}"/install.sh
+  - name: NeoBundleInstall
+    command: vim +NeoBundleInstall +qall
+
