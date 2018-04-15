@@ -2,8 +2,8 @@
 - hosts: "{{ given_host | default('localhost') }}"
   vars:
     nodesetup: /tmp/node_setup.sh
-    gituser: hoge
-    gitemail: hoge@fuga.email
+    gituser: user
+    gitemail: ""
     font: 'MigMix 1M 16'
     font_monospace: 'Ricty Diminished Regular 15'
     font_titlebar: 'Migu 2M Bold 14'
@@ -45,6 +45,7 @@
     with_items:
       - wicd
     become: true
+    when: not ansible_check_mode
 #
 # wicd Settings
 #
@@ -119,20 +120,6 @@
   - name: list themes
     command: ls ~/.themes
     register: themes
-#  - name: debug result var
-#    debug: var=themes
-  - name: font size
-    replace: >-
-      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
-      regexp='font-size.+$'
-      replace='font-size: 12pt;'
-    with_items: themes.stdout_lines
-  - name: font family
-    replace: >-
-      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
-      regexp='font-family.+$'
-      replace='font-family: MigMix 1C;'
-    with_items: themes.stdout_lines
 #
 # Desktop Themes
 #
@@ -157,12 +144,14 @@
       regexp='font-size.+$'
       replace='font-size: 12pt;'
     with_items: themes.stdout_lines
+    when: not ansible_check_mode
   - name: font family
     replace: >-
       dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
       regexp='font-family.+$'
       replace='font-family: MigMix 1C;'
     with_items: themes.stdout_lines
+    when: not ansible_check_mode
 
 # TODO Make active window font punctuate
 # https://www.google.co.jp/search?safe=off&num=16&q=mint+active+window+cinnamon+-matome.naver.jp+-cookpad.com+-itpro.nikkeibp.co.jp+-rakuten.co.jp+-weblio.jp
@@ -200,8 +189,10 @@
       - fcitx
       - fcitx-mozc
     become: true
+    when: not ansible_check_mode
   - name: set fcitx as default, restarting is required
     command: im-config -n fcitx
+    when: not ansible_check_mode
 
 #
 # Node.js Preinstallation
@@ -271,7 +262,9 @@
       - guile-2.0-dev
       - w3m
       - w3m-img
+      - pdftk
     become: true
+    when: not ansible_check_mode
 
 #
 # npm Global Problem fix
@@ -333,6 +326,7 @@
       #- libcurl-dev
       - libsqlite3-dev
     become: true
+    when: not ansible_check_mode
   - name: download for Onedrive
     get_url:
       url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
@@ -347,11 +341,13 @@
     apt:
       update_cache: yes
     become: true
+    when: not ansible_check_mode
   - name: install packages
     apt: name={{ item }} update_cache=yes state=latest allow_unauthenticated=yes
     with_items:
       - dmd-bin
     become: true
+    when: not ansible_check_mode
   - name: clone Onedrive
     git:
       repo: https://github.com/skilion/onedrive
@@ -416,9 +412,9 @@
 # git configuration
 #
   - name: git config username in global
-    command: git config --global user.email "{{ gituser }}"
+    command: git config --global user.name "{{ gituser }}"
   - name: git config email in global
-    command: git config --global user.name "{{ gitemail }}"
+    command: git config --global user.email "{{ gitemail }}"
 
 #
 # Fonts
@@ -475,6 +471,7 @@
     apt: >-
       deb={{ downloads }}/{{ monitorix }}
     become: true
+    when: not ansible_check_mode
   - name: start monitorix
     service: name=monitorix state=running enabled=yes
     become: true
@@ -508,6 +505,7 @@
       - mailutils
       - exim4
     become: true
+    when: not ansible_check_mode
   - name: copy exim4 cfg file
     copy: >
       src=./src/update-exim4.conf.conf
@@ -549,6 +547,7 @@
      - libvirt-bin
      - bridge-utils
     become: true
+    when: not ansible_check_mode
   - name: start libvirt-bin
     service: name=libvirt-bin state=running enabled=yes
     become: true
@@ -586,6 +585,7 @@
       upgrade: dist
       autoremove: yes
     become: true
+    when: not ansible_check_mode
 
   handlers:
   - name: restart ssh

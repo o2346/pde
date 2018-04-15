@@ -1,5 +1,187 @@
 ---
 - hosts: "{{ given_host | default('localhost') }}"
   vars:
+    homebrew_taps:
+      - caskroom/cask
+      - caskroom/versions
+      - homebrew/boneyard
+      - sanemat/font # ricty
+
+    homebrew_cask_packages:
+      - name: appcleaner
+      - name: virtualbox
+      - name: vagrant
+      - name: atom
+      - name: google-chrome
+      - name: firefox
+      - name: diffmerge
+      - name: google-japanese-ime
+      - name: p4merge
+      - name: vlc
+      - name: dropbox
+      - name: iterm2
+      - name: skitch
+      - name: xquartz
+      - name: filezilla
+      - name: keepassx
+      - name: sourcetree
+      - name: libreoffice
+      - name: geekbench
+      - name: macdown
+    homebrew_packages:
+      - name: awscli
+      - name: python
+      - name: python3
+      - name: tig
+      - name: tmux
+      - name: zsh
+      - name: imagemagick
+      - name: cmake
+      - name: diff-pdf
+      - name: doxygen
+      - name: emacs
+      - name: ffmpeg
+        install_options: with-tools
+      - name: fontconfig
+      - name: fontforge
+      - name: freetype
+      - name: gnu-sed
+      - name: gnutls
+      - name: htop
+      - name: jasper
+      - name: jpeg
+      - name: lame
+      - name: macvim
+        install_options: override-system-vim
+      - name: mp3splt
+      - name: nasm
+      - name: net-snmp
+      - name: nettle
+      - name: nkf
+      - name: nmap
+      - name: node
+      - name: openssl
+      - name: python
+      - name: readline
+      - name: reattach-to-user-namespace
+      - name: rename
+      - name: sqlite
+      - name: texi2html
+      - name: trash
+      - name: tree
+      - name: utf8proc
+      - name: w3m
+      - name: webp
+      - name: wget
+      - name: wine
+      # consider it's really necessary
+      # - name: wireshark
+      #   install_options: with-qt
+      - name: wxmac
+      - name: yasm
+
   become: no
   tasks:
+  - name: homebrew update
+    homebrew:
+      update_homebrew: yes
+    when: not ansible_check_mode
+
+  - name: homebrew tap
+    homebrew_tap:
+      name: '{{ item }}'
+      state: present
+    with_items: '{{ homebrew_taps }}'
+    when: not ansible_check_mode
+
+  - name: homebrew packages install
+    homebrew:
+      name: '{{ item.name }}'
+      state: '{{ item.state | default("present") }}'
+      install_options: '{{ item.install_options | default("None") }}'
+    with_items: '{{ homebrew_packages }}'
+    when: not ansible_check_mode
+
+  - name: homebrew cask packages install
+    homebrew_cask: name={{ item.name }} state=installed
+    # ※1 GUIツールをインストールする場所を `/Application` に固定
+    environment:
+      HOMEBREW_CASK_OPTS: "--appdir=/Applications"
+    with_items: '{{ homebrew_cask_packages }}'
+    when: not ansible_check_mode
+
+  - name: make temp folder
+    command: mktemp -d
+    register: tmp_dir
+  - debug: msg="{{tmp_dir.stdout}}"
+
+    # error occurd & not resolved
+    #  - name: installs latest available version ovirt-engine-sdk
+    #    gem:
+    #      name: ovirt-engine-sdk
+    #      state: latest
+    #    become: true
+    #  - name: vagrant plugin install
+    #    command: vagrant plugin install vagrant-aws
+    #    become: true
+
+  - name: show hidden files and directorys
+    command: defaults write com.apple.finder AppleShowAllFiles TRUE
+  - name: show hidden files and directorys
+    command: killall Finder
+
+  - name: download NeoBundle↲
+    get_url:
+      url: https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
+      dest: '{{tmp_dir.stdout}}'
+  - name: install NeoBundle
+    command: bash "{{tmp_dir.stdout}}"/install.sh
+  - name: NeoBundleInstall
+    command: vim +NeoBundleInstall +qall
+
+#
+# eslint
+#
+  - name: Install "eslint" node.js package globally.
+    npm:
+      name: eslint
+      global: yes
+
+# ricty font
+  - name: ricty font
+    shell: cp -f /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
+  - name: ricty font
+    command: fc-cache -vf
+# curl -L 'https://gist.github.com/ysaotome/7286145/raw/installing_ricty_on_MacOSX.sh' | bash
+
+#
+# Dotfiles
+#
+  - name: check if .dotfiles exists
+    stat: path=~/Documents/.dotfiles
+    register: has_dotfiles
+  - name: download dotfiles
+    git:
+      repo: https://gist.githubusercontent.com/whateverjp/6ea3445379a6cdf87037c1be97ef7b16
+      dest: ~/Documents/.dotfiles
+    when: not has_dotfiles.stat.exists
+  - name: deploy dotfiles
+    command: sh ~/Documents/.dotfiles/deploy.sh
+    when: not has_dotfiles.stat.exists
+  - name: copy .tmux.pd.conf
+    copy: >
+      src=../mint/.tmux.pd.conf
+      dest=~/
+    when: not has_dotfiles.stat.exists
+
+# w3m
+  - name: download .w3m
+    git:
+      repo: https://github.com/o2346/.w3m
+      dest: ~/Documents/.w3m
+
+# login shell
+  - name: zsh for login shell
+    user: name={{ansible_user_id}} shell=/bin/zsh
+    become: true
+
