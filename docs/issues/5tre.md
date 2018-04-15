@@ -30,8 +30,11 @@ update playbook for macOS
 1. initial setup of the macOS
 1. make it online
 1. full install xcode to avoid macvim installation on brew
+  1. __really need__ ?? open xcode in gui, then it updates something
 1. register appleid
+1. darken terminal before next execution
 1. execute entry point of this sysytem
+ 1. virtualbox error -> [go sec & privacy](https://github.com/caskroom/homebrew-cask/issues/39369)
 1. ssh configurations
 1. configurations for each objects
   1. iterm2
