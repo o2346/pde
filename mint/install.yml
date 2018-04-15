@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: "{{ given_host | default('localhost') }}"
   vars:
     nodesetup: /tmp/node_setup.sh
     gituser: hoge
@@ -12,11 +12,13 @@
     theme_controls: 'Mint-Y-Dark-Blue'
     theme_mouse_pointer: 'DMZ-White'
     theme_desktop: 'Modern Mint Dark'
-    monitorix: monitorix_3.9.0-izzy1_all.deb
+    monitorix: monitorix_3.10.0-izzy1_all.deb
     downloads: /home/{{ansible_user_id}}/Downloads
     android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
     android_studio_name: android-studio-ide-162.4069837-linux.zip
     android_studio_checksum: 1383cfd47441e5f820b6257a1bdd683e0e980bc76c7f2027ef84dc2e6ad2f17f
+    android_studio_parentdir: /usr/local/
+    android_studio_dir: android-studio
   become: no
   tasks:
 #
@@ -55,13 +57,13 @@
 #
   - name: download dotfiles
     git:
-      repo: https://gist.githubusercontent.com/whateverjp/f43ec7ea2687697cc1ad
+      repo: https://gist.githubusercontent.com/whateverjp/6ea3445379a6cdf87037c1be97ef7b16
       dest: ~/Documents/.dotfiles
   - name: deploy dotfiles
     command: sh ~/Documents/.dotfiles/deploy.sh
   - name: .vimperator option files
     git:
-      repo: https://github.com/whateverjp/.vimperator
+      repo: https://github.com/o2346/.vimperator
       dest: ~/.vimperator
   - name: copy .tmux.pd.conf
     copy: >
@@ -253,6 +255,7 @@
       - chromium-browser
       - clang #for NeoBundle
       - ssh
+      - sshpass
       - firewall-applet #replacement of ufw
       - whois
       - tree
@@ -263,6 +266,11 @@
       # sudo pip install -U setuptools
       # sudo pip install csvkit
       # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
+      - inotify-tools
+      - guile-2.0
+      - guile-2.0-dev
+      - w3m
+      - w3m-img
     become: true
 
 #
@@ -363,9 +371,7 @@
       state: directory
       mode: 0755
   - name: copy onedrive.conf
-    copy: >
-      src=~/Downloads/onedrive/config
-      dest=~/.config/onedrive/config
+    command: cp ~/Downloads/onedrive/config ~/.config/onedrive/config
   - name: systemd onedrive enabled
     command: systemctl --user enable onedrive
   - name: systemd onedrive start
@@ -405,15 +411,6 @@
       path: ~/.ssh
       state: directory
       mode: 0755
-
-#
-# dist-upgrade, autoremove
-#
-  - name: Update all packages to the latest version
-    apt:
-      upgrade: dist
-      autoremove: yes
-    become: true
 
 #
 # git configuration
@@ -471,7 +468,7 @@
     get_url: >-
       url=http://www.monitorix.org/{{ monitorix }}
       dest={{ downloads }}/{{ monitorix }}
-      sha256sum=1020cdfed78edc33d4877df87f0d0f09246b1ccd54f9e2d7a7b0a83220be84a4
+      sha256sum=3fb8b4a4f7aeeeafccc6dc5b232f82d5761be80fe8e82008bc768f805fe5a744
       force=no
     become: true
   - name: Install Monitorix from a deb package
@@ -518,10 +515,17 @@
     become: true
   - shell: update-exim4.conf
     become: true
+# tail -f /var/log/exim4/mainlog
 
 #
 # Android
 #https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+  - name: check if android_studio_zip exists
+    stat: path={{ downloads }}/{{ android_studio_name }}
+    register: has_android_studio_zip
+  - name: show stat if NO android_studio_zip exists
+    debug: var=has_android_studio_zip
+    when: not has_android_studio_zip.stat.exists
   - name: download Android Studio (sh256sum)
     get_url: >-
       url={{ android_studio_url }}/{{ android_studio_name }}
@@ -529,23 +533,59 @@
       sha256sum={{android_studio_checksum}}
       force=no
     become: true
+    when: not has_android_studio_zip.stat.exists
   - name: Unzip Android Studio
     command: unzip -o {{ downloads }}/{{ android_studio_name }}
     args:
-        chdir: /usr/local/
+        chdir: "{{ android_studio_parentdir }}"
     become: true
   - name: kvm install packages
     apt: name={{ item }} update_cache=yes state=latest
     with_items:
+     - qemu-kvm
      - kvm
      - virt-manager
+     - ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
      - libvirt-bin
      - bridge-utils
     become: true
   - name: start libvirt-bin
     service: name=libvirt-bin state=running enabled=yes
     become: true
+  #http://acchi-muite-hoi.hatenablog.com/entry/2016/08/18/102709
+  - name: add vhost_net to load module
+    lineinfile:
+      dest: /etc/modules
+      line: 'vhost_net'
+    become: true
+  - name: chown
+    file: >-
+      path={{ android_studio_parentdir }}{{ android_studio_dir }}
+      group=root
+      owner={{ansible_user_id}}
+    become: true
+  # http://www.techscore.com/blog/2016/08/26/debianstretch%E3%81%A7%E3%80%81android-studio2-1-3-%E3%81%AE-%E5%BF%AB%E9%81%A9-%E3%81%AAavd%E8%B5%B7%E5%8B%95%E7%92%B0%E5%A2%83%E3%82%92%E5%AE%9F%E7%8F%BE%E3%81%99%E3%82%8B/
+  - name: adduser
+    user: >-
+      name={{ansible_user_id}}
+      groups=root,libvirtd,kvm
+      append=true
+    become: true
 
+# w3m
+  - name: create ~/.w3m directory if it doesn't exist
+    file:
+      path: ~/.w3m
+      state: directory
+
+#
+# dist-upgrade, autoremove
+#
+  - name: Update all packages to the latest version
+    apt:
+      upgrade: dist
+      autoremove: yes
+    become: true
 
   handlers:
   - name: restart ssh

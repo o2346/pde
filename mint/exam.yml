@@ -1,0 +1,24 @@
+---
+- hosts: "{{ given_host | default('localhost') }}"
+  vars:
+    downloads: /home/{{ansible_user_id}}/Downloads
+  become: no
+  tasks:
+
+#
+# mail command settings
+#
+  - name: install packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - mailutils
+      - exim4
+    become: true
+  - name: copy exim4 cfg file
+    copy: >
+      src=./src/update-exim4.conf.conf
+      dest=/etc/exim4/update-exim4.conf.conf
+    become: true
+  - shell: update-exim4.conf
+    become: true
+

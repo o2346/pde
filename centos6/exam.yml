@@ -1,0 +1,30 @@
+---
+- hosts: "{{ given_host | default('localhost') }}"
+  vars:
+  become: no
+  tasks:
+
+#
+# ssh
+#
+  - name: start ssh
+    service: name=sshd state=started enabled=yes
+    become: true
+    notify: restart ssh
+  - name: Allow root SSH access
+    lineinfile: dest=/etc/ssh/sshd_config
+              regexp="^PermitRootLogin"
+              line="PermitRootLogin yes"
+              state=present
+    notify: restart ssh
+    become: true
+  - name: create ~/.ssh directory if it doesn't exist
+    file:
+      path: ~/.ssh
+      state: directory
+      mode: 0755
+
+  handlers:
+  - name: restart ssh
+    service: name=sshd state=restarted enabled=yes
+    become: true

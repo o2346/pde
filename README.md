@@ -13,7 +13,7 @@ PDE(Personalized Development Environment) is system configration for my work.
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Operating system</td>
-<td bgcolor="#FFFFFF" valign="top"><a href="http://www.linuxmint.com/rel_sarah_cinnamon.php">Linux Mint 18 Cinnamon 64-bit</a></td>
+<td bgcolor="#FFFFFF" valign="top"><a href="https://linuxmint.com/">Linux Mint 18 Cinnamon 64-bit</a></td>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Development status</td>
@@ -21,7 +21,7 @@ PDE(Personalized Development Environment) is system configration for my work.
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Version</td>
-<td bgcolor="#FFFFFF" valign="top">1.1.2</td>
+<td bgcolor="#FFFFFF" valign="top">1.2.1</td>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Written in</td>
@@ -40,7 +40,7 @@ Secondary Guest Operating System setup helper.
   * configure settings
     * desktop themes
     * fonts
-    * [trackball behaveior](sarah/doc/trackball.md)
+    * [trackball behaveior](mint/doc/trackball.md)
   * dotfiles
 * Guest OS setup helper
   * Use of guest machine is a sandbox in order to develop PDE itself.
@@ -59,7 +59,7 @@ Secondary Guest Operating System setup helper.
 **[WARNING]** _This may be cause of Destruction of your environment since the provisioner will run administratively.  
 Use disposable machine such as VM_
 ```
-curl https://raw.githubusercontent.com/whateverjp/pde/master/install.sh | bash
+curl https://raw.githubusercontent.com/o2346/pde/master/install.sh | bash
 ```
 
 ### <a name="helper">Guest OS setup helper
@@ -67,21 +67,21 @@ curl https://raw.githubusercontent.com/whateverjp/pde/master/install.sh | bash
 __on Guest Machine__ , run
 
 ```
-wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
+wget https://raw.githubusercontent.com/o2346/pde/master/install.sh
 bash install.sh -v
 ```
 
-### for development of playbook( Mint 18 Sarah )
+### for development of playbook
 
 Development mode. Checkout Branch "Develop" and play normal playbook
 ```
-wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
+wget https://raw.githubusercontent.com/o2346/pde/develop/install.sh
 bash install.sh -d
 ```
 
 Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will be played instead of normal playbook)
 ```
-wget https://raw.githubusercontent.com/whateverjp/pde/master/install.sh
+wget https://raw.githubusercontent.com/o2346/pde/master/install.sh
 bash install.sh -e
 ```
 
@@ -154,8 +154,9 @@ File Menu > Edit > Profile Preferenses > [As I like]
 |name|kind|discription|
 |---|---|---|
 |[Dark Reader](https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)|plugin|Darken pages|
-|~~Change Colors~~|plugin|Darken pages|
 |Download Master|plugin||
+|go to chrome://settings/ and click "Use GTK+ theme".||
+|fonts||
 
 ### Installation of VMware
 
@@ -166,13 +167,23 @@ File Menu > Edit > Profile Preferenses > [As I like]
     * this is for command [`vmrun`](https://communities.vmware.com/thread/521189?start=0&tstart=0) functional
 * `sudo sh VMxxxx.bundle` for each `.bundle` files
 
+### others
+
+* screensaver
+* power management
+
+### /etc/fstab
+
+configure as necessary
+
 ## misc
 
 * [remove_keyring][remove_keyring]
 * [List of Tools][list_of_tools]
 * [printer](http://support.brother.co.jp/j/b/downloadhowto.aspx?c=jp&lang=ja&prod=dcpj137n&os=128&dlid=dlf100517_000&flang=1001&type3=561)
+  * .deb packages
 * [DraftSight](https://www.3ds.com/ja/products-services/draftsight-cad-software/free-download/)
 
-[remove_keyring]: sarah/doc/misc.md#remove_keyring
-[list_of_tools]: sarah/doc/misc.md#list_of_tools
+[remove_keyring]: mint/doc/misc.md#remove_keyring
+[list_of_tools]: mint/doc/misc.md#list_of_tools
 
