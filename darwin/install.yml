@@ -4,10 +4,7 @@
     homebrew_taps:
       - caskroom/cask
       - caskroom/versions
-      - homebrew/dupes
-      - homebrew/versions
       - homebrew/boneyard
-      - homebrew/binary
       - sanemat/font # ricty
 
     homebrew_cask_packages:
