@@ -170,7 +170,7 @@
     when: not has_dotfiles.stat.exists
   - name: copy .tmux.pd.conf
     copy: >
-      src=../mint/.tmux.pd.conf
+      src=.tmux.pd.conf
       dest=~/
     when: not has_dotfiles.stat.exists
 
