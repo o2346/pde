@@ -38,6 +38,7 @@ update playbook for macOS
  1. virtualbox error -> [go sec & privacy](https://github.com/caskroom/homebrew-cask/issues/39369)
 1. ssh configurations
 1. configurations for each objects
+  1. git user & email on global config
   1. iterm2
   1. plugins for firefox
   1. plugins for chrome
