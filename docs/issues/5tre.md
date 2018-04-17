@@ -33,7 +33,6 @@ update playbook for macOS
   1. __really need__ ?? open xcode in gui, then it updates something
 1. register appleid
 1. [csrutil disable](https://qiita.com/iwaseasahi/items/9d2e29b02df5cce7285d) to override system vim
-  1. [link latest vim from brew after installation](https://qiita.com/iwaseasahi/items/a45b99a484966662adbe)
 1. darken terminal before next execution
 1. execute entry point of this sysytem
  1. virtualbox error -> [go sec & privacy](https://github.com/caskroom/homebrew-cask/issues/39369)
@@ -46,6 +45,7 @@ update playbook for macOS
   1. hhkb
   1. magicpad & apple keyborad
   1. auto startup some apps when macOS launched
+  1. [link latest vim from brew after installation](https://qiita.com/iwaseasahi/items/a45b99a484966662adbe)
 
 ---
 
