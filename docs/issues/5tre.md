@@ -41,8 +41,8 @@ update playbook for macOS
   1. iterm2
   1. plugins for firefox
   1. plugins for chrome
+  1. [hhkb](http://www.pfu.fujitsu.com/hhkeyboard/macdownload.html)
   1. trackball
-  1. hhkb
   1. magicpad & apple keyborad
   1. auto startup some apps when macOS launched
   1. [link latest vim from brew after installation](https://qiita.com/iwaseasahi/items/a45b99a484966662adbe)
