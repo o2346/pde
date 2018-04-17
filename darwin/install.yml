@@ -50,7 +50,7 @@
       - name: jasper
       - name: jpeg
       - name: lame
-      - name: macvim
+      - name: vim # https://qiita.com/iwaseasahi/items/a45b99a484966662adbe
       - name: mp3splt
       - name: nasm
       - name: net-snmp
@@ -118,9 +118,6 @@
     register: tmp_dir
   - debug: msg='{{tmp_dir.stdout}}'
     when: not ansible_check_mode
-
-  - name: macvim
-    command: brew reinstall macvim --override-system-vim
 
     # error occurd & not resolved
     #  - name: installs latest available version ovirt-engine-sdk
