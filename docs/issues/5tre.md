@@ -8,10 +8,10 @@
 |Category|<!-- optional -->|
 |Target version|1.3.0<!-- optional, any of git tags recommended -->|
 |Start date|2018-04-14|
-|Due date|2018-04-15|
-|estimated|12hours|
-|% Done|30%|
-|worked|5hours|
+|Due date|2018-04-24|
+|estimated|24hours|
+|% Done|60%|
+|worked|21hours|
 
 ## Description
 
@@ -47,7 +47,7 @@ update playbook for macOS
   1. magicpad & apple keyborad
   1. auto startup some apps when macOS launched
   1. [link latest vim from brew after installation](https://qiita.com/iwaseasahi/items/a45b99a484966662adbe)
-  1. w3m extbrowser=`/usr/bin/open`
+  1. [TODO] w3m extbrowser
 
 ---
 
