@@ -47,6 +47,7 @@ update playbook for macOS
   1. magicpad & apple keyborad
   1. auto startup some apps when macOS launched
   1. [link latest vim from brew after installation](https://qiita.com/iwaseasahi/items/a45b99a484966662adbe)
+  1. w3m extbrowser=`/usr/bin/open`
 
 ---
 
