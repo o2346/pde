@@ -49,6 +49,7 @@ update playbook for macOS
   1. [link latest vim from brew after installation](https://qiita.com/iwaseasahi/items/a45b99a484966662adbe)
   1. w3m extbrowser = `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome`
     * only chrome is functional. Could't open in any way with Safari & Firefox
+  1. [Open usp TukubaiをHomebrewでインストールする](http://papiro.hatenablog.jp/entry/2016/05/25/215608)
 
 ---
 
