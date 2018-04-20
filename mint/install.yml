@@ -596,3 +596,5 @@
       name: "{{nodesetup}}"
       state: absent
 
+# todo: add useful tools https://qiita.com/onokatio/items/50fb616f71bf3c5021b9
+# todo: apt-fast https://news.mynavi.jp/article/20161101-a177/
