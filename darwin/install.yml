@@ -27,6 +27,7 @@
       - name: libreoffice
       - name: geekbench
       - name: macdown
+      - name: hyperswitch
     homebrew_packages:
       - name: awscli
       - name: python
