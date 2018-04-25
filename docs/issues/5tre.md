@@ -50,6 +50,7 @@ update playbook for macOS
   1. w3m extbrowser = `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome`
     * only chrome is functional. Could't open in any way with Safari & Firefox
   1. [Open usp TukubaiをHomebrewでインストールする](http://papiro.hatenablog.jp/entry/2016/05/25/215608)
+  1. https://clients.amazonworkspaces.com/#
 
 ---
 
