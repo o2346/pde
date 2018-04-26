@@ -460,21 +460,21 @@
 #     - libconfig-general-perl
 #     - libio-socket-ssl-perl
 #   become: true
-  - name: download Monitorix deb pack file with check (sh256sum)
-    get_url: >-
-      url=http://www.monitorix.org/{{ monitorix }}
-      dest={{ downloads }}/{{ monitorix }}
-      sha256sum=3fb8b4a4f7aeeeafccc6dc5b232f82d5761be80fe8e82008bc768f805fe5a744
-      force=no
-    become: true
-  - name: Install Monitorix from a deb package
-    apt: >-
-      deb={{ downloads }}/{{ monitorix }}
-    become: true
-    when: not ansible_check_mode
-  - name: start monitorix
-    service: name=monitorix state=running enabled=yes
-    become: true
+# - name: download Monitorix deb pack file with check (sh256sum)
+#   get_url: >-
+#     url=http://www.monitorix.org/{{ monitorix }}
+#     dest={{ downloads }}/{{ monitorix }}
+#     sha256sum=3fb8b4a4f7aeeeafccc6dc5b232f82d5761be80fe8e82008bc768f805fe5a744
+#     force=no
+#   become: true
+# - name: Install Monitorix from a deb package
+#   apt: >-
+#     deb={{ downloads }}/{{ monitorix }}
+#   become: true
+#   when: not ansible_check_mode
+# - name: start monitorix
+#   service: name=monitorix state=running enabled=yes
+#   become: true
 
 #
 # pip
