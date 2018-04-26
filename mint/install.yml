@@ -199,7 +199,7 @@
 #
   - name: download preinstaller of nodejs
     get_url:
-      url: https://deb.nodesource.com/setup_7.x
+      url: https://deb.nodesource.com/setup_10.x
       dest: "{{nodesetup}}"
       mode: 0665
   - name: preinstall nodejs
