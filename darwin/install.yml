@@ -28,6 +28,16 @@
       - name: geekbench
       - name: macdown
       - name: hyperswitch
+      - name: font-ricty-diminished
+      - name: font-migmix-1m
+      - name: font-migmix-1p
+      - name: font-migmix-2m
+      - name: font-migmix-2p
+      - name: font-migu-1p
+      - name: font-migu-1c
+      - name: font-migu-1m
+      - name: font-migu-2m
+      - name: font-ricty-diminished
     homebrew_packages:
       - name: awscli
       - name: python
