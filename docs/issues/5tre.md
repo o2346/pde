@@ -40,6 +40,8 @@ update playbook for macOS
 1. configurations for each objects
   1. git user & email on global config
   1. iterm2
+  1. terminal - instead of iterm2?
+    1. disable bell, annoying
   1. plugins for firefox
   1. plugins for chrome
   1. [hhkb](http://www.pfu.fujitsu.com/hhkeyboard/macdownload.html)
