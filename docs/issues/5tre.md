@@ -2,7 +2,7 @@
 
 |**Issue**||
 |---|---|
-|Status|in progress<!-- any of "new", "in progress", "end" http://redmine.jp/tech_note/issue_statuses/ -->|
+|Status|end<!-- any of "new", "in progress", "end" http://redmine.jp/tech_note/issue_statuses/ -->|
 |Priority|Normal<!-- "high" or "normal" or "low"-->|
 |Assignee|owner<!-- your name -->|
 |Category|<!-- optional -->|
@@ -10,8 +10,8 @@
 |Start date|2018-04-14|
 |Due date|2018-04-24|
 |estimated|24hours|
-|% Done|80%|
-|worked|24hours|
+|% Done|100%|
+|worked|28hours|
 
 ## Description
 
@@ -24,6 +24,10 @@ update playbook for macOS
 |||<!--OTHER_ISSUE;;-->
 
 ## History
+
+close
+
+---
 
 ### procedure
 
