@@ -263,6 +263,7 @@
       - w3m
       - w3m-img
       - pdftk
+      - jq
     become: true
     when: not ansible_check_mode
 
@@ -485,6 +486,7 @@
       - pip
       - setuptools
       - csvkit
+      - yq
     become: true
 
   - name: sitecustomize.py
