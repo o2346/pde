@@ -88,6 +88,7 @@
       #   install_options: with-qt
       - name: wxmac
       - name: yasm
+      - name: jq
 
   become: no
   tasks:
@@ -212,3 +213,16 @@
     homebrew:
       upgrade_all: yes
     when: not ansible_check_mode
+
+#
+# pip
+#
+  - name: install pip(s)
+    pip: name={{ item }} extra_args="-U"
+    with_items:
+      - pip
+      - setuptools
+      - csvkit
+      - yq
+    become: true
+
