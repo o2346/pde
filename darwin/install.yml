@@ -90,6 +90,7 @@
       - name: wxmac
       - name: yasm
       - name: jq
+      - name: fswatch
 
   become: no
   tasks:
