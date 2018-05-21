@@ -91,6 +91,8 @@
       - name: yasm
       - name: jq
       - name: fswatch
+      - name: make
+        install_options: with-default-names
 
   become: no
   tasks:
