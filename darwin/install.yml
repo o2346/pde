@@ -37,6 +37,7 @@
       - name: font-migu-1c
       - name: font-migu-1m
       - name: font-migu-2m
+      - name: chromium
     homebrew_packages:
       - name: awscli
       - name: python
