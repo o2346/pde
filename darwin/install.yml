@@ -93,6 +93,7 @@
       - name: fswatch
       - name: make
         install_options: with-default-names
+      - name: watch
 
   become: no
   tasks:
