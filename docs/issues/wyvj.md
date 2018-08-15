@@ -31,5 +31,8 @@ http://eduroll.eu/?p=119
 
 ## History
 
+一時的に回避する場合
+https://askubuntu.com/questions/599808/cannot-set-lc-ctype-to-default-locale-no-such-file-or-directory
+
 ---
 *this document has been generated & accessed from computer program, named "icol"*
