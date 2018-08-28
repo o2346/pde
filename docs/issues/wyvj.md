@@ -1,4 +1,4 @@
-# #wyvj - ssh problem: warning: setlocale: LC_CTYPE....
+# #wyvj - add solusion to plabook for 'ssh problem: warning: setlocale: LC_CTYPE....'
 
 |**Issue**||
 |---|---|
@@ -8,8 +8,8 @@
 |Category|<!-- optional -->|
 |Target version|<!-- optional, any of git tags recommended -->|
 |Start date|2018-08-15|
-|Due date|2018-08-31|
-|estimated|2hours|
+|Due date|2018-09-30|
+|estimated|3hours|
 |% Done|10%|
 |worked|1hours|
 
@@ -18,7 +18,7 @@
 Using terminal ssh to my Linux servers I have always got the following error:
 ` warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory`
 
-http://eduroll.eu/?p=119
+[**結論**](http://eduroll.eu/?p=119)
 
 この問題のため接続先サーバ上の vim で日本語が文字化けし、正常に表示されない。
 解決策もリンク先にあり、これを playbook に適用すること
