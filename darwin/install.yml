@@ -62,6 +62,7 @@
       - name: jpeg
       - name: lame
       - name: vim # https://qiita.com/iwaseasahi/items/a45b99a484966662adbe  vim --with-override-system-vi
+        #https://github.com/Homebrew/legacy-homebrew/issues/43983
       - name: mp3splt
       - name: nasm
       - name: net-snmp
