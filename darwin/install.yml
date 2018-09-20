@@ -61,7 +61,7 @@
       - name: jasper
       - name: jpeg
       - name: lame
-      - name: vim # https://qiita.com/iwaseasahi/items/a45b99a484966662adbe
+      - name: vim # https://qiita.com/iwaseasahi/items/a45b99a484966662adbe  vim --with-override-system-vi
       - name: mp3splt
       - name: nasm
       - name: net-snmp
