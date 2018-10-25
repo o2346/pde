@@ -95,6 +95,7 @@
       - name: make
         install_options: with-default-names
       - name: watch
+      - name: qemu
 
   become: no
   tasks:
