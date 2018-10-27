@@ -264,6 +264,14 @@
       - w3m-img
       - pdftk
       - jq
+      # https://bw.org/ldcsql/
+      # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
+      # deploy sid into docroot afterward
+      - apache2
+      - php
+      - libapache2-mod-php
+      - php-pdo
+      - php-pdo-sqlite
     become: true
     when: not ansible_check_mode
 
