@@ -552,6 +552,7 @@
   - name: kvm install packages
     apt: name={{ item }} update_cache=yes state=latest
     with_items:
+     - qemu #https://fosspost.org/tutorials/use-qemu-test-operating-systems-distributions
      - qemu-kvm
      - kvm
      - virt-manager
