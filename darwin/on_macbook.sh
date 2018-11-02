@@ -1,9 +1,7 @@
 #!/bin/bash
 
 # enable wifi or internet con beforhand
-sudo apt update
 sudo apt install -y git
-sudo apt install -y make
 cd `mktemp -d`
 
 #https://github.com/cb22/macbook12-spi-driver
