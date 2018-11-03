@@ -6,7 +6,7 @@ sudo dnf install -y dkms
 sudo dnf install -y make
 dmidecode | grep -i macbook
 yum update kernel
-dnf install kernel-devel kernel-headers dkms git
+sudo dnf install -y kernel-devel kernel-headers
 echo -e "\nadd_drivers+=\"applespi intel_lpss_pci spi_pxa2xx_platform\"" > /etc/dracut.conf.d/applespi.conf
 
 cd `mktemp -d`
