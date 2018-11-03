@@ -3,6 +3,7 @@
 # enable wifi or internet con beforhand
 sudo dnf install -y git
 sudo dnf install -y dkms
+sudo dnf install -y make
 dmidecode | grep -i macbook
 yum update kernel
 dnf install kernel-devel kernel-headers dkms git
