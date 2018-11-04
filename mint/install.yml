@@ -273,6 +273,7 @@
       - php-pdo
       - php-pdo-sqlite
       - tshark
+      - transmission-cli
     become: true
     when: not ansible_check_mode
 
