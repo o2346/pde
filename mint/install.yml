@@ -275,6 +275,7 @@
       - tshark
       - transmission-cli
       # http://www.mirandora.com/?p=697
+      # ~/.config/chromium/Default/History
       - sqlite3
     become: true
     when: not ansible_check_mode
