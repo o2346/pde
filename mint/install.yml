@@ -274,6 +274,8 @@
       - php-pdo-sqlite
       - tshark
       - transmission-cli
+      # http://www.mirandora.com/?p=697
+      - sqlite3
     become: true
     when: not ansible_check_mode
 
