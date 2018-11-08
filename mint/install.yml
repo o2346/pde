@@ -271,24 +271,13 @@
       - apache2
       - php
       - libapache2-mod-php
+      - php-sqlite3
+      - php-common
       - tshark
       - transmission-cli
       # http://www.mirandora.com/?p=697
       # ~/.config/chromium/Default/History
       - sqlite3
-    become: true
-    when: not ansible_check_mode
-
-#
-# php-pdo
-# https://www.google.co.jp/search?safe=off&num=24&hl=en&q=php+pdo+no+installation+candidate+-matome.naver.jp+-cookpad.com+-nikkeibp.co.jp+-rakuten.co.jp+-weblio.jp+-slideshare.net+-japan.zdnet.com+-news.mynavi.jp
-# https://linuxacademy.com/community/posts/show/topic/12916-php5-install-fails-with-no-install-candidate
-#
-  - name: install ime, fcitx mozc
-    apt: name={{ item }} state=installed update_cache=yes install_recommends=yes
-    with_items:
-      - php-pdo
-      - php-pdo-sqlite
     become: true
     when: not ansible_check_mode
 
