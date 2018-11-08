@@ -143,14 +143,14 @@
       dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
       regexp='font-size.+$'
       replace='font-size: 12pt;'
-    with_items: themes.stdout_lines
+    with_items: " {{themes.stdout_lines}} "
     when: not ansible_check_mode
   - name: font family
     replace: >-
       dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
       regexp='font-family.+$'
       replace='font-family: MigMix 1C;'
-    with_items: themes.stdout_lines
+    with_items: " {{themes.stdout_lines}} "
     when: not ansible_check_mode
 
 # TODO Make active window font punctuate
