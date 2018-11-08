@@ -241,7 +241,8 @@
       - zsh
       - ffmpeg
       - mp3splt
-      - wine
+      #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
+      #- wine
       - tig
       - chromium-browser
       - clang #for NeoBundle
@@ -281,6 +282,7 @@
 #
 # php-pdo
 # https://www.google.co.jp/search?safe=off&num=24&hl=en&q=php+pdo+no+installation+candidate+-matome.naver.jp+-cookpad.com+-nikkeibp.co.jp+-rakuten.co.jp+-weblio.jp+-slideshare.net+-japan.zdnet.com+-news.mynavi.jp
+# https://linuxacademy.com/community/posts/show/topic/12916-php5-install-fails-with-no-install-candidate
 #
   - name: install ime, fcitx mozc
     apt: name={{ item }} state=installed update_cache=yes install_recommends=yes
