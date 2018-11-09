@@ -12,7 +12,6 @@
     theme_controls: 'Mint-Y-Dark-Blue'
     theme_mouse_pointer: 'DMZ-White'
     theme_desktop: 'Modern Mint Dark'
-    monitorix: monitorix_3.10.0-izzy1_all.deb
     downloads: /home/{{ansible_user_id}}/Downloads
     android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
     android_studio_name: android-studio-ide-162.4069837-linux.zip
@@ -455,42 +454,6 @@
       groups: vboxusers
       append: yes
     become: true
-
-#
-# Monitorix
-#
-# Works without installation of libs listed below despite official instruction
-# http://www.monitorix.org/doc-debian.html
-# - name: install packages
-#   apt: name={{ item }} update_cache=yes state=latest
-#   with_items:
-#     - rrdtool
-#     - perl
-#     - libwww-perl
-#     - libmailtools-perl
-#     - libmime-lite-perl
-#     - librrds-perl
-#     - libdbi-perl
-#     - libxml-simple-perl
-#     - libhttp-server-simple-perl
-#     - libconfig-general-perl
-#     - libio-socket-ssl-perl
-#   become: true
-# - name: download Monitorix deb pack file with check (sh256sum)
-#   get_url: >-
-#     url=http://www.monitorix.org/{{ monitorix }}
-#     dest={{ downloads }}/{{ monitorix }}
-#     sha256sum=3fb8b4a4f7aeeeafccc6dc5b232f82d5761be80fe8e82008bc768f805fe5a744
-#     force=no
-#   become: true
-# - name: Install Monitorix from a deb package
-#   apt: >-
-#     deb={{ downloads }}/{{ monitorix }}
-#   become: true
-#   when: not ansible_check_mode
-# - name: start monitorix
-#   service: name=monitorix state=running enabled=yes
-#   become: true
 
 #
 # pip
