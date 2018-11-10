@@ -277,6 +277,7 @@
       # http://www.mirandora.com/?p=697
       # ~/.config/chromium/Default/History
       - sqlite3
+      # benchmark https://www.howtoforge.com/how-to-benchmark-your-system-cpu-file-io-mysql-with-sysbench
     become: true
     when: not ansible_check_mode
 
