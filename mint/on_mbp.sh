@@ -14,3 +14,4 @@ gcc touchbar.c
 sudo ./a.out -d /dev/bus/usb/001/006 1
 #iwconfig
 #iwlist wlp3s0 channel
+#https://gist.github.com/roadrunner2/1289542a748d9a104e7baec6a92f9cd7
