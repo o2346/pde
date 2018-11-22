@@ -12,3 +12,5 @@ sudo update-initramfs -u
 gcc touchbar.c
 #https://unix.stackexchange.com/questions/108888/how-creation-of-new-usb-device-file-in-dev-bus-usb-001-directory-work
 sudo ./a.out -d /dev/bus/usb/001/006 1
+#iwconfig
+#iwlist wlp3s0 channel
