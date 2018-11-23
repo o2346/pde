@@ -26,7 +26,7 @@
       - name: sourcetree
       - name: libreoffice
       - name: geekbench
-      - name: macdown
+#      - name: macdown
       - name: hyperswitch
       - name: font-ricty-diminished
       - name: font-migmix-1m
