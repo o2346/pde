@@ -11,7 +11,7 @@
       - name: appcleaner
       - name: virtualbox
       - name: vagrant
-      - name: atom
+#      - name: atom
       - name: google-chrome
       - name: firefox
       - name: diffmerge
