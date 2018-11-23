@@ -18,7 +18,7 @@
       - name: google-japanese-ime
       - name: p4merge
       - name: vlc
-      - name: dropbox
+#      - name: dropbox
       - name: iterm2
       - name: skitch
         # Error: undefined method `release' for OS::Mac:Module - name: filezilla
