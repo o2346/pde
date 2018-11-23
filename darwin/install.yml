@@ -167,7 +167,7 @@
 #
 # eslint
 #
-  - name: Install "eslint" node.js package globally.
+  - name: Install "eslint" globally.
     npm: name={{ item }} global=yes
     with_items:
       - eslint
