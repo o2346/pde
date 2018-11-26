@@ -233,7 +233,9 @@
     become: true
 
 # after playing
+# [vim](https://qiita.com/n_oshiumi/items/7b3198d3565e84bfa611)
 # https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh/related?hl=ja
 # https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb/related?hl=ja
 # https://www.kensington.com/ja-jp/software/trackballworks-customization-software/
 # http://www.pfu.fujitsu.com/hhkeyboard/bt/feature.html
+
