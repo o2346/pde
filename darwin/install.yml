@@ -12,14 +12,12 @@
       - name: appcleaner
       - name: virtualbox
       - name: vagrant
-#      - name: atom
       - name: google-chrome
       - name: firefox
       - name: diffmerge
       - name: google-japanese-ime
       - name: p4merge
       - name: vlc
-#      - name: dropbox
       - name: iterm2
       - name: skitch
         # Error: undefined method `release' for OS::Mac:Module - name: filezilla
@@ -27,7 +25,6 @@
       - name: sourcetree
       - name: libreoffice
       - name: geekbench
-#      - name: macdown
       - name: hyperswitch
       - name: font-ricty-diminished
       - name: font-migmix-1m
@@ -235,3 +232,7 @@
       - yq
     become: true
 
+# after playing
+# https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh/related?hl=ja
+# https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb/related?hl=ja
+# https://www.kensington.com/ja-jp/software/trackballworks-customization-software/
