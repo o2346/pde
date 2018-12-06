@@ -559,6 +559,9 @@
       path: ~/.w3m
       state: directory
 
+# remove screen reader
+# https://askubuntu.com/questions/278693/how-do-i-stop-orca-screen-reader
+
 #
 # dist-upgrade, autoremove
 #
