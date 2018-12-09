@@ -171,6 +171,16 @@ File Menu > Edit > Profile Preferenses > [As I like]
 * screensaver
 * power management
 
+brother printer DCP-J137N
+https://workshop-of-aruku-web.blogspot.com/2016/06/linux-mint-173.html
+
+```
+cd /tmp
+wget https://download.brother.com/welcome/dlf100889/linux-brjprinter-installer-2.2.1-1.gz
+gunzip linux-brjprinter-installer-2.2.1-1.gz
+sudo bash ./linux-brjprinter-installer-2.2.1-1 DCP-J132
+```
+
 ### /etc/fstab
 
 configure as necessary
