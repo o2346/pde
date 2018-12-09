@@ -173,6 +173,8 @@ File Menu > Edit > Profile Preferenses > [As I like]
 
 brother printer DCP-J137N
 https://workshop-of-aruku-web.blogspot.com/2016/06/linux-mint-173.html
+https://support.brother.co.jp/j/b/downloadlist.aspx?c=jp&lang=ja&prod=dcpj137n&os=128
+https://support.brother.co.jp/j/b/downloadhowto.aspx?c=jp&lang=ja&prod=dcpj137n&os=128&dlid=dlf100889_000&flang=1001&type3=10373
 
 ```
 cd /tmp
