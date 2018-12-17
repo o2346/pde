@@ -95,6 +95,7 @@
         install_options: with-default-names
       - name: watch
       - name: qemu
+      - name: ghostscript #https://superuser.com/questions/819277/cant-convert-pdf-into-image-because-of-no-images-defined-error
 
   become: no
   tasks:
