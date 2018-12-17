@@ -97,6 +97,11 @@
       - name: qemu
       - name: ghostscript #https://superuser.com/questions/819277/cant-convert-pdf-into-image-because-of-no-images-defined-error
 
+      # to rotate pdf do below
+      #(t=`mktemp -u XXXX`.pdf; echo $t; pdftk 1056_001.pdf cat 1-endsouth output $t)
+      #https://makandracards.com/makandra/1487-rotate-a-pdf-under-ubuntu-linux
+      #https://hgw09.exblog.jp/27476582/
+
   become: no
   tasks:
   - name: homebrew update
