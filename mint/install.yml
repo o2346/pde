@@ -253,6 +253,10 @@
       #You are using pip version 8.1.1, however version 9.0.1 is available.
       #You should consider upgrading via the 'pip install --upgrade pip' command.
       - python-pip
+      # pip broken problem:
+      #   sudo apt-get remove --purge python-pip
+      #   wget https://bootstrap.pypa.io/get-pip.py
+      #   python3 ./get-pip.py
       # https://github.com/pypa/setuptools/issues/937
       # sudo pip install -U setuptools
       # sudo pip install csvkit
