@@ -153,7 +153,7 @@ File Menu > Edit > Profile Preferenses > [As I like]
 |name|kind|discription|
 |---|---|---|
 |[Dark Reader](https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)|plugin|Darken pages|
-|Download Master|plugin||
+|[Batch Link Downloader](https://chrome.google.com/webstore/detail/batch-link-downloader/aiahkbnnpafepcgnhhecilboebmmolnn/related)|plugin||
 |go to chrome://settings/ and click "Use GTK+ theme".||
 |fonts||
 
