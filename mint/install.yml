@@ -286,6 +286,7 @@
       # nvidia-smi -q -d temperature #https://askubuntu.com/questions/34449/how-to-see-the-video-card-temperature-nvidia-ati-intel
       - nvidia-375
       - nvidia-settings
+      # sudo apt-get -y oklar # https://www.google.co.jp/search?q=linux+pdf+viewer+dark
     become: true
     when: not ansible_check_mode
 
