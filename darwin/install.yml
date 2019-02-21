@@ -96,6 +96,7 @@
       - name: watch
       - name: qemu
       - name: ghostscript #https://superuser.com/questions/819277/cant-convert-pdf-into-image-because-of-no-images-defined-error
+      - name: clib
 
       # to rotate pdf do below
       #(t=`mktemp -u XXXX`.pdf; echo $t; pdftk 1056_001.pdf cat 1-endsouth output $t)
