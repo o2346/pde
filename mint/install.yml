@@ -318,6 +318,9 @@
       - eslint
       - eslint_d
 
+# randomize screen saver
+# TODO: http://applocator.blogspot.com/2017/01/random-screensaver-with-linux-mint.html
+
 #
 # NeoBundle
 #
