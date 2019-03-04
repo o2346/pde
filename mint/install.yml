@@ -575,6 +575,7 @@
 # remove screen reader
 # https://askubuntu.com/questions/278693/how-do-i-stop-orca-screen-reader
 
+#
 # plantUML
 # https://www.hiroom2.com/2018/07/02/ubuntu-1804-plantuml-en/
   - name: install dependencies for PlantUML
@@ -587,12 +588,17 @@
     file:
       path: /opt/plantuml
       state: directory
+    become: true
+  - name: check existence of plantuml
+    stat: path=/opt/plantuml/plantuml.jar
+    register: has_plantml
   - name: download PlantUML
     get_url:
       url: http://sourceforge.net/projects/plantuml/files/plantuml.jar/download
       dest: /opt/plantuml/
       mode: 0555
     become: true
+    when: not has_plantml.stat.exists
 
 #
 # dist-upgrade, autoremove

@@ -6,19 +6,27 @@
   tasks:
 
 #
-# mail command settings
-#
-  - name: install packages
+# plantUML
+# https://www.hiroom2.com/2018/07/02/ubuntu-1804-plantuml-en/
+  - name: install dependencies for PlantUML
     apt: name={{ item }} update_cache=yes state=latest
     with_items:
-      - mailutils
-      - exim4
+     - graphviz
+     - default-jre
     become: true
-  - name: copy exim4 cfg file
-    copy: >
-      src=./src/update-exim4.conf.conf
-      dest=/etc/exim4/update-exim4.conf.conf
+  - name: Creates directory
+    file:
+      path: /opt/plantuml
+      state: directory
     become: true
-  - shell: update-exim4.conf
+  - name: check existence of plantuml
+    stat: path=/opt/plantuml/plantuml.jar
+    register: has_plantml
+  - name: download PlantUML
+    get_url:
+      url: http://sourceforge.net/projects/plantuml/files/plantuml.jar/download
+      dest: /opt/plantuml/
+      mode: 0555
     become: true
+    when: not has_plantml.stat.exists
 
