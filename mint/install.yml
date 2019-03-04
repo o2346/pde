@@ -583,10 +583,15 @@
      - graphviz
      - default-jre
     become: true
+  - name: Creates directory
+    file:
+      path: /opt/plantuml
+      state: directory
   - name: download PlantUML
     get_url:
       url: http://sourceforge.net/projects/plantuml/files/plantuml.jar/download
-      dest: /etc/apt/sources.list.d/d-apt.list
+      dest: /opt/plantuml/
+      mode: 0555
     become: true
 
 #
