@@ -575,6 +575,20 @@
 # remove screen reader
 # https://askubuntu.com/questions/278693/how-do-i-stop-orca-screen-reader
 
+# plantUML
+# https://www.hiroom2.com/2018/07/02/ubuntu-1804-plantuml-en/
+  - name: install dependencies for PlantUML
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+     - graphviz
+     - default-jre
+    become: true
+  - name: download PlantUML
+    get_url:
+      url: http://sourceforge.net/projects/plantuml/files/plantuml.jar/download
+      dest: /etc/apt/sources.list.d/d-apt.list
+    become: true
+
 #
 # dist-upgrade, autoremove
 #
