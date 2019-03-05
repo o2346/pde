@@ -288,6 +288,8 @@
       - nvidia-settings
       # sudo apt-get -y oklar # https://www.google.co.jp/search?q=linux+pdf+viewer+dark
       # okular settings: space & shift+space for next/previous page, instead of scrolling up/down
+      - okular
+      - gnuplot
     become: true
     when: not ansible_check_mode
 
