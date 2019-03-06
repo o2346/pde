@@ -37,6 +37,7 @@
       - name: font-migu-2m
       - name: chromium
       - name: burp-suite
+      - name: java
     homebrew_packages:
       - name: awscli
       - name: python
@@ -98,7 +99,7 @@
       - name: ghostscript #https://superuser.com/questions/819277/cant-convert-pdf-into-image-because-of-no-images-defined-error
       - name: clib
       - name: gnuplot
-
+      - name: plantuml
       # to rotate pdf do below
       #(t=`mktemp -u XXXX`.pdf; echo $t; pdftk 1056_001.pdf cat 1-endsouth output $t)
       #https://makandracards.com/makandra/1487-rotate-a-pdf-under-ubuntu-linux
