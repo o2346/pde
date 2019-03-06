@@ -37,7 +37,8 @@
       - name: font-migu-2m
       - name: chromium
       - name: burp-suite
-      - name: java            # for plantuml
+      # java for plantuml
+      - name: java
     homebrew_packages:
       - name: awscli
       - name: python
