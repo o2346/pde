@@ -105,6 +105,8 @@
       #(t=`mktemp -u XXXX`.pdf; echo $t; pdftk 1056_001.pdf cat 1-endsouth output $t)
       #https://makandracards.com/makandra/1487-rotate-a-pdf-under-ubuntu-linux
       #https://hgw09.exblog.jp/27476582/
+      #latex: https://texwiki.texjp.org/?TeX%20Live%2FMac#texlive-install-brew
+      #to large & consumes too much time to install, so do it afterword
 
   become: no
   tasks:
