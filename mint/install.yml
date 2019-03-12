@@ -603,6 +603,13 @@
     when: not has_plantml.stat.exists
 
 #
+# latex
+#
+# do it manually for now, because it time-consuming
+# sudo apt install texlive-full
+# https://texwiki.texjp.org/?Linux%2FLinux%20Mint
+
+#
 # dist-upgrade, autoremove
 #
   - name: Update all packages to the latest version
