@@ -6,27 +6,28 @@
   tasks:
 
 #
-# plantUML
-# https://www.hiroom2.com/2018/07/02/ubuntu-1804-plantuml-en/
-  - name: install dependencies for PlantUML
+# mitmdump
+#
+  - name: install dependencies for mitmproxy
     apt: name={{ item }} update_cache=yes state=latest
     with_items:
-     - graphviz
-     - default-jre
+     - python3-dev
+     - python3-pip
+     - libffi-dev
+     - libssl-dev
     become: true
-  - name: Creates directory
-    file:
-      path: /opt/plantuml
-      state: directory
+
+  - name: upgrade pip
+    pip:
+      name: pip
+      executable: pip3
+      state: latest
     become: true
-  - name: check existence of plantuml
-    stat: path=/opt/plantuml/plantuml.jar
-    register: has_plantml
-  - name: download PlantUML
-    get_url:
-      url: http://sourceforge.net/projects/plantuml/files/plantuml.jar/download
-      dest: /opt/plantuml/
-      mode: 0555
+
+  - command: sudo pip3 install -U pip
     become: true
-    when: not has_plantml.stat.exists
+
+  - name: mitmproxy
+    command: sudo pip3 install --ignore-installed mitmproxy
+    become: true
 
