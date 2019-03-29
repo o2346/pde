@@ -608,7 +608,7 @@
 #
 # latex
 #
-# do it manually for now, because it time-consuming
+# do it manually for now, because it's time-consuming
 #  - command: sudo apt install texlive-full
 # https://texwiki.texjp.org/?Linux%2FLinux%20Mint
 
