@@ -171,7 +171,7 @@
 
 #
 # apt
-#
+# https://www.ubuntulinux.jp/ubuntu/mirrors
   - name: apt source list
     copy: >
       src=./sources.list
