@@ -172,6 +172,8 @@
 #
 # apt
 # https://www.ubuntulinux.jp/ubuntu/mirrors
+# how to modify url
+# https://note.mu/junf/n/nc710a82cad00
   - name: apt source list
     copy: >
       src=./sources.list
