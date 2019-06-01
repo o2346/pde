@@ -293,6 +293,7 @@
       # okular settings: space & shift+space for next/previous page, instead of scrolling up/down
       - okular
       - gnuplot
+      # - pandoc apt has old version. see  https://pandoc.org/installing.html
     become: true
     when: not ansible_check_mode
 
