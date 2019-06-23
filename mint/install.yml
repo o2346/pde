@@ -294,6 +294,7 @@
       - okular
       - gnuplot
       # - pandoc apt has old version. see  https://pandoc.org/installing.html
+      - pv
     become: true
     when: not ansible_check_mode
 
