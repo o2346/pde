@@ -295,6 +295,7 @@
       - gnuplot
       # - pandoc apt has old version. see  https://pandoc.org/installing.html
       - pv
+      # - name: exiftool
     become: true
     when: not ansible_check_mode
 

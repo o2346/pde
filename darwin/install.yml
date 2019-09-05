@@ -113,6 +113,7 @@
       # https://apple.stackexchange.com/questions/317845/is-there-the-dark-mode-inverted-colors-in-the-preview-application-for-pdf-re
       # Preferences > accessibility
       # View > display theme > dark gray
+      - name: exiftool
 
   become: no
   tasks:
