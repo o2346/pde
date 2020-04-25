@@ -27,3 +27,5 @@ if ps aux | grep "powermate \-d"; then
 else
   ./powermate -d
 fi
+
+# ps aux | grep 'powermate \-d' | awk '{print $2}' | xargs kill
