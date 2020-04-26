@@ -17,7 +17,7 @@ if [ -f "./powermate" ]; then
   :
 else
   sudo cp 60-powermate.rules /etc/udev/rules.d/
-  sudo apt-get install -y libpulse-dev libnotify-dev
+  sudo apt-get install -y libpulse-dev libnotify-dev xdotool
   sudo apt-get update --fix-missing
   make
 fi
