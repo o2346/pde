@@ -22,10 +22,11 @@ else
   make
 fi
 
-if ps aux | grep "powermate \-d"; then
-  echo "It's already running. Abort" >&2
-else
-  ./powermate -d
-fi
+ps aux | grep 'powermate \-d' | awk '{print $2}' | xargs kill
+./powermate -d -c `dirname $0`/powermate.toml
 
-# ps aux | grep 'powermate \-d' | awk '{print $2}' | xargs kill
+#if ps aux | grep "powermate \-d"; then
+#  echo "It's already running. Abort" >&2
+#else
+#  ./powermate -d
+#fi
