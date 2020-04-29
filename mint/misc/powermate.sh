@@ -21,7 +21,7 @@ else
   sudo apt-get update --fix-missing
   make
 fi
-
+pwd
 ps aux | grep 'powermate \-d' | awk '{print $2}' | xargs kill
 ./powermate -d -c `dirname $0`/powermate.toml
 
