@@ -26,7 +26,17 @@ else
   make
 fi
 
-ps aux | grep 'powermate \-d' | awk '{print $2}' | xargs kill
+setup() {
+  echo "Setting up powermate with custom config" >&2
+  ps aux | grep 'powermate \-d' | awk '{print $2}' | xargs kill
+  (./powermate -d -c $current_script_path/powermate.toml) &
+}
 
-./powermate -d -c $current_script_path/powermate.toml
+setup
 
+#cat /var/log/syslog
+#tail -f /var/log/syslog | grep -iE "(Product|input):.*Griffin\ PowerMate" | while read line; do
+#  echo "$line" >&2
+#  setup
+#  sleep 3
+#done
