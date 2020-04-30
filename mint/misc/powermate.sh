@@ -7,12 +7,16 @@
 
 # Register this script to like 'Startup Application' on your system
 
+readonly current_script_path=$(dirname $(readlink -f $0))
+
 cd /var/tmp
 
 if ! ls powermate-linux; then
   git clone --recurse-submodules https://github.com/stefansundin/powermate-linux.git
 fi
+
 cd powermate-linux
+
 if [ -f "./powermate" ]; then
   :
 else
@@ -21,12 +25,8 @@ else
   sudo apt-get update --fix-missing
   make
 fi
-pwd
-ps aux | grep 'powermate \-d' | awk '{print $2}' | xargs kill
-./powermate -d -c `dirname $0`/powermate.toml
 
-#if ps aux | grep "powermate \-d"; then
-#  echo "It's already running. Abort" >&2
-#else
-#  ./powermate -d
-#fi
+ps aux | grep 'powermate \-d' | awk '{print $2}' | xargs kill
+
+./powermate -d -c $current_script_path/powermate.toml
+
