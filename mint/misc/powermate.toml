@@ -11,7 +11,7 @@ dev = "/dev/input/powermate"
 daemonize = false
 
 # How much (in percent) to change the volume for each step:
-p = 0.8
+p = 0.6
 
 # Custom commands (will disable default behavior).
 # Set to an empty string to disable the default behavior without executing a custom command.
