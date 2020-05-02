@@ -297,6 +297,14 @@
       - pv
       # - name: exiftool
       - xsane
+      - ttf-mscorefonts-installer
+        #After installing the fonts, we need to update the font cache using command:
+        #sudo fc-cache -f -v
+        #https://www.ostechnix.com/install-microsoft-windows-fonts-ubuntu-16-04/
+
+        #http://zairyo.susi.oita-u.ac.jp/wordpress/?p=7385
+        #convert: not authorized `show:' @ error/constitute.c/WriteImage/1028.
+
     become: true
     when: not ansible_check_mode
 
