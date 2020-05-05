@@ -507,6 +507,22 @@
         sys.setdefaultencoding('utf-8')
     become: true
 
+# aws
+  - name: install ecosystem for AWS
+    pip: name={{ item }} extra_args="-U"
+    with_items:
+      - aws-shell #https://github.com/awslabs/aws-shell
+    become: true
+
+#https://github.com/awslabs/aws-data-wrangler
+#https://github.com/awslabs/cloudwatch-api-tracker
+#https://github.com/awslabs/aws-reserved-instance-expiration-notification
+#https://github.com/awslabs/cloudwatch-logs-analyze-data
+#https://github.com/awslabs/serverless-photo-recognition
+#https://github.com/awslabs/aws-sam-cli
+#https://github.com/awslabs/aws-cloudformation-templates
+#https://github.com/awslabs/aws-deployment-framework
+
 #
 # mail command settings
 #
