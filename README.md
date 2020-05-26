@@ -156,6 +156,11 @@ File Menu > Edit > Profile Preferenses > [As I like]
 |[Batch Link Downloader](https://chrome.google.com/webstore/detail/batch-link-downloader/aiahkbnnpafepcgnhhecilboebmmolnn/related)|plugin||
 |go to chrome://settings/ and click "Use GTK+ theme".||
 |fonts||
+|[Un Focus Web Pages](https://chrome.google.com/webstore/detail/un-focus-web-pages/cdbkhgekcjdpnjlajincjjknmbmigifg)||plugin|
+|Vimium|||
+|adblock|||
+|dictionary|||
+|translator|||
 
 ### Installation of VMware
 
