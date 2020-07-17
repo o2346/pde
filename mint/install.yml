@@ -512,6 +512,7 @@
     pip: name={{ item }} extra_args="-U"
     with_items:
       - aws-shell #https://github.com/awslabs/aws-shell
+      - cfn-lint
     become: true
 
 #https://github.com/awslabs/aws-data-wrangler
