@@ -61,10 +61,6 @@
       dest: ~/Documents/.dotfiles
   - name: deploy dotfiles
     command: sh ~/Documents/.dotfiles/deploy.sh
-  - name: .vimperator option files
-    git:
-      repo: https://github.com/o2346/.vimperator
-      dest: ~/.vimperator
   - name: copy .tmux.pd.conf
     copy: >
       src=./.tmux.pd.conf
