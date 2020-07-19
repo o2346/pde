@@ -55,16 +55,14 @@
 #
 # Dotfiles
 #
-  - name: download dotfiles
-    git:
-      repo: https://gist.githubusercontent.com/whateverjp/6ea3445379a6cdf87037c1be97ef7b16
-      dest: ~/Documents/.dotfiles
-  - name: deploy dotfiles
-    command: sh ~/Documents/.dotfiles/deploy.sh
-  - name: copy .tmux.pd.conf
-    copy: >
-      src=./.tmux.pd.conf
-      dest=~/
+#  - name: deploy dotfiles
+#    command: sh ~/Documents/.files/deploy.sh
+#  - name: copy .tmux.pd.conf
+#    copy: >
+#      src=./.tmux.pd.conf
+#      dest=~/
+#Migrated to new management style
+#Manual operation required for '.tmux.pd.conf' do some update later
 
 #
 # Get rid of the keyring, annoying
