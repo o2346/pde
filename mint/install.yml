@@ -298,6 +298,8 @@
 
         #http://zairyo.susi.oita-u.ac.jp/wordpress/?p=7385
         #convert: not authorized `show:' @ error/constitute.c/WriteImage/1028.
+      - cmake
+      - build-essential
 
     become: true
     when: not ansible_check_mode
@@ -660,6 +662,19 @@
   - name: mitmproxy
     command: sudo pip3 install --ignore-installed mitmproxy
     become: true
+
+#
+# stderred
+# https://github.com/sickill/stderred
+#
+  - name: clone stderred
+    git:
+      repo: https://github.com/sickill/stderred
+      dest: ~/Downloads/stderred
+  - name: make stderred
+    make:
+      chdir: ~/Downloads/stderred
+      target: ~/Downloads/stderred/Makefile
 
 #
 # dist-upgrade, autoremove
