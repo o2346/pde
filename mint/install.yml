@@ -675,6 +675,13 @@
     make:
       chdir: ~/Downloads/stderred
       target: ~/Downloads/stderred/Makefile
+    #issue: >&2 would not be colored even 'make 32 && make 64'
+    #ERROR: ld.so: object '/home/magi/Downloads/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
+  - name: install dependencies for stderred
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+     - gcc-multilib #https://askubuntu.com/questions/904929/gcc-compile-32-bit-code-on-64-bit-system
+    become: true
 
 #
 # dist-upgrade, autoremove
