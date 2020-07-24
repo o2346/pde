@@ -300,6 +300,7 @@
         #convert: not authorized `show:' @ error/constitute.c/WriteImage/1028.
       - cmake
       - build-essential
+      - zsh-syntax-highlighting
 
     become: true
     when: not ansible_check_mode
