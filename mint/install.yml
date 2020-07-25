@@ -301,6 +301,7 @@
       - cmake
       - build-essential
       - zsh-syntax-highlighting
+      - entr
 
     become: true
     when: not ansible_check_mode
