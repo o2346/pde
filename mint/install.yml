@@ -302,6 +302,7 @@
       - build-essential
       - zsh-syntax-highlighting
       - entr
+      - colordiff
 
     become: true
     when: not ansible_check_mode
