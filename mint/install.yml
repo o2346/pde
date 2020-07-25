@@ -18,6 +18,7 @@
     android_studio_checksum: 1383cfd47441e5f820b6257a1bdd683e0e980bc76c7f2027ef84dc2e6ad2f17f
     android_studio_parentdir: /usr/local/
     android_studio_dir: android-studio
+      # font_good_for_terminal: Migu 1M Regular # just memo
   become: no
   tasks:
 #
