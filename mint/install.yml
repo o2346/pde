@@ -228,9 +228,15 @@
       - virtualbox-qt
       - virtualbox-dkms
       - virtualbox-guest-additions-iso
+        #https://beyondjapan.com/blog/2017/01/japanese-gothic-fonts-on-linux/
       - fontforge
       - fonts-ricty-diminished
       - fonts-migmix
+      - fonts-takao
+      - fonts-noto  # sans mono cjk jp regular for terminal
+      - fonts-vlgothic # regular may be nice for teminal
+      - fonts-ipaexfont
+      - fonts-ipafont
       - filezilla
       - keepassx
       - vlc
