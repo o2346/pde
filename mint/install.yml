@@ -19,6 +19,7 @@
     android_studio_parentdir: /usr/local/
     android_studio_dir: android-studio
       # font_good_for_terminal: Migu 1M Regular # just memo
+      # http://malkalech.com/urxvt_terminal_emulator
   become: no
   tasks:
 #
@@ -702,6 +703,9 @@
       autoremove: yes
     become: true
     when: not ansible_check_mode
+
+# neofetch
+#https://www.linuxhelp.com/how-to-install-neofetch-in-ubuntu
 
   handlers:
   - name: restart ssh
