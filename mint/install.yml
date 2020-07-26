@@ -223,6 +223,12 @@
       - htop
       - nkf
       - tmux
+      - rxvt-unicode
+        #https://wiki.archlinux.org/index.php/Rxvt-unicode
+        #https://superuser.com/questions/454825/linux-terminal-emulator-with-custom-line-height-and-character-spacing
+        #http://malkalech.com/urxvt_terminal_emulator
+        #urxvtd
+        #urxvt-perls
       - xsel
       # https://sites.google.com/site/linuxnomemo/mint-use/virtualbox
       - virtualbox
@@ -238,6 +244,9 @@
       - fonts-vlgothic # regular may be nice for teminal
       - fonts-ipaexfont
       - fonts-ipafont
+        #https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md
+        #https://eng-blog.iij.ad.jp/archives/421
+        #http://www.wheel.gr.jp/~dai/fonts/pcf_on_ubuntu.html
       - filezilla
       - keepassx
       - vlc
