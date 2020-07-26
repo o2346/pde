@@ -320,6 +320,7 @@
       - zsh-syntax-highlighting
       - entr
       - colordiff
+      - wopr
 
     become: true
     when: not ansible_check_mode
