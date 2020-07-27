@@ -229,6 +229,7 @@
         #http://malkalech.com/urxvt_terminal_emulator
         #urxvtd
         #urxvt-perls
+      - rxvt-unicode-256color
       - xsel
       # https://sites.google.com/site/linuxnomemo/mint-use/virtualbox
       - virtualbox
