@@ -223,13 +223,13 @@
       - htop
       - nkf
       - tmux
-      - rxvt-unicode
+      - rxvt-unicode-256color
         #https://wiki.archlinux.org/index.php/Rxvt-unicode
         #https://superuser.com/questions/454825/linux-terminal-emulator-with-custom-line-height-and-character-spacing
         #http://malkalech.com/urxvt_terminal_emulator
         #urxvtd
         #urxvt-perls
-      - rxvt-unicode-256color
+        #https://www.youtube.com/watch?v=_kjbj-Ez1vU
       - xsel
       # https://sites.google.com/site/linuxnomemo/mint-use/virtualbox
       - virtualbox
