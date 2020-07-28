@@ -321,6 +321,7 @@
       - zsh-syntax-highlighting
       - entr
       - colordiff
+      - libnotify-bin #enable notify-send command
         #      - wopr
 
     become: true
