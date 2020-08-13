@@ -439,6 +439,12 @@
     command: systemctl --user start onedrive
 
 #
+# rclone
+#
+  - shell: curl https://rclone.org/install.sh | sudo bash
+    become: true
+
+#
 # misc Settings
 #
   - name: zsh for login shell
