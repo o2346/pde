@@ -323,7 +323,11 @@
       - colordiff
       - libnotify-bin #enable notify-send command
         #      - wopr
-
+      - fdupes
+        # https://linux.die.net/man/1/fdupes
+        # https://www.tecmint.com/fdupes-find-and-delete-duplicate-files-in-linux/
+        # https://github.com/adrianlopezroche/fdupes
+        # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
     become: true
     when: not ansible_check_mode
 
