@@ -282,6 +282,7 @@
       - w3m
       - w3m-img
       - pdftk
+        #https://cromwell-intl.com/open-source/pdf-not-authorized.html
       - jq
       # https://bw.org/ldcsql/
       # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
