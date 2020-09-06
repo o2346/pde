@@ -329,6 +329,7 @@
         # https://www.tecmint.com/fdupes-find-and-delete-duplicate-files-in-linux/
         # https://github.com/adrianlopezroche/fdupes
         # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
+      - shotwell #image viewer for .NEF https://www.linuxquestions.org/questions/linux-newbie-8/viewing-nef-4175596548/
     become: true
     when: not ansible_check_mode
 
