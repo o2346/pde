@@ -330,6 +330,10 @@
         # https://github.com/adrianlopezroche/fdupes
         # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
       - shotwell #image viewer for .NEF https://www.linuxquestions.org/questions/linux-newbie-8/viewing-nef-4175596548/
+        # https://yermakov.net/adding-nef-preview-to-linux-mint-file-manager-nemo/
+      - gnome-raw-thumbnailer
+      - libopenraw1v5
+      - libopenrawgnome1v5
     become: true
     when: not ansible_check_mode
 
