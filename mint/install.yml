@@ -722,6 +722,18 @@
      - gcc-multilib #https://askubuntu.com/questions/904929/gcc-compile-32-bit-code-on-64-bit-system
     become: true
 
+
+## jmespath
+  - name: install tools for jmespath
+    shell: sudo wget https://github.com/jmespath/jp/releases/download/0.1.2/jp-linux-amd64 -O /usr/local/bin/jp && sudo chmod +x /usr/local/bin/jp
+    become: true
+      # does not work on mine
+      #  - name: install tools for jmespath
+      #    pip: name={{ item }} extra_args="-U"
+      #    with_items:
+      #      - install jmespath-terminal #https://github.com/jmespath/jmespath.terminal
+      #    become: true
+
 #
 # dist-upgrade, autoremove
 #
