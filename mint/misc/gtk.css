@@ -1,0 +1,26 @@
+#https://forums.linuxmint.com/viewtopic.php?t=258354
+.nemo-desktop.nemo-canvas-item {
+color: #FFFFFF;
+text-shadow: 1px 1px @desktop_item_text_shadow;
+}
+
+.nemo-desktop.nemo-canvas-item:selected {
+background-color: alpha(#D64A38, 0.9);
+background-image: none;
+color: #FFFFFF;
+text-shadow: none;
+}
+NemoWindow .sidebar, NemoWindow .sidebar .view {
+  background-color: #000000;
+  color: #ffffff;
+}
+
+NemoWindow .view {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+NemoWindow .view:selected {
+  background-color: shade(#00152e, 3.4);
+  color: #ffffff;
+}
