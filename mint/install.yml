@@ -766,3 +766,7 @@
 #dark theme for nemo
 #https://forums.linuxmint.com/viewtopic.php?p=1130585#p1130585
 #.themes/Mint-X-Dark/gtk-3.0/apps
+#
+#note
+#systemctl --user restart pulseaudio.service
+#https://askubuntu.com/a/1123869
