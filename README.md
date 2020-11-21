@@ -161,7 +161,7 @@ File Menu > Edit > Profile Preferenses > [As I like]
 |adblock||plugin|
 |dictionary||plugin|
 |translator||plugin|
-|[Ad blocker youdube](https://chrome.google.com/webstore/detail/adblock-for-youtube/cmedhionkhpnakcndndgjdbohmhepckk/related?hl=en)||plugin|
+|[Adblock for Youtube](https://chrome.google.com/webstore/detail/adblock-for-youtube/cmedhionkhpnakcndndgjdbohmhepckk/related?hl=en)||plugin|
 
 ### Installation of VMware
 
