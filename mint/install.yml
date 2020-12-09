@@ -334,6 +334,11 @@
       - gnome-raw-thumbnailer
       - libopenraw1v5
       - libopenrawgnome1v5
+        #docker - complicated
+        #https://docs.docker.com/engine/install/ubuntu/
+        #https://www.liquidweb.com/kb/install-docker-ubuntu-16-04/
+        #https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket
+        #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
     become: true
     when: not ansible_check_mode
 
