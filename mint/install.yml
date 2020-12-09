@@ -548,6 +548,9 @@
     with_items:
       - aws-shell #https://github.com/awslabs/aws-shell
       - cfn-lint
+      - rdk
+      - sam
+      #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
     become: true
 
 #https://github.com/awslabs/aws-data-wrangler
