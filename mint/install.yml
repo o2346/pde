@@ -253,6 +253,7 @@
         - cfn-lint
         - rdk
         - sam
+        - jmespath-terminal
       #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
       executable: pip3
       extra_args: "-U"
@@ -268,15 +269,16 @@
 #https://github.com/awslabs/aws-deployment-framework
 
 ## jmespath
-  - name: install tools for jmespath
-    shell: sudo wget https://github.com/jmespath/jp/releases/download/0.1.2/jp-linux-amd64 -O /usr/local/bin/jp && sudo chmod +x /usr/local/bin/jp
-    become: true
-      # does not work on mine
-      #  - name: install tools for jmespath
-      #    pip: name={{ item }} extra_args="-U"
-      #    with_items:
-      #      - install jmespath-terminal #https://github.com/jmespath/jmespath.terminal
-      #    become: true
+#  - name: install tools for jmespath
+#    shell: sudo wget https://github.com/jmespath/jp/releases/download/0.1.2/jp-linux-amd64 -O /usr/local/bin/jp && sudo chmod +x /usr/local/bin/jp
+#    become: true
+#      # does not work on mine
+#      #  - name: install tools for jmespath
+#      #    pip: name={{ item }} extra_args="-U"
+#      #    with_items:
+#      #      - install jmespath-terminal #https://github.com/jmespath/jmespath.terminal
+#      #    become: true
+
 #
 # main apps
 #
