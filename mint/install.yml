@@ -166,11 +166,12 @@
   - name: set fcitx as default, restarting is required
     command: im-config -n fcitx
     when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+      #https://stackoverflow.com/questions/52743147/changing-ansible-loop-due-to-v2-11-deprecation
 
 #
 # Node.js
 #
-  - name: Check
+  - name: Node.js - checking already installed
     command: which node
     register: is_node_installed
     ignore_errors: true
@@ -195,6 +196,42 @@
       - nodejs
     become: true
     when: is_node_installed is failed
+
+#
+# AWS
+#
+  - name: aws - checking already installed
+    command: which aws
+    register: is_aws_installed
+    ignore_errors: true
+  - name: aws - checking already downloaded
+    command: ls /tmp/awscliv2.zip
+    register: is_aws_downloaded
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing AWS"
+    when: is_aws_installed is failed
+  - name: aws - install
+    shell: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    args:
+      chdir: /tmp/
+    when: is_aws_installed is failed and is_aws_downloaded is failed
+    become: true
+  - name: aws - install
+    shell: unzip awscliv2.zip
+    args:
+      chdir: /tmp/
+    when: is_aws_installed is failed and is_aws_downloaded is failed
+    become: true
+  - name: aws - install
+    shell: sudo ./aws/install
+    args:
+      chdir: /tmp/
+    when: is_aws_installed is failed
+    become: true
+    #(cd `mktemp -d` && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install)
+    #https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html
 
 #
 # main apps
