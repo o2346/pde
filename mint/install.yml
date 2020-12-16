@@ -272,9 +272,18 @@
 
 ## jmespath
 #https://pypi.org/project/jmespath-terminal/
+  - name: jmespath - checking already installed
+    command: which jpterm
+    register: is_jmespath_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing jmespath"
+    when: is_jmespath_installed is failed
   - name: install tools for jmespath
     shell: sudo wget https://github.com/jmespath/jp/releases/download/0.1.2/jp-linux-amd64 -O /usr/local/bin/jpterm && sudo chmod +x /usr/local/bin/jpterm
     become: true
+    when: is_jmespath_installed is failed
       # does not work on mine
       #  - name: install tools for jmespath
       #    pip: name={{ item }} extra_args="-U"
