@@ -9,9 +9,9 @@
     font_titlebar: 'Migu 2M Bold 14'
     theme_window_borders: 'mint-x-mod'
     theme_icons: 'oxygen'
-    theme_controls: 'Mint-Y-Dark-Blue'
+    theme_controls: 'Mint-Y-Dark'
     theme_mouse_pointer: 'DMZ-White'
-    theme_desktop: 'Modern Mint Dark'
+    theme_desktop: 'Mint-Y-Dark-Sand'
     downloads: /home/{{ansible_user_id}}/Downloads
     android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
     android_studio_name: android-studio-ide-162.4069837-linux.zip
@@ -102,19 +102,19 @@
 #      - https://cinnamon-spices.linuxmint.com/uploads/themes/W24H-LL4V-VPK7.zip
 #      # Modern Mint Dark 1
 #      - https://cinnamon-spices.linuxmint.com/uploads/themes/AELJ-LXG0-O7NW.zip
-#  - name: Theme - Window borders
-#    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
-#  - name: Theme - Icons
-#    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
-#  - name: Theme - Controls
-#    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
-#  - name: Theme - Mouse Pointer
-#    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
-#  - name: Theme - Desktop
-#    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
-#  - name: list themes
-#    command: ls ~/.themes
-#    register: themes
+  - name: Theme - Window borders
+    command: gsettings set org.cinnamon.desktop.wm.preferences theme "Mint-Y-Dark"
+  - name: Theme - Icons
+    command: gsettings set org.cinnamon.desktop.interface icon-theme "Mint-Y"
+  - name: Theme - Controls
+    command: gsettings set org.cinnamon.desktop.interface gtk-theme "Mint-Y-Dark"
+  - name: Theme - Mouse Pointer
+    command: gsettings set org.cinnamon.desktop.interface cursor-theme "DMZ-White"
+  - name: Theme - Desktop
+    command: gsettings set org.cinnamon.theme name "Mint-Y-Dark-Blue"
+      #  - name: list themes
+      #    command: ls ~/.themes
+      #    register: themes
 ##
 ## Desktop Themes
 ##
@@ -780,9 +780,6 @@
       autoremove: yes
     become: true
     when: not ansible_check_mode
-
-# neofetch
-#https://www.linuxhelp.com/how-to-install-neofetch-in-ubuntu
 
   handlers:
   - name: restart ssh
