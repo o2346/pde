@@ -697,29 +697,6 @@
     become: true
 # tail -f /var/log/exim4/mainlog
 
-#
-# Android
-#https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
-#  - name: check if android_studio_zip exists
-#    stat: path={{ downloads }}/{{ android_studio_name }}
-#    register: has_android_studio_zip
-#  - name: show stat if NO android_studio_zip exists
-#    debug: var=has_android_studio_zip
-#    when: not has_android_studio_zip.stat.exists
-#  - name: download Android Studio (sh256sum)
-#    get_url: >-
-#      url={{ android_studio_url }}/{{ android_studio_name }}
-#      dest={{ downloads }}
-#      sha256sum={{android_studio_checksum}}
-#      force=no
-#    become: true
-#    when: not has_android_studio_zip.stat.exists
-#  - name: Unzip Android Studio
-#    command: unzip -o {{ downloads }}/{{ android_studio_name }}
-#    args:
-#        chdir: "{{ android_studio_parentdir }}"
-#    become: true
-
   - name: kvm install packages
     apt: name={{ item }} update_cache=yes state=latest
     with_items:
@@ -850,6 +827,29 @@
   - name: restart ssh
     service: name=sshd state=restarted
     become: true
+
+#
+# Android
+#https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+#  - name: check if android_studio_zip exists
+#    stat: path={{ downloads }}/{{ android_studio_name }}
+#    register: has_android_studio_zip
+#  - name: show stat if NO android_studio_zip exists
+#    debug: var=has_android_studio_zip
+#    when: not has_android_studio_zip.stat.exists
+#  - name: download Android Studio (sh256sum)
+#    get_url: >-
+#      url={{ android_studio_url }}/{{ android_studio_name }}
+#      dest={{ downloads }}
+#      sha256sum={{android_studio_checksum}}
+#      force=no
+#    become: true
+#    when: not has_android_studio_zip.stat.exists
+#  - name: Unzip Android Studio
+#    command: unzip -o {{ downloads }}/{{ android_studio_name }}
+#    args:
+#        chdir: "{{ android_studio_parentdir }}"
+#    become: true
 
       #  - name: chown
       #    file: >-
