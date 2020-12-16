@@ -361,7 +361,6 @@
       - w3m-img
       - pdftk
         #https://cromwell-intl.com/open-source/pdf-not-authorized.html
-      - jq
       # https://bw.org/ldcsql/
       # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
       # deploy sid into docroot afterward
@@ -471,21 +470,6 @@
 #
   - name: NeoBundle
     shell: curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | bash
-
-#
-# vagrant
-#
-#  - name: download Vagrant deb pack file with check (sh256sum)
-#    get_url:
-#      url: https://releases.hashicorp.com/vagrant/1.8.7/vagrant_1.8.7_x86_64.deb
-#      dest: /home/{{ansible_user_id}}/Downloads/vagrant_1.8.7_x86_64.deb
-#      sha256sum: 10c77b643b73dd3ad7a45a89d8ab95b58b79dc10e0cf6e760fe24abc436b2fdb
-#      force: no
-#    become: true
-#  - name: Install vagrant from a deb package
-#    apt:
-#      deb: /home/{{ansible_user_id}}/Downloads/vagrant_1.8.7_x86_64.deb
-#    become: true
 
 #
 # Onedrive client Install
@@ -841,3 +825,7 @@
 #note
 #systemctl --user restart pulseaudio.service
 #https://askubuntu.com/a/1123869
+#
+#memo:
+# vagrant - unnecessary lately. just a reminder
+
