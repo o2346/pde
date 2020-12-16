@@ -218,7 +218,7 @@
   - name: install packages
     apt: name={{ item }} update_cache=yes state=latest
     with_items:
-      - vim-gnome
+      #      - vim-gnome
       - emacs
       - nodejs
       - awscli
@@ -269,7 +269,7 @@
       - tree
       #You are using pip version 8.1.1, however version 9.0.1 is available.
       #You should consider upgrading via the 'pip install --upgrade pip' command.
-      - python-pip
+      - python3-pip
       # pip broken problem:
       #   sudo apt-get remove --purge python-pip
       #   wget https://bootstrap.pypa.io/get-pip.py
@@ -302,8 +302,24 @@
       # benchmark https://www.howtoforge.com/how-to-benchmark-your-system-cpu-file-io-mysql-with-sysbench
       - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
       # nvidia-smi -q -d temperature #https://askubuntu.com/questions/34449/how-to-see-the-video-card-temperature-nvidia-ati-intel
-      - nvidia-375
+      - nvidia-driver-430
       - nvidia-settings
+      #
+      #on mint 18
+      #[127]% sudo ubuntu-drivers devices
+      #[sudo] password for magi:
+      #== cpu-microcode.py ==
+      #driver   : intel-microcode - distro free
+      #
+      #== /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0 ==
+      #vendor   : NVIDIA Corporation
+      #modalias : pci:v000010DEd00001C82sv00001458sd00003764bc03sc00i00
+      #driver   : nvidia-384 - distro free
+      #driver   : xserver-xorg-video-nouveau - distro free builtin
+      #driver   : nvidia-430 - third-party free recommended
+      #driver   : nvidia-418 - third-party free
+      #driver   : nvidia-410 - third-party free
+      #driver   : nvidia-415 - third-party free
       # sudo apt-get -y oklar # https://www.google.co.jp/search?q=linux+pdf+viewer+dark
       # okular settings: space & shift+space for next/previous page, instead of scrolling up/down
       - okular
@@ -333,9 +349,9 @@
         # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
       - shotwell #image viewer for .NEF https://www.linuxquestions.org/questions/linux-newbie-8/viewing-nef-4175596548/
         # https://yermakov.net/adding-nef-preview-to-linux-mint-file-manager-nemo/
-      - gnome-raw-thumbnailer
-      - libopenraw1v5
-      - libopenrawgnome1v5
+        #- gnome-raw-thumbnailer
+      - libopenraw7
+      - libopenrawgnome7
         #docker - complicated
         #https://docs.docker.com/engine/install/ubuntu/
         #https://www.liquidweb.com/kb/install-docker-ubuntu-16-04/
