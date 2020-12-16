@@ -853,11 +853,8 @@
       state: latest
     become: true
 
-  - command: sudo pip3 install -U pip
-    become: true
-
   - name: mitmproxy
-    command: sudo pip3 install --ignore-installed mitmproxy
+    command: pip3 install --ignore-installed mitmproxy
     become: true
 
 #
