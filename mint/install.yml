@@ -484,7 +484,7 @@
 #
 # rclone
 #
-  - shell: curl https://rclone.org/install.sh | sudo bash
+  - shell: which rclone || curl https://rclone.org/install.sh | sudo bash
     become: true
 
 #
@@ -642,11 +642,12 @@
     with_items:
      - qemu #https://fosspost.org/tutorials/use-qemu-test-operating-systems-distributions
      - qemu-kvm
-     - kvm
      - virt-manager
      - ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
      - libvirt-bin
      - bridge-utils
+     - libvirt-daemon-system
+     - libvirt-clients
     become: true
     when: not ansible_check_mode
   - name: start libvirt-bin
