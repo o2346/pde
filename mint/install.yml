@@ -500,11 +500,10 @@
 # eslint
 #
   - name: Install "eslint" node.js package globally.
-    npm:
-      name:
-        - eslint
-        - eslint_d
-      global: yes
+    npm: name={{ item }} global=yes
+    with_items:
+      - eslint
+      - eslint_d
 
 # randomize screen saver
 # TODO: http://applocator.blogspot.com/2017/01/random-screensaver-with-linux-mint.html
