@@ -531,14 +531,31 @@
 #
 # NeoBundle
 #
+  - name: neobundle - checking already installed
+    command: test -d ~/.vim/bundle/neobundle.vim
+    register: is_neobundle_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing neobundle"
+    when: is_neobundle_installed is failed
   - name: NeoBundle
     shell: curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | bash
+    when: is_neobundle_installed is failed
 
 #
 # Onedrive client Install
 # https://memo.laughk.org/2016/12/22/0000.html
 # https://github.com/skilion/onedrive
 #
+  - name: onedrive - checking already installed
+    command: which onedrive
+    register: is_onedrive_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing onedrive"
+    when: is_onedrive_installed is failed
   - name: install packages
     apt:
       name:
@@ -549,6 +566,7 @@
       update_cache: yes
       state: latest
     become: true
+    when: is_onedrive_installed is failed
       #  - name: download for Onedrive
       #    get_url:
       #      url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
@@ -571,9 +589,11 @@
   - name: dmd
     shell: wget https://netcologne.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
     become: true
+    when: is_onedrive_installed is failed
   - name: dmd
     shell: sudo apt-get update --allow-insecure-repositories && sudo apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring && sudo apt-get update
     become: true
+    when: is_onedrive_installed is failed
   - name: dmd - install
     apt:
       update_cache: yes
@@ -582,19 +602,23 @@
         - dmd-compiler
         - dmd-tools
     become: true
+    when: is_onedrive_installed is failed
   - name: clone Onedrive
     git:
       repo: https://github.com/skilion/onedrive
       dest: ~/Downloads/onedrive
+    when: is_onedrive_installed is failed
   - name: make all
     make:
       chdir: ~/Downloads/onedrive
       target: ~/Downloads/onedrive/Makefile
+    when: is_onedrive_installed is failed
   - name: make install
     command: make install
     args:
       chdir: /home/{{ansible_user_id}}/Downloads/onedrive
     become: true
+    when: is_onedrive_installed is failed
   - name: create ~/.config/onedrive directory if it doesn't exist
     file:
       path: ~/.config/onedrive
