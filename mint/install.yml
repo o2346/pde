@@ -15,7 +15,6 @@
       # font_good_for_terminal: Migu 1M Regular # just memo
       # http://malkalech.com/urxvt_terminal_emulator
   become: no
-    #https://github.com/geerlingguy/ansible-role-docker/issues/77
   tasks:
 #
 # Network Manager disable
@@ -287,7 +286,6 @@
       #ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
       #jmespath-terminal 0.2.1 requires urwid==1.2.2, but you have urwid 2.1.2 which is incompatible.
 
-#TODO: https://github.com/geerlingguy/ansible-role-docker/issues/77#issuecomment-433856996
   - name: uninstall packages
     apt:
       name:
@@ -440,6 +438,9 @@
 #          #https://www.liquidweb.com/kb/install-docker-ubuntu-16-04/
 #          #https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket
 #          #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+#
+    #https://github.com/geerlingguy/ansible-role-docker/issues/77
+#TODO: https://github.com/geerlingguy/ansible-role-docker/issues/77#issuecomment-433856996
 #  - name: Docker - setup
 #    apt:
 #      update_cache: yes
