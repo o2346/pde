@@ -191,9 +191,11 @@
     become: true
     when: is_node_installed is failed
   - name:  Node.js - Install
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - nodejs
+    apt:
+      name:
+        - nodejs
+      update_cache: yes
+      state: latest
     become: true
     when: is_node_installed is failed
 
@@ -488,10 +490,11 @@
 # eslint
 #
   - name: Install "eslint" node.js package globally.
-    npm: name={{ item }} global=yes
-    with_items:
-      - eslint
-      - eslint_d
+    npm:
+      name:
+        - eslint
+        - eslint_d
+      global: yes
 
 # randomize screen saver
 # TODO: http://applocator.blogspot.com/2017/01/random-screensaver-with-linux-mint.html
@@ -508,12 +511,14 @@
 # https://github.com/skilion/onedrive
 #
   - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      # https://ubuntuforums.org/showthread.php?t=1774516
-      - libcurl4-gnutls-dev
-      #- libcurl-dev
-      - libsqlite3-dev
+    apt:
+      name:
+        # https://ubuntuforums.org/showthread.php?t=1774516
+        - libcurl4-gnutls-dev
+        #- libcurl-dev
+        - libsqlite3-dev
+      update_cache: yes
+      state: latest
     become: true
       #  - name: download for Onedrive
       #    get_url:
@@ -663,11 +668,12 @@
 # pip
 #
   - name: install pip(s)
-    pip: name={{ item }} extra_args="-U"
-    with_items:
-      - pip
-      - setuptools
-      - csvkit
+    pip:
+      name:
+        - pip
+        - setuptools
+        - csvkit
+      extra_args: "-U"
     become: true
 
   - name: sitecustomize.py
@@ -683,10 +689,12 @@
 # mail command settings
 #
   - name: mail utils install
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - mailutils
-      - exim4
+    apt:
+      name:
+        - mailutils
+        - exim4
+      update_cache: yes
+      state: latest
     become: true
   - name: copy exim4 cfg file
     copy: >
@@ -698,15 +706,17 @@
 # tail -f /var/log/exim4/mainlog
 
   - name: kvm install packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-     - qemu #https://fosspost.org/tutorials/use-qemu-test-operating-systems-distributions
-     - qemu-kvm
-     - virt-manager
-     - ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
-     - bridge-utils
-     - libvirt-daemon-system
-     - libvirt-clients
+    apt:
+      name:
+        - qemu #https://fosspost.org/tutorials/use-qemu-test-operating-systems-distributions
+        - qemu-kvm
+        - virt-manager
+        - ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
+        - bridge-utils
+        - libvirt-daemon-system
+        - libvirt-clients
+      update_cache: yes
+      state: latest
     become: true
       #  - name: start libvirt-bin
       #    service: name=libvirt-bin state=restarted enabled=yes
@@ -739,10 +749,12 @@
 # plantUML
 # https://www.hiroom2.com/2018/07/02/ubuntu-1804-plantuml-en/
   - name: install dependencies for PlantUML
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-     - graphviz
-     - default-jre
+    apt:
+      name:
+        - graphviz
+        - default-jre
+      update_cache: yes
+      state: latest
     become: true
   - name: Creates directory
     file:
@@ -771,12 +783,14 @@
 # mitmdump
 #
   - name: install dependencies for mitmproxy
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-     - python3-dev
-     - python3-pip
-     - libffi-dev
-     - libssl-dev
+    apt:
+      name:
+        - python3-dev
+        - python3-pip
+        - libffi-dev
+        - libssl-dev
+      update_cache: yes
+      state: latest
     become: true
 
   - name: upgrade pip
@@ -808,9 +822,11 @@
     #issue: >&2 would not be colored even 'make 32 && make 64'
     #ERROR: ld.so: object '/home/magi/Downloads/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
   - name: install dependencies for stderred
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-     - gcc-multilib #https://askubuntu.com/questions/904929/gcc-compile-32-bit-code-on-64-bit-system
+    apt:
+      name:
+        - gcc-multilib #https://askubuntu.com/questions/904929/gcc-compile-32-bit-code-on-64-bit-system
+      update_cache: yes
+      state: latest
     become: true
 
 
