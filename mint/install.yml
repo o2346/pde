@@ -1,7 +1,6 @@
 ---
 - hosts: "{{ given_host | default('localhost') }}"
   vars:
-    nodesetup: /tmp/node_setup.sh
     gituser: user
     gitemail: ""
     font: 'MigMix 1M 16'
@@ -182,13 +181,12 @@
   - name: Node.js - Download preinstaller
     get_url:
       url: https://deb.nodesource.com/setup_current.x
-      dest: "{{nodesetup}}"
+      dest: "/tmp/nodesetup.sh"
       mode: 0665
     when: is_node_installed is failed
   - name: Node.js - preinstall
-    command: bash -E "{{nodesetup}}"
+    command: bash -E "/tmp/nodesetup.sh"
     become: true
-    notify: delete node_setup
     when: is_node_installed is failed
   - name:  Node.js - Install
     apt: name={{ item }} update_cache=yes state=latest
@@ -823,10 +821,6 @@
   - name: restart ssh
     service: name=sshd state=restarted
     become: true
-  - name: delete node_setup
-    file:
-      name: "{{nodesetup}}"
-      state: absent
 
 # todo: add useful tools https://qiita.com/onokatio/items/50fb616f71bf3c5021b9
 # todo: apt-fast https://news.mynavi.jp/article/20161101-a177/
