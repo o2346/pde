@@ -830,7 +830,17 @@
 #
 # do it manually for now, because it's time-consuming
 #  - command: sudo apt install texlive-full
+  - name: install latex(instead of texlive-full)
+    apt:
+      name:
+        - texlive-base
+        - texlive-lang-japanese
+          #        - texlive-fonts-recommended
+      update_cache: yes
+      state: latest
+    become: true
 # https://texwiki.texjp.org/?Linux%2FLinux%20Mint
+# https://linuxconfig.org/how-to-install-latex-on-ubuntu-20-04-focal-fossa-linux
 
 #
 # mitmdump
