@@ -77,22 +77,16 @@
 #  - name: desktop themes
 #    unarchive: src={{ item }} dest=~/.themes copy=no
 #    with_items:
+#      # they likely renewed the site https://cinnamon-spices.linuxmint.com/themes
 #      # BlackMint
 #      - https://cinnamon-spices.linuxmint.com/uploads/themes/IQ3Q-WIFH-A9V3.zip
 #      # Hacktivist 1.4
-#      - https://cinnamon-spices.linuxmint.com/uploads/themes/5UKU-H6JI-G3O6.zip
 #      # Mint-X-Dark
-#      - https://cinnamon-spices.linuxmint.com/uploads/themes/8ZA5-UIX7-QXJ7.zip
 #      # mint-x-mod
-#      - https://cinnamon-spices.linuxmint.com/uploads/themes/JBT7-9J4S-EAUH.zip
 #      # Mint-Y-Gray
-#      - https://cinnamon-spices.linuxmint.com/uploads/themes/M9WI-K8ME-QKAK.zip
 #      # Mint-Y-Yltra-Dark
-#      - https://cinnamon-spices.linuxmint.com/uploads/themes/PH79-PQF1-TYRD.zip
 #      # Mint Y Dark Blue
-#      - https://cinnamon-spices.linuxmint.com/uploads/themes/W24H-LL4V-VPK7.zip
 #      # Modern Mint Dark 1
-#      - https://cinnamon-spices.linuxmint.com/uploads/themes/AELJ-LXG0-O7NW.zip
   - name: Theme - Window borders
     command: gsettings set org.cinnamon.desktop.wm.preferences theme "Mint-Y-Dark"
   - name: Theme - Icons
@@ -109,19 +103,6 @@
 ##
 ## Desktop Themes
 ##
-#  - name: Theme - Window borders
-#    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
-#  - name: Theme - Icons
-#    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
-#  - name: Theme - Controls
-#    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
-#  - name: Theme - Mouse Pointer
-#    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
-#  - name: Theme - Desktop
-#    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
-#  - name: list themes
-#    command: ls ~/.themes
-#    register: themes
 #  - name: debug result var
 #    debug: var=themes
 #  - name: font size
@@ -169,9 +150,6 @@
       mode=0644
     become: yes
 
-
-
-#todo
 # fcitx mozc
   - name: install ime, fcitx mozc
     apt: name={{ item }} state=latest update_cache=yes install_recommends=yes
@@ -183,20 +161,20 @@
   - name: set fcitx as default, restarting is required
     command: im-config -n fcitx
     when: not ansible_check_mode
+
 #
+# Node.js
 #
-# Node.js Preinstallation
-#
-  - name: download preinstaller of nodejs
+  - name: Node.js - Download preinstaller
     get_url:
       url: https://deb.nodesource.com/setup_current.x
       dest: "{{nodesetup}}"
       mode: 0665
-  - name: preinstall nodejs
+  - name: Node.js - preinstall
     command: bash -E "{{nodesetup}}"
     become: true
     notify: delete node_setup
-  - name: install nodejs
+  - name:  Node.js - Install
     apt: name={{ item }} update_cache=yes state=latest
     with_items:
       - nodejs
