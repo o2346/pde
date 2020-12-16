@@ -197,16 +197,16 @@
 #
 # Node.js Preinstallation
 #
-  - name: download preinstaller of nodejs
-    get_url:
-      url: https://deb.nodesource.com/setup_15.x
-      dest: "{{nodesetup}}"
-      mode: 0665
-  - name: preinstall nodejs
-    command: bash -E "{{nodesetup}}"
-    become: true
-    notify: delete node_setup
-
+#  - name: download preinstaller of nodejs
+#    get_url:
+#      url: https://deb.nodesource.com/setup_15.x
+#      dest: "{{nodesetup}}"
+#      mode: 0665
+#  - name: preinstall nodejs
+#    command: bash -E "{{nodesetup}}" -
+#    become: true
+#    notify: delete node_setup
+#
 #
 # main apps
 #
