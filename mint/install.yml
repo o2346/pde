@@ -617,7 +617,6 @@
       - pip
       - setuptools
       - csvkit
-        #      - yq
     become: true
 
   - name: sitecustomize.py
