@@ -295,7 +295,7 @@
   - name: install packages
     apt: name={{ item }} update_cache=yes state=latest
     with_items:
-      - vim-gtk
+      - vim-gtk #taking care of clipboard functionality since default version does not support
       - emacs
       - htop
       - nkf
