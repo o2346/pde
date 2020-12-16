@@ -433,7 +433,6 @@
         #https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket
         #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
     become: true
-    when: not ansible_check_mode
 
 #
 # npm Global Problem fix
@@ -484,7 +483,6 @@
       #- libcurl-dev
       - libsqlite3-dev
     become: true
-    when: not ansible_check_mode
       #  - name: download for Onedrive
       #    get_url:
       #      url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
@@ -637,7 +635,6 @@
       - mailutils
       - exim4
     become: true
-    when: not ansible_check_mode
   - name: copy exim4 cfg file
     copy: >
       src=./src/update-exim4.conf.conf
@@ -681,7 +678,6 @@
      - libvirt-daemon-system
      - libvirt-clients
     become: true
-    when: not ansible_check_mode
       #  - name: start libvirt-bin
       #    service: name=libvirt-bin state=restarted enabled=yes
       #    become: true
@@ -803,7 +799,6 @@
       upgrade: dist
       autoremove: yes
     become: true
-    when: not ansible_check_mode
 
   handlers:
   - name: restart ssh
