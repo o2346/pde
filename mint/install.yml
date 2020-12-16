@@ -171,14 +171,14 @@
 # how to modify url
 # https://note.mu/junf/n/nc710a82cad00
 # TODO: not to upload local file, just replace urls
-#  - name: apt source list
-#    copy: >
-#      src=./sources.list
-#      dest=/etc/apt/sources.list
-#      mode=0644
-#    become: yes
-#
-#
+  - name: apt source list
+    copy: >
+      src=./sources.list
+      dest=/etc/apt/sources.list
+      mode=0644
+    become: yes
+
+
 
 #todo
 # fcitx mozc
@@ -197,16 +197,16 @@
 #
 # Node.js Preinstallation
 #
-#  - name: download preinstaller of nodejs
-#    get_url:
-#      url: https://deb.nodesource.com/setup_15.x
-#      dest: "{{nodesetup}}"
-#      mode: 0665
-#  - name: preinstall nodejs
-#    command: bash -E "{{nodesetup}}" -
-#    become: true
-#    notify: delete node_setup
-#
+  - name: download preinstaller of nodejs
+    get_url:
+      url: https://deb.nodesource.com/setup_15.x
+      dest: "{{nodesetup}}"
+      mode: 0665
+  - name: preinstall nodejs
+    command: bash -E "{{nodesetup}}"
+    become: true
+    notify: delete node_setup
+
 #
 # main apps
 #
