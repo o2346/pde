@@ -91,9 +91,9 @@
   - name: Theme - Icons
     command: gsettings set org.cinnamon.desktop.interface icon-theme "Mint-Y"
   - name: Theme - Controls
-    command: gsettings set org.cinnamon.desktop.interface gtk-theme "Mint-Y-Dark"
+    command: gsettings set org.cinnamon.desktop.interface gtk-theme "Adwaita-dark"
   - name: Theme - Mouse Pointer
-    command: gsettings set org.cinnamon.desktop.interface cursor-theme "DMZ-White"
+    command: gsettings set org.cinnamon.desktop.interface cursor-theme "Adwaita"
   - name: Theme - Desktop
     command: gsettings set org.cinnamon.theme name "Mint-Y-Dark-Blue"
       #  - name: list themes
@@ -814,7 +814,7 @@
 #[Dark theme in Dolphin file manager](https://unix.stackexchange.com/a/566789)
 #dark theme for nemo
 #https://forums.linuxmint.com/viewtopic.php?p=1130585#p1130585
-#.themes/Mint-X-Dark/gtk-3.0/apps
+#~/.themes/Mint-X-Dark/gtk-3.0/apps
 #
 #note
 #systemctl --user restart pulseaudio.service
