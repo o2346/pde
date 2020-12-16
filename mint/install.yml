@@ -461,7 +461,6 @@
       update_cache: yes
       state: latest
       name:
-        - install
         - docker-ce
         - docker-ce-cli
         - containerd.io
