@@ -199,17 +199,24 @@
 #
   - name: download preinstaller of nodejs
     get_url:
-      url: https://deb.nodesource.com/setup_15.x
+      url: https://deb.nodesource.com/setup_current.x
       dest: "{{nodesetup}}"
       mode: 0665
   - name: preinstall nodejs
     command: bash -E "{{nodesetup}}"
     become: true
     notify: delete node_setup
+  - name: install nodejs
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - nodejs
+    become: true
+    when: not ansible_check_mode
 
 #
 # main apps
 #
+#TODO: https://github.com/geerlingguy/ansible-role-docker/issues/77#issuecomment-433856996
   - name: uninstall packages
     apt: name={{ item }} state=absent
     with_items:
@@ -220,7 +227,6 @@
     with_items:
       #      - vim-gnome
       - emacs
-      - nodejs
       - awscli
       - htop
       - nkf

@@ -37,8 +37,7 @@ getosdir () {
     return "$(expr substr $(uname -s) 1 10)"
   fi
 }
-getlinuxdir
-exit 0
+
 vmx() {
   echo "[Hypervisor Detection] $1 is the one virtualizes this machine. proceeding..."
   sh ~/Downloads/pde/`getosdir`/guest/vmware.sh
