@@ -372,7 +372,7 @@
 #
   - name: create Directory for global installation
     file:
-      path: ~/.npm-global
+      path: ~/.npm-global/lib
       state: directory
       mode: 0755
   - name: set directory of npm
@@ -431,27 +431,30 @@
       - libsqlite3-dev
     become: true
     when: not ansible_check_mode
-  - name: download for Onedrive
-    get_url:
-      url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
-      dest: /etc/apt/sources.list.d/d-apt.list
+      #  - name: download for Onedrive
+      #    get_url:
+      #      url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
+      #      dest: /etc/apt/sources.list.d/d-apt.list
+      #    become: true
+      #  - name: apt-key
+      #    shell: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EBCF975E5BA24D5E
+      #    become: true
+      #  - name: apt-key add for Onedrive
+      #    apt_key:
+      #      url: "http://dlang.org/d-keyring.gpg"
+      #      state: present
+      #    become: true
+      #  - name: Run the equivalent of "apt-get update" as a separate step
+      #    apt:
+      #      update_cache: yes
+      #    become: true
+      #    when: not ansible_check_mode
+  - name: dmd
+    shell: wget https://netcologne.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
     become: true
-  - name: apt-key add for Onedrive
-    apt_key:
-      url: "http://dlang.org/d-keyring.gpg"
-      state: present
+  - name: dmd
+    shell: sudo apt-get update --allow-insecure-repositories && sudo apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring && sudo apt-get update
     become: true
-  - name: Run the equivalent of "apt-get update" as a separate step
-    apt:
-      update_cache: yes
-    become: true
-    when: not ansible_check_mode
-  - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest allow_unauthenticated=yes
-    with_items:
-      - dmd-bin
-    become: true
-    when: not ansible_check_mode
   - name: clone Onedrive
     git:
       repo: https://github.com/skilion/onedrive
