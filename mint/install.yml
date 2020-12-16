@@ -152,15 +152,20 @@
 
 # fcitx mozc
   - name: install ime, fcitx mozc
-    apt: name={{ item }} state=latest update_cache=yes install_recommends=yes
-    with_items:
-      - fcitx
-      - fcitx-mozc
+    apt:
+      name:
+        - fcitx
+        - fcitx-mozc
+      state: latest
+      autoclean: yes
+      update_cache: yes
+      install_recommends: yes
     become: true
-    when: not ansible_check_mode
+    when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+      #when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
   - name: set fcitx as default, restarting is required
     command: im-config -n fcitx
-    when: not ansible_check_mode
+    when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 #
 # Node.js
