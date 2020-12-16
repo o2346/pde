@@ -450,33 +450,53 @@
 #
     #https://github.com/geerlingguy/ansible-role-docker/issues/77
 #TODO: https://github.com/geerlingguy/ansible-role-docker/issues/77#issuecomment-433856996
-#  - name: Docker - setup
-#    apt:
-#      update_cache: yes
-#      state: latest
-#      name:
-#        - apt-transport-https
-#        - ca-certificates
-#        - curl
-#        - gnupg-agent
-#        - software-properties-common
-#    become: true
-#  - name: add GPG key
-#    shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-#    become: true
-#  # Verify that you now have the key with the fingerprint 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88, by searching for the last 8 characters of the fingerprint.
-#  - name: add repo
-#    shell: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-#    become: true
-#  - name: Docker - setup
-#    apt:
-#      update_cache: yes
-#      state: latest
-#      name:
-#        - docker-ce
-#        - docker-ce-cli
-#        - containerd.io
-#    become: true
+  - name: docker - checking already installed
+    command: which jpterm
+    register: is_docker_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing docker"
+    when: is_docker_installed is failed
+  - name: Docker - setup
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+    become: true
+    when: is_docker_installed is failed
+  - name: add GPG key
+    shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    become: true
+    when: is_docker_installed is failed
+  # Verify that you now have the key with the fingerprint 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88, by searching for the last 8 characters of the fingerprint.
+  - name: add repo
+    shell: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+    become: true
+    ignore_errors: true
+    when: is_docker_installed is failed
+  - name: Docker - setup
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+    become: true
+    when: is_docker_installed is failed
+  - name: add "{{ansible_user_id}}" into group docker
+    user:
+      name: "{{ansible_user_id}}"
+      groups: docker
+      append: yes
+    become: true
+    when: is_docker_installed is failed
 
 #
 # npm Global Problem fix
