@@ -5,11 +5,19 @@
   become: no
   tasks:
 
+  #https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html
   - name: Check
-    command: cat /etc/os-release
-    register: osrelease
+    command: which node
+    register: is_node_installed
+    ignore_errors: true
 
-  - name: Print version
+  - name: Print on succeeded
     debug:
-      msg: "os-release: {{ osrelease.stdout }}"
+      msg: "{{ is_node_installed.stdout }}"
+    when: is_node_installed is succeeded
+
+  - name: Print on failed
+    debug:
+      msg: "nothing found"
+    when: is_node_installed is failed
 
