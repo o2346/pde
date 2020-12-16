@@ -428,11 +428,43 @@
           #- gnome-raw-thumbnailer
         - libopenraw7
         - libopenrawgnome7
+    become: true
+
+#
+# Docker
+#
           #docker - complicated
           #https://docs.docker.com/engine/install/ubuntu/
           #https://www.liquidweb.com/kb/install-docker-ubuntu-16-04/
           #https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket
           #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+  - name: Docker - setup
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+    become: true
+  - name: add GPG key
+    shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    become: true
+  # Verify that you now have the key with the fingerprint 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88, by searching for the last 8 characters of the fingerprint.
+  - name: add repo
+    shell: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    become: true
+  - name: Docker - setup
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        - install
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
     become: true
 
 #
@@ -508,6 +540,14 @@
     become: true
   - name: dmd
     shell: sudo apt-get update --allow-insecure-repositories && sudo apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring && sudo apt-get update
+    become: true
+  - name: dmd - install
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        - dmd-compiler
+        - dmd-tools
     become: true
   - name: clone Onedrive
     git:
