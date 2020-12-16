@@ -285,9 +285,6 @@
       #ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
       #jmespath-terminal 0.2.1 requires urwid==1.2.2, but you have urwid 2.1.2 which is incompatible.
 
-#
-# main apps
-#
 #TODO: https://github.com/geerlingguy/ansible-role-docker/issues/77#issuecomment-433856996
   - name: uninstall packages
     apt:
@@ -295,146 +292,147 @@
         - ufw
       state: absent
     become: true
-  - name: install general packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - vim-gtk #taking care of clipboard functionality since default version does not support
-      - emacs
-      - htop
-      - nkf
-      - tmux
-      - rxvt-unicode-256color
-        #https://wiki.archlinux.org/index.php/Rxvt-unicode
-        #https://superuser.com/questions/454825/linux-terminal-emulator-with-custom-line-height-and-character-spacing
-        #http://malkalech.com/urxvt_terminal_emulator
-        #urxvtd
-        #urxvt-perls
-        #https://www.youtube.com/watch?v=_kjbj-Ez1vU
-      - xsel
-      # https://sites.google.com/site/linuxnomemo/mint-use/virtualbox
-      - virtualbox
-      - virtualbox-qt
-      - virtualbox-dkms
-      - virtualbox-guest-additions-iso
-        #https://beyondjapan.com/blog/2017/01/japanese-gothic-fonts-on-linux/
-      - fontforge
-      - fonts-ricty-diminished
-      - fonts-migmix
-      - fonts-takao
-      - fonts-noto  # sans mono cjk jp regular for terminal
-      - fonts-vlgothic # regular may be nice for teminal
-      - fonts-ipaexfont
-      - fonts-ipafont
-        #https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md
-        #https://eng-blog.iij.ad.jp/archives/421
-        #http://www.wheel.gr.jp/~dai/fonts/pcf_on_ubuntu.html
-      - keepassx
-      - vlc
-      - k3b
-      - zsh
-      - ffmpeg
-      - mp3splt
-      #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
-      #- wine
-      - tig
-      - chromium-browser
-      - clang #for NeoBundle
-      - ssh
-      - sshpass
-      - openssh-server
-        #https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-enable-ssh-on-ubuntu-18-04-linux-mint-19-debian-9.html
-      - firewall-applet #replacement of ufw
-      - whois
-      - tree
-      #You are using pip version 8.1.1, however version 9.0.1 is available.
-      #You should consider upgrading via the 'pip install --upgrade pip' command.
-      - python3-pip
-      # pip broken problem:
-      #   sudo apt-get remove --purge python-pip
-      #   wget https://bootstrap.pypa.io/get-pip.py
-      #   python3 ./get-pip.py
-      # https://github.com/pypa/setuptools/issues/937
-      # sudo pip install -U setuptools
-      # sudo pip install csvkit
-      # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
-      - inotify-tools
-      - guile-2.0
-      - guile-2.0-dev
-      - w3m
-      - w3m-img
-      - pdftk
-        #https://cromwell-intl.com/open-source/pdf-not-authorized.html
-      # https://bw.org/ldcsql/
-      # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
-      # deploy sid into docroot afterward
-      - apache2
-      - php
-      - libapache2-mod-php
-      - php-sqlite3
-      - php-common
-      - tshark
-      - transmission-cli
-      # http://www.mirandora.com/?p=697
-      # ~/.config/chromium/Default/History
-      - sqlite3
-      # benchmark https://www.howtoforge.com/how-to-benchmark-your-system-cpu-file-io-mysql-with-sysbench
-      - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
-      # nvidia-smi -q -d temperature #https://askubuntu.com/questions/34449/how-to-see-the-video-card-temperature-nvidia-ati-intel
-      - nvidia-driver-430
-      - nvidia-settings
-      #
-      #on mint 18
-      #[127]% sudo ubuntu-drivers devices
-      #[sudo] password for magi:
-      #== cpu-microcode.py ==
-      #driver   : intel-microcode - distro free
-      #
-      #== /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0 ==
-      #vendor   : NVIDIA Corporation
-      #modalias : pci:v000010DEd00001C82sv00001458sd00003764bc03sc00i00
-      #driver   : nvidia-384 - distro free
-      #driver   : xserver-xorg-video-nouveau - distro free builtin
-      #driver   : nvidia-430 - third-party free recommended
-      #driver   : nvidia-418 - third-party free
-      #driver   : nvidia-410 - third-party free
-      #driver   : nvidia-415 - third-party free
-      # sudo apt-get -y oklar # https://www.google.co.jp/search?q=linux+pdf+viewer+dark
-      # okular settings: space & shift+space for next/previous page, instead of scrolling up/down
-      - okular
-      - gnuplot
-      # - pandoc apt has old version. see  https://pandoc.org/installing.html
-      - pv
-      # - name: exiftool
-      - xsane
-      - ttf-mscorefonts-installer
-        #After installing the fonts, we need to update the font cache using command:
-        #sudo fc-cache -f -v
-        #https://www.ostechnix.com/install-microsoft-windows-fonts-ubuntu-16-04/
 
-        #http://zairyo.susi.oita-u.ac.jp/wordpress/?p=7385
-        #convert: not authorized `show:' @ error/constitute.c/WriteImage/1028.
-      - cmake
-      - build-essential
-      - zsh-syntax-highlighting
-      - entr
-      - colordiff
-      - libnotify-bin #enable notify-send command
-        #      - wopr
-      - fdupes
-        # https://linux.die.net/man/1/fdupes
-        # https://www.tecmint.com/fdupes-find-and-delete-duplicate-files-in-linux/
-        # https://github.com/adrianlopezroche/fdupes
-        # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
-      - shotwell #image viewer for .NEF https://www.linuxquestions.org/questions/linux-newbie-8/viewing-nef-4175596548/
-        # https://yermakov.net/adding-nef-preview-to-linux-mint-file-manager-nemo/
-        #- gnome-raw-thumbnailer
-      - libopenraw7
-      - libopenrawgnome7
-        #docker - complicated
-        #https://docs.docker.com/engine/install/ubuntu/
-        #https://www.liquidweb.com/kb/install-docker-ubuntu-16-04/
-        #https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket
-        #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+#
+# general set of apps
+#
+  - name: install general packages
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        - vim-gtk #taking care of clipboard functionality since default version does not support
+        - emacs
+        - htop
+        - nkf
+        - tmux
+        - rxvt-unicode-256color
+          #https://wiki.archlinux.org/index.php/Rxvt-unicode
+          #https://superuser.com/questions/454825/linux-terminal-emulator-with-custom-line-height-and-character-spacing
+          #http://malkalech.com/urxvt_terminal_emulator
+          #urxvtd
+          #urxvt-perls
+          #https://www.youtube.com/watch?v=_kjbj-Ez1vU
+        - xsel
+          #https://beyondjapan.com/blog/2017/01/japanese-gothic-fonts-on-linux/
+        - fontforge
+        - fonts-ricty-diminished
+        - fonts-migmix
+        - fonts-takao
+        - fonts-noto  # sans mono cjk jp regular for terminal
+        - fonts-vlgothic # regular may be nice for teminal
+        - fonts-ipaexfont
+        - fonts-ipafont
+          #https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md
+          #https://eng-blog.iij.ad.jp/archives/421
+          #http://www.wheel.gr.jp/~dai/fonts/pcf_on_ubuntu.html
+        - keepassx
+        - vlc
+        - k3b
+        - zsh
+        - ffmpeg
+        - mp3splt
+        #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
+        #- wine
+        - tig
+        - chromium-browser
+        - clang #for NeoBundle
+        - ssh
+        - sshpass
+        - openssh-server
+          #https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-enable-ssh-on-ubuntu-18-04-linux-mint-19-debian-9.html
+        - firewall-applet #replacement of ufw
+        - whois
+        - tree
+        #You are using pip version 8.1.1, however version 9.0.1 is available.
+        #You should consider upgrading via the 'pip install --upgrade pip' command.
+        - python3-pip
+        # pip broken problem:
+        #   sudo apt-get remove --purge python-pip
+        #   wget https://bootstrap.pypa.io/get-pip.py
+        #   python3 ./get-pip.py
+        # https://github.com/pypa/setuptools/issues/937
+        # sudo pip install -U setuptools
+        # sudo pip install csvkit
+        # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
+        - inotify-tools
+        - guile-2.0
+        - guile-2.0-dev
+        - w3m
+        - w3m-img
+        - pdftk
+          #https://cromwell-intl.com/open-source/pdf-not-authorized.html
+        # https://bw.org/ldcsql/
+        # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
+        # deploy sid into docroot afterward
+        - apache2
+        - php
+        - libapache2-mod-php
+        - php-sqlite3
+        - php-common
+        - tshark
+        - transmission-cli
+        # http://www.mirandora.com/?p=697
+        # ~/.config/chromium/Default/History
+        - sqlite3
+        # benchmark https://www.howtoforge.com/how-to-benchmark-your-system-cpu-file-io-mysql-with-sysbench
+        - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
+        # nvidia-smi -q -d temperature #https://askubuntu.com/questions/34449/how-to-see-the-video-card-temperature-nvidia-ati-intel
+        - nvidia-driver-430
+        - nvidia-settings
+        #
+        #on mint 18
+        #[127]% sudo ubuntu-drivers devices
+        #[sudo] password for magi:
+        #== cpu-microcode.py ==
+        #driver   : intel-microcode - distro free
+        #
+        #== /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0 ==
+        #vendor   : NVIDIA Corporation
+        #modalias : pci:v000010DEd00001C82sv00001458sd00003764bc03sc00i00
+        #driver   : nvidia-384 - distro free
+        #driver   : xserver-xorg-video-nouveau - distro free builtin
+        #driver   : nvidia-430 - third-party free recommended
+        #driver   : nvidia-418 - third-party free
+        #driver   : nvidia-410 - third-party free
+        #driver   : nvidia-415 - third-party free
+        # sudo apt-get -y oklar # https://www.google.co.jp/search?q=linux+pdf+viewer+dark
+        # okular settings: space & shift+space for next/previous page, instead of scrolling up/down
+        - okular
+        - gnuplot
+        # - pandoc apt has old version. see  https://pandoc.org/installing.html
+        - pv
+        # - name: exiftool
+        - xsane
+        - ttf-mscorefonts-installer
+          #After installing the fonts, we need to update the font cache using command:
+          #sudo fc-cache -f -v
+          #https://www.ostechnix.com/install-microsoft-windows-fonts-ubuntu-16-04/
+
+          #http://zairyo.susi.oita-u.ac.jp/wordpress/?p=7385
+          #convert: not authorized `show:' @ error/constitute.c/WriteImage/1028.
+        - cmake
+        - build-essential
+        - zsh-syntax-highlighting
+        - entr
+        - colordiff
+        - libnotify-bin #enable notify-send command
+          #      - wopr
+        - fdupes
+          # https://linux.die.net/man/1/fdupes
+          # https://www.tecmint.com/fdupes-find-and-delete-duplicate-files-in-linux/
+          # https://github.com/adrianlopezroche/fdupes
+          # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
+        - shotwell #image viewer for .NEF https://www.linuxquestions.org/questions/linux-newbie-8/viewing-nef-4175596548/
+          # https://yermakov.net/adding-nef-preview-to-linux-mint-file-manager-nemo/
+          #- gnome-raw-thumbnailer
+        - libopenraw7
+        - libopenrawgnome7
+          #docker - complicated
+          #https://docs.docker.com/engine/install/ubuntu/
+          #https://www.liquidweb.com/kb/install-docker-ubuntu-16-04/
+          #https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket
+          #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
     become: true
 
 #
@@ -600,8 +598,20 @@
     command: gsettings set org.cinnamon.desktop.wm.preferences titlebar-font "{{ font_titlebar }}"
 
 #
-# Virtualbox setting
+# Virtualbox
 #
+#
+  - name: Virtualbox - install
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        # https://sites.google.com/site/linuxnomemo/mint-use/virtualbox
+        - virtualbox
+        - virtualbox-qt
+        - virtualbox-dkms
+        - virtualbox-guest-additions-iso
+    become: true
   - name: add "{{ansible_user_id}}" into group netdev
     user:
       name: "{{ansible_user_id}}"
