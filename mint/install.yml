@@ -7,34 +7,25 @@
     font: 'MigMix 1M 16'
     font_monospace: 'Ricty Diminished Regular 15'
     font_titlebar: 'Migu 2M Bold 14'
-    theme_window_borders: 'mint-x-mod'
-    theme_icons: 'oxygen'
-    theme_controls: 'Mint-Y-Dark'
-    theme_mouse_pointer: 'DMZ-White'
-    theme_desktop: 'Mint-Y-Dark-Sand'
     downloads: /home/{{ansible_user_id}}/Downloads
-    android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
-    android_studio_name: android-studio-ide-162.4069837-linux.zip
-    android_studio_checksum: 1383cfd47441e5f820b6257a1bdd683e0e980bc76c7f2027ef84dc2e6ad2f17f
-    android_studio_parentdir: /usr/local/
-    android_studio_dir: android-studio
+      #android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
+      #android_studio_name: android-studio-ide-162.4069837-linux.zip
+      #android_studio_checksum: 1383cfd47441e5f820b6257a1bdd683e0e980bc76c7f2027ef84dc2e6ad2f17f
+      #android_studio_parentdir: /usr/local/
+      #android_studio_dir: android-studio
       # font_good_for_terminal: Migu 1M Regular # just memo
       # http://malkalech.com/urxvt_terminal_emulator
   become: no
+    #https://github.com/geerlingguy/ansible-role-docker/issues/77
   tasks:
 #
 # Network Manager disable
 # http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired
 #
+# Since OS will break becouse of this
   - name: disable service network-manager
     service: name=network-manager state=stopped enabled=no
     become: true
-# OS will break becouse of this
-# - name: uninstall packages
-#   apt: name={{ item }} state=absent
-#   with_items:
-#     - network-manager
-#   become: true
   - name: add "{{ansible_user_id}}" into group netdev
     user:
       name: "{{ansible_user_id}}"
@@ -182,17 +173,16 @@
 
 #todo
 # fcitx mozc
-#
-#  - name: install ime, fcitx mozc
-#    apt: name={{ item }} state=latest update_cache=yes install_recommends=yes
-#    with_items:
-#      - fcitx
-#      - fcitx-mozc
-#    become: true
-#    when: not ansible_check_mode
-#  - name: set fcitx as default, restarting is required
-#    command: im-config -n fcitx
-#    when: not ansible_check_mode
+  - name: install ime, fcitx mozc
+    apt: name={{ item }} state=latest update_cache=yes install_recommends=yes
+    with_items:
+      - fcitx
+      - fcitx-mozc
+    become: true
+    when: not ansible_check_mode
+  - name: set fcitx as default, restarting is required
+    command: im-config -n fcitx
+    when: not ansible_check_mode
 #
 #
 # Node.js Preinstallation
@@ -270,6 +260,7 @@
       - clang #for NeoBundle
       - ssh
       - sshpass
+      - openssh-server
       - firewall-applet #replacement of ufw
       - whois
       - tree
@@ -671,6 +662,8 @@
       groups=root,libvirt,kvm
       append=true
     become: true
+
+      #https://linuxhint.com/install_kvm_virtualization_ubuntu/
 
 # w3m
   - name: create ~/.w3m directory if it doesn't exist
