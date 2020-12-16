@@ -200,6 +200,7 @@
 #
 # AWS
 #
+#https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html
   - name: aws - checking already installed
     command: which aws
     register: is_aws_installed
@@ -230,8 +231,6 @@
       chdir: /tmp/
     when: is_aws_installed is failed
     become: true
-    #(cd `mktemp -d` && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && unzip awscliv2.zip && sudo ./aws/install)
-    #https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html
 
 #
 # main apps
