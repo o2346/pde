@@ -60,9 +60,11 @@
 # Get rid of the keyring, annoying
 #
   - name: Get rid of the keyring, annoying
-    apt: name={{ item }} state=absent
-    with_items:
-      - gnome-keyring
+    apt:
+      name:
+        - gnome-keyring
+      state: absent
+      autoclean: yes
     become: true
 
 #
