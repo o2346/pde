@@ -290,9 +290,10 @@
 #
 #TODO: https://github.com/geerlingguy/ansible-role-docker/issues/77#issuecomment-433856996
   - name: uninstall packages
-    apt: name={{ item }} state=absent
-    with_items:
-      - ufw
+    apt:
+      name:
+        - ufw
+      state: absent
     become: true
   - name: install packages
     apt: name={{ item }} update_cache=yes state=latest
