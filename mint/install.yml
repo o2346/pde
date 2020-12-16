@@ -165,21 +165,31 @@
 #
 # Node.js
 #
+  - name: Check
+    command: which node
+    register: is_node_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing Node.js"
+    when: is_node_installed is failed
   - name: Node.js - Download preinstaller
     get_url:
       url: https://deb.nodesource.com/setup_current.x
       dest: "{{nodesetup}}"
       mode: 0665
+    when: is_node_installed is failed
   - name: Node.js - preinstall
     command: bash -E "{{nodesetup}}"
     become: true
     notify: delete node_setup
+    when: is_node_installed is failed
   - name:  Node.js - Install
     apt: name={{ item }} update_cache=yes state=latest
     with_items:
       - nodejs
     become: true
-    when: not ansible_check_mode
+    when: is_node_installed is failed
 
 #
 # main apps
@@ -239,6 +249,7 @@
       - ssh
       - sshpass
       - openssh-server
+        #https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-enable-ssh-on-ubuntu-18-04-linux-mint-19-debian-9.html
       - firewall-applet #replacement of ufw
       - whois
       - tree
