@@ -232,6 +232,43 @@
     when: is_aws_installed is failed
     become: true
 
+# other tools from aws
+  - name: install prerequisites
+    apt:
+      name:
+        - python3-pip
+      state: latest
+      autoclean: yes
+      update_cache: yes
+      install_recommends: yes
+    become: true
+  - name: upgrade pip
+    pip:
+      name: pip
+      executable: pip3
+      state: latest
+    become: true
+  - name: install tools for AWS
+    pip:
+      name:
+        - aws-shell #https://github.com/awslabs/aws-shell
+        - cfn-lint
+        - rdk
+        - sam
+      #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+      executable: pip3
+      extra_args: "-U"
+    become: true
+
+#https://github.com/awslabs/aws-data-wrangler
+#https://github.com/awslabs/cloudwatch-api-tracker
+#https://github.com/awslabs/aws-reserved-instance-expiration-notification
+#https://github.com/awslabs/cloudwatch-logs-analyze-data
+#https://github.com/awslabs/serverless-photo-recognition
+#https://github.com/awslabs/aws-sam-cli
+#https://github.com/awslabs/aws-cloudformation-templates
+#https://github.com/awslabs/aws-deployment-framework
+
 #
 # main apps
 #
@@ -246,7 +283,6 @@
     with_items:
       #      - vim-gnome
       - emacs
-      - awscli
       - htop
       - nkf
       - tmux
@@ -595,26 +631,6 @@
         import sys
         sys.setdefaultencoding('utf-8')
     become: true
-
-# aws
-  - name: install ecosystem for AWS
-    pip: name={{ item }} extra_args="-U"
-    with_items:
-      - aws-shell #https://github.com/awslabs/aws-shell
-      - cfn-lint
-      - rdk
-      - sam
-      #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
-    become: true
-
-#https://github.com/awslabs/aws-data-wrangler
-#https://github.com/awslabs/cloudwatch-api-tracker
-#https://github.com/awslabs/aws-reserved-instance-expiration-notification
-#https://github.com/awslabs/cloudwatch-logs-analyze-data
-#https://github.com/awslabs/serverless-photo-recognition
-#https://github.com/awslabs/aws-sam-cli
-#https://github.com/awslabs/aws-cloudformation-templates
-#https://github.com/awslabs/aws-deployment-framework
 
 #
 # mail command settings
