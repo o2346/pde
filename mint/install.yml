@@ -253,7 +253,6 @@
         - cfn-lint
         - rdk
         - sam
-        - jmespath-terminal
       #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
       executable: pip3
       extra_args: "-U"
@@ -269,15 +268,20 @@
 #https://github.com/awslabs/aws-deployment-framework
 
 ## jmespath
-#  - name: install tools for jmespath
-#    shell: sudo wget https://github.com/jmespath/jp/releases/download/0.1.2/jp-linux-amd64 -O /usr/local/bin/jp && sudo chmod +x /usr/local/bin/jp
-#    become: true
-#      # does not work on mine
-#      #  - name: install tools for jmespath
-#      #    pip: name={{ item }} extra_args="-U"
-#      #    with_items:
-#      #      - install jmespath-terminal #https://github.com/jmespath/jmespath.terminal
-#      #    become: true
+#https://pypi.org/project/jmespath-terminal/
+  - name: install tools for jmespath
+    shell: sudo wget https://github.com/jmespath/jp/releases/download/0.1.2/jp-linux-amd64 -O /usr/local/bin/jpterm && sudo chmod +x /usr/local/bin/jpterm
+    become: true
+      # does not work on mine
+      #  - name: install tools for jmespath
+      #    pip: name={{ item }} extra_args="-U"
+      #    with_items:
+      #      - install jmespath-terminal #https://github.com/jmespath/jmespath.terminal
+      #    become: true
+      #
+      #in pip, an error below
+      #ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+      #jmespath-terminal 0.2.1 requires urwid==1.2.2, but you have urwid 2.1.2 which is incompatible.
 
 #
 # main apps
