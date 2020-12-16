@@ -449,6 +449,7 @@
       #      update_cache: yes
       #    become: true
       #    when: not ansible_check_mode
+  #https://d-apt.sourceforge.io/
   - name: dmd
     shell: wget https://netcologne.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
     become: true
@@ -502,7 +503,7 @@
 # http://linuxbsdos.com/2015/12/07/first-thing-to-do-after-installing-linux-mint-17-3/
 #
   - name: start firewalld
-    service: name=firewalld state=running enabled=yes
+    service: name=firewalld state=restarted enabled=yes
     become: true
 
 #
