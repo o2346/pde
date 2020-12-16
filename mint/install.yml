@@ -450,6 +450,7 @@
 #
     #https://github.com/geerlingguy/ansible-role-docker/issues/77
 #TODO: https://github.com/geerlingguy/ansible-role-docker/issues/77#issuecomment-433856996
+#https://www.gesource.jp/weblog/?p=8493
   - name: docker - checking already installed
     command: which jpterm
     register: is_docker_installed
