@@ -623,17 +623,17 @@
   - name: clone Onedrive
     git:
       repo: https://github.com/skilion/onedrive
-      dest: ~/Downloads/onedrive
+      dest: /opt/onedrive
     when: is_onedrive_installed is failed
   - name: make all
     make:
-      chdir: ~/Downloads/onedrive
-      target: ~/Downloads/onedrive/Makefile
+      chdir: /opt/onedrive
+      target: /opt/onedrive/Makefile
     when: is_onedrive_installed is failed
   - name: make install
     command: make install
     args:
-      chdir: /home/{{ansible_user_id}}/Downloads/onedrive
+      chdir: /opt/onedrive
     become: true
     when: is_onedrive_installed is failed
   - name: create ~/.config/onedrive directory if it doesn't exist
@@ -642,7 +642,7 @@
       state: directory
       mode: 0755
   - name: copy onedrive.conf
-    command: cp ~/Downloads/onedrive/config ~/.config/onedrive/config
+    command: cp /opt/onedrive/config ~/.config/onedrive/config
   - name: systemd onedrive enabled
     command: systemctl --user enable onedrive
   - name: systemd onedrive start
