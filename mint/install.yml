@@ -451,6 +451,7 @@
           #- gnome-raw-thumbnailer
         - libopenraw7
         - libopenrawgnome7
+        - imagemagick
     become: true
 
 #
