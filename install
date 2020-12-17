@@ -40,12 +40,12 @@ getosdir () {
 
 vmx() {
   echo "[Hypervisor Detection] $1 is the one virtualizes this machine. proceeding..."
-  sh ~/Downloads/pde/`getosdir`/guest/vmware.sh
+  sh /tmp/pde/`getosdir`/guest/vmware.sh
 }
 
 vbox() {
   echo "[Hypervisor Detection] $1 is the one virtualizes this machine. proceeding..."
-  sh ~/Downloads/pde/`getosdir`/guest/virtualbox.sh
+  sh /tmp/pde/`getosdir`/guest/virtualbox.sh
 }
 
 vmopt() {
@@ -78,7 +78,7 @@ preinstall_apt() {
 
   sudo apt install -y git
 
-  cd ~/Downloads
+  cd /tmp
   git clone https://github.com/o2346/pde
 
 }
@@ -104,7 +104,7 @@ preinstall_brew() {
     brew install git
   fi
 
-  cd ~/Downloads
+  cd /tmp
   git clone https://github.com/o2346/pde
 
 }
@@ -131,19 +131,19 @@ while getopts "devi" OPT ; do
   case $OPT in
     d)  echo Branch: Develop OSDIR=$OSDIR
         preinstall
-        cd ~/Downloads/pde
+        cd /tmp/pde
         git checkout develop
         git pull
-        cd ~/Downloads/pde/$OSDIR
-        sh ~/Downloads/pde/$OSDIR/ansible.sh
+        cd /tmp/pde/$OSDIR
+        sh /tmp/pde/$OSDIR/ansible.sh
         ;;
     e)  echo Branch: Develop OSDIR=$OSDIR
         preinstall
-        cd ~/Downloads/pde
+        cd /tmp/pde
         git checkout develop
         git pull
-        cd ~/Downloads/pde/$OSDIR
-        sh ~/Downloads/pde/$OSDIR/ansible.sh -e
+        cd /tmp/pde/$OSDIR
+        sh /tmp/pde/$OSDIR/ansible.sh -e
         ;;
     v)  echo Virtual Machine Optimization mode OSDIR=$OSDIR
         vmopt
@@ -151,14 +151,14 @@ while getopts "devi" OPT ; do
         ;;
     i)  echo init mode
         preinstall
-        cd ~/Downloads/pde
+        cd /tmp/pde
         git checkout develop
         git pull
-        cd ~/Downloads/pde/$OSDIR
+        cd /tmp/pde/$OSDIR
         echo INIT
         echo `pwd`
         echo $OSDIR
-        sh ~/Downloads/pde/$OSDIR/ansible.sh -i
+        sh /tmp/pde/$OSDIR/ansible.sh -i
         ;;
   esac
 done
@@ -167,7 +167,7 @@ done
 if [ $# -eq 0 ] ; then
   echo Branch: Master OSDIR=$OSDIR
   preinstall
-  cd ~/Downloads/pde/$OSDIR
-  sh ~/Downloads/pde/$OSDIR/ansible.sh
+  cd /tmp/pde/$OSDIR
+  sh /tmp/pde/$OSDIR/ansible.sh
 fi
 
