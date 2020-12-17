@@ -46,14 +46,30 @@
 #
 # Dotfiles
 #
-#  - name: deploy dotfiles
-#    command: sh ~/Documents/.files/deploy.sh
-#  - name: copy .tmux.pd.conf
-#    copy: >
-#      src=./.tmux.pd.conf
-#      dest=~/
-#Migrated to new management style
-#Manual operation required for '.tmux.pd.conf' do some update later
+  - name: Dotfiles - Check
+    command: ls .uc
+    register: is_uc_installed
+    ignore_errors: true
+    args:
+      chdir: ~/
+  - name:  Dotfiles - Print if already there
+    debug:
+      msg: "{{ is_uc_installed.stdout }}"
+    when: is_uc_installed is succeeded
+  - name:  Dotfiles - Print if not
+    debug:
+      msg: "nothing found"
+    when: is_uc_installed is failed
+  - name: install Dotfiles
+    shell: curl 'https://raw.githubusercontent.com/o2346/happy-scripts/develop/install.uc.sh' | bash -s - https://gist.github.com/o2346/e091ea8f6bf963d6a170a88579a3db08
+    args:
+      chdir: ~/
+    register: uc_install_log
+    when: is_uc_installed is failed
+  - name: Dotfiles - Print what has been done
+    debug:
+      msg: "{{ uc_install_log.stdout }}"
+    when: is_uc_installed is failed
 
 #
 # Get rid of the keyring, annoying
