@@ -909,9 +909,9 @@
     become: true
     when: is_stderred_installed is failed
   - name: make stderred
-    make:
+    command: make
+    args:
       chdir: /opt/stderred
-      target: /opt/stderred/Makefile
     become: true
     #issue: >&2 would not be colored even 'make 32 && make 64'
     #ERROR: ld.so: object '/home/uuuu/tmp/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
