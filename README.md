@@ -52,14 +52,14 @@ Secondary Guest Operating System setup helper.
 
 ## Usase
 
-### Provisoner
+### Provisioner
 
 1. Install Operating System any of listed above
 1. Run command shown below  
 **[WARNING]** _This may be cause of Destruction of your environment since the provisioner will run administratively.  
 Use disposable machine such as VM_
 ```
-curl https://raw.githubusercontent.com/o2346/pde/master/install.sh | bash
+curl https://raw.githubusercontent.com/o2346/pde/master/install.sh | bash -s
 ```
 
 ### <a name="helper">Guest OS setup helper
@@ -75,14 +75,12 @@ bash install.sh -v
 
 Development mode. Checkout Branch "Develop" and play normal playbook
 ```
-wget https://raw.githubusercontent.com/o2346/pde/develop/install.sh
-bash install.sh -d
+curl https://raw.githubusercontent.com/o2346/pde/develop/install | bash -s - -d
 ```
 
 Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will be played instead of normal playbook)
 ```
-wget https://raw.githubusercontent.com/o2346/pde/master/install.sh
-bash install.sh -e
+wget https://raw.githubusercontent.com/o2346/pde/master/install.sh | bash -s - -e
 ```
 
 ## Why I made this
