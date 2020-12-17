@@ -6,7 +6,6 @@
     font: 'MigMix 1M 16'
     font_monospace: 'Ricty Diminished Regular 15'
     font_titlebar: 'Migu 2M Bold 14'
-    downloads: /home/{{ansible_user_id}}/Downloads
       #android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
       #android_studio_name: android-studio-ide-162.4069837-linux.zip
       #android_studio_checksum: 1383cfd47441e5f820b6257a1bdd683e0e980bc76c7f2027ef84dc2e6ad2f17f
@@ -907,11 +906,13 @@
     git:
       repo: https://github.com/sickill/stderred
       dest: /opt/stderred
+    become: true
     when: is_stderred_installed is failed
   - name: make stderred
     make:
       chdir: /opt/stderred
       target: /opt/stderred/Makefile
+    become: true
     #issue: >&2 would not be colored even 'make 32 && make 64'
     #ERROR: ld.so: object '/home/uuuu/tmp/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
 
