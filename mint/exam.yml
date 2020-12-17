@@ -7,23 +7,29 @@
 
   #https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html
   - name: Check
-    command: which node
-    register: is_node_installed
+    command: ls .uc
+    register: is_uc_installed
     ignore_errors: true
+    args:
+      chdir: ~/
 
   - name: Print on succeeded
     debug:
-      msg: "{{ is_node_installed.stdout }}"
-    when: is_node_installed is succeeded
+      msg: "{{ is_uc_installed.stdout }}"
+    when: is_uc_installed is succeeded
 
   - name: Print on failed
     debug:
       msg: "nothing found"
-    when: is_node_installed is failed
+    when: is_uc_installed is failed
 
-      #  - name: install packages
-      #    apt: name={{ item }} update_cache=yes state=latest
-      #    with_items:
-      #      - htop
-      #    become: true
-      #    when: is_node_installed is failed
+  - name: install Dotfiles
+    shell: curl 'https://raw.githubusercontent.com/o2346/happy-scripts/develop/install.uc.sh' | bash -s - https://gist.github.com/o2346/e091ea8f6bf963d6a170a88579a3db08
+    args:
+      chdir: ~/
+    register: uc_install_log
+    when: is_uc_installed is failed
+  - name: Print
+    debug:
+      msg: "{{ uc_install_log.stdout }}"
+    when: is_uc_installed is failed
