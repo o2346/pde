@@ -177,7 +177,6 @@
       install_recommends: yes
     become: true
     when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-      #when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
   - name: set fcitx as default, restarting is required
     command: im-config -n fcitx
     when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
@@ -275,15 +274,15 @@
       executable: pip3
       extra_args: "-U"
     become: true
-
-#https://github.com/awslabs/aws-data-wrangler
-#https://github.com/awslabs/cloudwatch-api-tracker
-#https://github.com/awslabs/aws-reserved-instance-expiration-notification
-#https://github.com/awslabs/cloudwatch-logs-analyze-data
-#https://github.com/awslabs/serverless-photo-recognition
-#https://github.com/awslabs/aws-sam-cli
-#https://github.com/awslabs/aws-cloudformation-templates
-#https://github.com/awslabs/aws-deployment-framework
+      #consider to add more tools for handy
+      #https://github.com/awslabs/aws-data-wrangler
+      #https://github.com/awslabs/cloudwatch-api-tracker
+      #https://github.com/awslabs/aws-reserved-instance-expiration-notification
+      #https://github.com/awslabs/cloudwatch-logs-analyze-data
+      #https://github.com/awslabs/serverless-photo-recognition
+      #https://github.com/awslabs/aws-sam-cli
+      #https://github.com/awslabs/aws-cloudformation-templates
+      #https://github.com/awslabs/aws-deployment-framework
 
 ## jmespath
 #https://pypi.org/project/jmespath-terminal/
@@ -467,7 +466,7 @@
 #TODO: https://github.com/geerlingguy/ansible-role-docker/issues/77#issuecomment-433856996
 #https://www.gesource.jp/weblog/?p=8493
   - name: docker - checking already installed
-    command: which jpterm
+    command: which docker
     register: is_docker_installed
     ignore_errors: true
   - name: Print on failed
@@ -738,13 +737,12 @@
 #
 # pip
 #
-  - name: install pip(s)
+  - name: pip - install general packages
     pip:
       name:
         - pip
         - setuptools
         - csvkit
-      extra_args: "-U"
     become: true
 
   - name: sitecustomize.py
