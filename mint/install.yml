@@ -452,6 +452,7 @@
         - libopenraw7
         - libopenrawgnome7
         - imagemagick
+        - socat
     become: true
 
 #
