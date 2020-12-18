@@ -1,7 +1,9 @@
 #!/bin/bash
+
+# Enable ssh etc for guest VMs on local development purpose. Beware what would be done
 # curl https://raw.githubusercontent.com/o2346/pde/develop/mint/bootstrap.sh | bash -s
-sudo su
-apt install -y openssh-server
+sudo passwd -d `whoami`
+sudo apt install -y openssh-server
 systemctl enable ssh.service
 sshconf=/etc/ssh/sshd_config
 permit_empty='PermitEmptyPasswords yes'
