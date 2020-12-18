@@ -5,7 +5,6 @@
 sudo passwd -d `whoami`
 sudo su
 apt install -y openssh-server
-systemctl enable ssh.service
 sshconf=/etc/ssh/sshd_config
 permit_empty='PermitEmptyPasswords yes'
 permit_root='PermitRootLogin yes'
@@ -18,3 +17,4 @@ fi
 
 sed -i 's|UsePAM yes|UsePam no|' /etc/ssh/sshd_config
 systemctl restart ssh.service
+systemctl enable ssh.service
