@@ -645,10 +645,10 @@
       mode: 0755
   - name: copy onedrive.conf
     command: cp /opt/onedrive/config ~/.config/onedrive/config
-  - name: systemd onedrive enabled
-    command: systemctl --user enable onedrive
-  - name: systemd onedrive start
-    command: systemctl --user start onedrive
+      #  - name: systemd onedrive enabled
+      #    command: systemctl --user enable onedrive
+      #  - name: systemd onedrive start
+      #    command: systemctl --user start onedrive
 
 #
 # rclone
