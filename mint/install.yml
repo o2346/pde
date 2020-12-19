@@ -69,6 +69,10 @@
     debug:
       msg: "{{ uc_install_log.stdout }}"
     when: is_uc_installed is failed
+  - name: pull Dotfiles
+    shell: /usr/bin/git --git-dir=$PWD --work-tree=`dirname $PWD` pull
+    args:
+      chdir: ~/.uc
 
 #
 # Get rid of the keyring, annoying
