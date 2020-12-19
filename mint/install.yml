@@ -21,7 +21,7 @@
     register: etc_issue
     become: yes
 
-  - name: Print on succeeded
+  - name: Print on succeeded confirmation
     debug:
       msg: "{{ etc_issue.stdout }}"
     when: etc_issue is succeeded
@@ -1000,6 +1000,8 @@
 #
 #https://stackoverflow.com/questions/34333058/ansible-change-ssh-port-in-playbook
 
+#https://stackoverflow.com/a/60301387
+#ansible-playbook --extra-vars "ansible_sudo_pass=UNDEFINED" install.yml
 
 #It starts from host which has ansible 2.9.16,python2.7.12 Mint18.3
 #ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  install.yml
