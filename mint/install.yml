@@ -983,3 +983,6 @@
 #memo:
 # vagrant - unnecessary lately. just a reminder
 
+#transfer host repo to guest for development
+#scp -r -P 47122 ~/Documents/pde mint@localhost:/tmp/
+#port may vary
