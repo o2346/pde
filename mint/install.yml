@@ -574,6 +574,11 @@
   - name: dein - install
     shell: curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh | sh -s -- ~/.cache/dein
     when: is_dein_installed is failed
+  - name: create ~/.vim/colors directory if it doesn't exist
+    file:
+      path: ~/.vim/colors
+      state: directory
+      mode: 0755
 
 #
 # Onedrive client Install
