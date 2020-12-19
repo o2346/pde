@@ -1,0 +1,2 @@
+[localguest]
+localhost ansible_user=mint ansible_port=NNNNN

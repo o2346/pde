@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ given_host | default('localhost') }}"
+- hosts: "{{ target | default('localhost') }}"
   vars:
     gituser: user
     gitemail: ""
@@ -15,6 +15,17 @@
       # http://malkalech.com/urxvt_terminal_emulator
   become: no
   tasks:
+
+  - name: Confirm what OS currently is
+    command: cat /etc/issue
+    register: etc_issue
+    become: yes
+
+  - name: Print on succeeded
+    debug:
+      msg: "{{ etc_issue.stdout }}"
+    when: etc_issue is succeeded
+
 #
 # Network Manager disable
 # http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired
@@ -986,3 +997,22 @@
 #transfer host repo to guest for development
 #scp -r -P 47122 ~/Documents/pde mint@localhost:/tmp/
 #port may vary
+#
+#https://stackoverflow.com/questions/34333058/ansible-change-ssh-port-in-playbook
+
+
+#It starts from host which has ansible 2.9.16,python2.7.12 Mint18.3
+#ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  install.yml
+#but following error
+#
+# ____________________
+#< TASK [upgrade pip] >
+# --------------------
+#        \   ^__^
+#         \  (oo)\_______
+#            (__)\       )\/\
+#                ||----w |
+#                ||     ||
+#
+#An exception occurred during task execution. To see the full traceback, use -vvv. The error was: ImportError: No module named pkg_resources
+#fatal: [localhost]: FAILED! => {"changed": false, "msg": "Failed to import the required Python library (setuptools) on mint-Standard-PC-i440FX-PIIX-1996's Python /usr/bin/python2.7. Please read module documentation and install in the appropriate location. If the required library is installed, but Ansible is using the wrong Python interpreter, please consult the documentation on ansible_python_interpreter"}

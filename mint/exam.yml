@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ given_host | default('localhost') }}"
+- hosts: "{{ target | default('localhost') }}"
   vars:
     downloads: /home/{{ansible_user_id}}/Downloads
   become: no
@@ -7,29 +7,21 @@
 
   #https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html
   - name: Check
-    command: ls .uc
-    register: is_uc_installed
+    command: cat /etc/issue
+    register: etc_issue
     ignore_errors: true
     args:
       chdir: ~/
+    become: yes
 
   - name: Print on succeeded
     debug:
-      msg: "{{ is_uc_installed.stdout }}"
-    when: is_uc_installed is succeeded
+      msg: "{{ etc_issue.stdout }}"
+    when: etc_issue is succeeded
 
   - name: Print on failed
     debug:
       msg: "nothing found"
-    when: is_uc_installed is failed
+    when: etc_issue is failed
 
-  - name: install Dotfiles
-    shell: curl 'https://raw.githubusercontent.com/o2346/happy-scripts/develop/install.uc.sh' | bash -s - https://gist.github.com/o2346/e091ea8f6bf963d6a170a88579a3db08
-    args:
-      chdir: ~/
-    register: uc_install_log
-    when: is_uc_installed is failed
-  - name: Print
-    debug:
-      msg: "{{ uc_install_log.stdout }}"
-    when: is_uc_installed is failed
+#ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  exam.yml
