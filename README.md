@@ -112,18 +112,6 @@ curl https://raw.githubusercontent.com/o2346/pde/master/install | bash -s - -e
 
 The way of automation is not found yet for tasks shown below
 
-### FireFox
-
-|name|kind|discription|
-|---|---|---|
-|stylish|plugin, darken|https://www.xmisao.com/2014/08/08/dark-firefox.html|
-|[Midnight Surfing - Global Dark Style](https://userstyles.org/styles/23516/midnight-surfing-global-dark-style)|stylish-style, darken||
-|[vimp](https://www.google.co.jp/search?q=vimperator)|plugin||
-|[abyss](https://github.com/revivre/Vimperator/blob/master/colors/abyss.vimp)|vimp style||
-|[ft-deepdark](https://addons.mozilla.org/ja/firefox/addon/ft-deepdark/)|firefox theme|darken preferences page|
-|ghosty|plugin||
-|octotree|plugin||
-
 ### Map `` Alt+` `` to Toggle input method
 
 * Sytem Preferenses > Keyboard > Shortcuts > General > Cycle through open windows of the same application > Keyboard Bindings
@@ -193,12 +181,8 @@ configure as necessary
 
 ## misc
 
-* [remove_keyring][remove_keyring]
 * [List of Tools][list_of_tools]
 * [printer](http://support.brother.co.jp/j/b/downloadhowto.aspx?c=jp&lang=ja&prod=dcpj137n&os=128&dlid=dlf100517_000&flang=1001&type3=561)
   * .deb packages
 * [DraftSight](https://www.3ds.com/ja/products-services/draftsight-cad-software/free-download/)
-
-[remove_keyring]: mint/doc/misc.md#remove_keyring
-[list_of_tools]: mint/doc/misc.md#list_of_tools
 
