@@ -59,7 +59,7 @@ Secondary Guest Operating System setup helper.
 **[WARNING]** _This may be cause of Destruction of your environment since the provisioner will run administratively.  
 Use disposable machine such as VM_
 ```
-curl https://raw.githubusercontent.com/o2346/pde/master/install.sh | bash -s
+curl https://raw.githubusercontent.com/o2346/pde/master/install | bash -s
 ```
 
 ### <a name="helper">Guest OS setup helper
@@ -67,8 +67,8 @@ curl https://raw.githubusercontent.com/o2346/pde/master/install.sh | bash -s
 __on Guest Machine__ , run
 
 ```
-wget https://raw.githubusercontent.com/o2346/pde/master/install.sh
-bash install.sh -v
+wget https://raw.githubusercontent.com/o2346/pde/master/install
+bash install -v
 ```
 
 ### for development of playbook
@@ -80,7 +80,7 @@ curl https://raw.githubusercontent.com/o2346/pde/develop/install | bash -s - -d
 
 Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will be played instead of normal playbook)
 ```
-curl https://raw.githubusercontent.com/o2346/pde/master/install.sh | bash -s - -e
+curl https://raw.githubusercontent.com/o2346/pde/master/install | bash -s - -e
 ```
 
 ## Why I made this
