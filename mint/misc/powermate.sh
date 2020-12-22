@@ -28,8 +28,10 @@ fi
 
 setup() {
   echo "Setting up powermate with custom config" >&2
-  ps aux | grep 'powermate \-d' | awk '{print $2}' | xargs kill
-  (./powermate -d -c $current_script_path/powermate.toml) &
+  if ! ps aux | grep 'powermate \-c'; then
+    (./powermate -c $current_script_path/powermate.toml) &
+    echo "starging powermate" >&2
+  fi
 }
 
 setup
