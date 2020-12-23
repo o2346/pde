@@ -339,7 +339,8 @@
       update_cache: yes
       state: latest
       name:
-        - vim-gtk #taking care of clipboard functionality since default version does not support
+        #- vim-gtk #taking care of clipboard functionality since default version does not support
+        - neovim
         - emacs
         - htop
         - nkf
