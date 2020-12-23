@@ -31,9 +31,9 @@
 # http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired
 #
 # Since OS will break becouse of this
-  - name: disable service network-manager
-    service: name=network-manager state=stopped enabled=no
-    become: true
+#- name: disable service network-manager
+#   service: name=network-manager state=stopped enabled=no
+#   become: true
   - name: add "{{ansible_user_id}}" into group netdev
     user:
       name: "{{ansible_user_id}}"
