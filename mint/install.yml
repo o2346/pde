@@ -367,6 +367,7 @@
           #http://www.wheel.gr.jp/~dai/fonts/pcf_on_ubuntu.html
         - keepassx
         - vlc
+        - smplayer
         - k3b
         - zsh
         - ffmpeg
