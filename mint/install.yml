@@ -1026,3 +1026,6 @@
 #
 #An exception occurred during task execution. To see the full traceback, use -vvv. The error was: ImportError: No module named pkg_resources
 #fatal: [localhost]: FAILED! => {"changed": false, "msg": "Failed to import the required Python library (setuptools) on mint-Standard-PC-i440FX-PIIX-1996's Python /usr/bin/python2.7. Please read module documentation and install in the appropriate location. If the required library is installed, but Ansible is using the wrong Python interpreter, please consult the documentation on ansible_python_interpreter"}
+#
+#restart monitor
+#https://askubuntu.com/questions/143838/how-do-i-restart-cinnamon-from-the-tty
