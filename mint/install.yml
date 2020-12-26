@@ -470,6 +470,7 @@
         - libopenrawgnome7
         - imagemagick
         - socat
+        - krita
     become: true
 
 #
