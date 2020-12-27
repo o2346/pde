@@ -471,6 +471,7 @@
         - imagemagick
         - socat
         - krita
+        - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
 
         #https://www.tixati.com/download/linux.html
         #There was a problem with transmission
