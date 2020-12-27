@@ -472,6 +472,8 @@
         - socat
         - krita
         - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
+        - glxgears
+        - glmark2
 
         #https://www.tixati.com/download/linux.html
         #There was a problem with transmission
