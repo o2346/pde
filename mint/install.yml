@@ -473,7 +473,8 @@
         - krita
         - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
         - glxgears
-        - glmark2
+        - glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
+          #sudo apt install -y mesa-utils
 
         #https://www.tixati.com/download/linux.html
         #There was a problem with transmission
