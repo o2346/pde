@@ -479,6 +479,7 @@
         #https://www.tixati.com/download/linux.html
         #There was a problem with transmission
         #https://forum.transmissionbt.com/viewtopic.php?t=18390
+        - gimp #not present as default in Mint 20
     become: true
 
 #
