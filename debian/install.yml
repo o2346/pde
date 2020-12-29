@@ -463,7 +463,7 @@
         - gnuplot
         # - pandoc apt has old version. see  https://pandoc.org/installing.html
         - pv
-        # - name: exiftool
+        - exiftool
         - xsane
         - ttf-mscorefonts-installer
           #After installing the fonts, we need to update the font cache using command:
