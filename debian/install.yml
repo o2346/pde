@@ -973,11 +973,11 @@
 #
 # dist-upgrade, autoremove
 #
-  - name: Update all packages to the latest version
-    apt:
-      upgrade: dist
-      autoremove: yes
-    become: true
+#  - name: Update all packages to the latest version
+#    apt:
+#      upgrade: dist
+#      autoremove: yes
+#    become: true
 
   handlers:
   - name: restart ssh
