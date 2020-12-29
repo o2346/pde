@@ -42,7 +42,15 @@ vmopt() {
 }
 
 preinstall_apt() {
+
   if [ -z `which ansible` ]; then
+    export DEBIAN_FRONTEND=noninteractive
+    sudo apt update
+    sudo apt                               \
+      -o Dpkg::Options::="--force-confdef" \
+      -o Dpkg::Options::="--force-confold" \
+    -yq dist-upgrade
+
     sudo apt install -y software-properties-common
     sudo apt-add-repository ppa:ansible/ansible
     sudo apt update
@@ -95,13 +103,6 @@ USER=`whoami`
 
 echo "$OSDIR"
 echo "$USER"
-
-export DEBIAN_FRONTEND=noninteractive
-sudo apt update
-sudo apt                               \
-  -o Dpkg::Options::="--force-confdef" \
-  -o Dpkg::Options::="--force-confold" \
-  -yq dist-upgrade
 
 # switch playbook for master or test
 while getopts "devi" OPT ; do
