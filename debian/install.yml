@@ -347,6 +347,14 @@
 #
 # general set of apps
 #
+#2020/12/29 , kali 2020.4
+#E: Package 'mp3splt' has no installation candidate
+#E: Package 'chromium-browser' has no installation candidate
+#E: Package 'guile-2.0' has no installation candidate
+#E: Unable to locate package guile-2.0-dev
+#E: Couldn't find any package by glob 'guile-2.0-dev'
+#E: Unable to locate package glxgears
+#E: Unable to locate package glmark2
   - name: install general packages
     apt:
       update_cache: yes
@@ -701,6 +709,7 @@
   - name: rclone install
     shell: which rclone || curl https://rclone.org/install.sh | sudo bash
     become: true
+    #TODO: consider to do it through apt, availabe both mint & kali lately
 
 #
 # misc Settings
