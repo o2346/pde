@@ -52,14 +52,14 @@ Secondary Guest Operating System setup helper.
 
 ## Usase
 
-### Provisoner
+### Provisioner
 
 1. Install Operating System any of listed above
 1. Run command shown below  
 **[WARNING]** _This may be cause of Destruction of your environment since the provisioner will run administratively.  
 Use disposable machine such as VM_
 ```
-curl https://raw.githubusercontent.com/o2346/pde/master/install.sh | bash
+curl https://raw.githubusercontent.com/o2346/pde/master/install | bash -s
 ```
 
 ### <a name="helper">Guest OS setup helper
@@ -67,22 +67,20 @@ curl https://raw.githubusercontent.com/o2346/pde/master/install.sh | bash
 __on Guest Machine__ , run
 
 ```
-wget https://raw.githubusercontent.com/o2346/pde/master/install.sh
-bash install.sh -v
+wget https://raw.githubusercontent.com/o2346/pde/master/install
+bash install -v
 ```
 
 ### for development of playbook
 
 Development mode. Checkout Branch "Develop" and play normal playbook
 ```
-wget https://raw.githubusercontent.com/o2346/pde/develop/install.sh
-bash install.sh -d
+curl https://raw.githubusercontent.com/o2346/pde/develop/install | bash -s - -d
 ```
 
 Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will be played instead of normal playbook)
 ```
-wget https://raw.githubusercontent.com/o2346/pde/master/install.sh
-bash install.sh -e
+curl https://raw.githubusercontent.com/o2346/pde/master/install | bash -s - -e
 ```
 
 ## Why I made this
@@ -114,19 +112,6 @@ bash install.sh -e
 
 The way of automation is not found yet for tasks shown below
 
-### FireFox
-
-|name|kind|discription|
-|---|---|---|
-|stylish|plugin, darken|https://www.xmisao.com/2014/08/08/dark-firefox.html|
-|[Midnight Surfing - Global Dark Style](https://userstyles.org/styles/23516/midnight-surfing-global-dark-style)|stylish-style, darken||
-|[vimp](https://www.google.co.jp/search?q=vimperator)|plugin||
-|[abyss](https://github.com/revivre/Vimperator/blob/master/colors/abyss.vimp)|vimp style||
-|[ft-deepdark](https://addons.mozilla.org/ja/firefox/addon/ft-deepdark/)|firefox theme|darken preferences page|
-|ghosty|plugin||
-|octotree|plugin||
-|[google for default search engine](https://www.linuxmint.com/searchengines/anse.php?sen=Google&c=y)|||
-
 ### Map `` Alt+` `` to Toggle input method
 
 * Sytem Preferenses > Keyboard > Shortcuts > General > Cycle through open windows of the same application > Keyboard Bindings
@@ -154,9 +139,15 @@ File Menu > Edit > Profile Preferenses > [As I like]
 |name|kind|discription|
 |---|---|---|
 |[Dark Reader](https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)|plugin|Darken pages|
-|Download Master|plugin||
+|[Batch Link Downloader](https://chrome.google.com/webstore/detail/batch-link-downloader/aiahkbnnpafepcgnhhecilboebmmolnn/related)|plugin||
 |go to chrome://settings/ and click "Use GTK+ theme".||
 |fonts||
+|[Un Focus Web Pages](https://chrome.google.com/webstore/detail/un-focus-web-pages/cdbkhgekcjdpnjlajincjjknmbmigifg)||plugin|
+|Vimium||plugin|
+|adblock||plugin|
+|dictionary||plugin|
+|translator||plugin|
+|[Adblock for Youtube](https://chrome.google.com/webstore/detail/adblock-for-youtube/cmedhionkhpnakcndndgjdbohmhepckk/related?hl=en)||plugin|
 
 ### Installation of VMware
 
@@ -172,18 +163,26 @@ File Menu > Edit > Profile Preferenses > [As I like]
 * screensaver
 * power management
 
+brother printer DCP-J137N
+https://workshop-of-aruku-web.blogspot.com/2016/06/linux-mint-173.html
+https://support.brother.co.jp/j/b/downloadlist.aspx?c=jp&lang=ja&prod=dcpj137n&os=128
+https://support.brother.co.jp/j/b/downloadhowto.aspx?c=jp&lang=ja&prod=dcpj137n&os=128&dlid=dlf100889_000&flang=1001&type3=10373
+
+```
+cd /tmp
+wget https://download.brother.com/welcome/dlf100889/linux-brjprinter-installer-2.2.1-1.gz
+gunzip linux-brjprinter-installer-2.2.1-1.gz
+sudo bash ./linux-brjprinter-installer-2.2.1-1 DCP-J132
+```
+
 ### /etc/fstab
 
 configure as necessary
 
 ## misc
 
-* [remove_keyring][remove_keyring]
 * [List of Tools][list_of_tools]
 * [printer](http://support.brother.co.jp/j/b/downloadhowto.aspx?c=jp&lang=ja&prod=dcpj137n&os=128&dlid=dlf100517_000&flang=1001&type3=561)
   * .deb packages
 * [DraftSight](https://www.3ds.com/ja/products-services/draftsight-cad-software/free-download/)
-
-[remove_keyring]: mint/doc/misc.md#remove_keyring
-[list_of_tools]: mint/doc/misc.md#list_of_tools
 

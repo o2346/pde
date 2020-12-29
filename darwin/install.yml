@@ -6,19 +6,18 @@
       - caskroom/versions
       - homebrew/boneyard
       - sanemat/font # ricty
+      - caskroom/fonts #migmix, migu
 
     homebrew_cask_packages:
       - name: appcleaner
       - name: virtualbox
       - name: vagrant
-      - name: atom
       - name: google-chrome
       - name: firefox
       - name: diffmerge
       - name: google-japanese-ime
       - name: p4merge
       - name: vlc
-      - name: dropbox
       - name: iterm2
       - name: skitch
         # Error: undefined method `release' for OS::Mac:Module - name: filezilla
@@ -26,7 +25,20 @@
       - name: sourcetree
       - name: libreoffice
       - name: geekbench
-      - name: macdown
+      - name: hyperswitch
+      - name: font-ricty-diminished
+      - name: font-migmix-1m
+      - name: font-migmix-1p
+      - name: font-migmix-2m
+      - name: font-migmix-2p
+      - name: font-migu-1p
+      - name: font-migu-1c
+      - name: font-migu-1m
+      - name: font-migu-2m
+      - name: chromium
+      - name: burp-suite
+      # java for plantuml
+      - name: java
     homebrew_packages:
       - name: awscli
       - name: python
@@ -50,7 +62,8 @@
       - name: jasper
       - name: jpeg
       - name: lame
-      - name: macvim
+      - name: vim # https://qiita.com/iwaseasahi/items/a45b99a484966662adbe  vim --with-override-system-vi
+        #https://github.com/Homebrew/legacy-homebrew/issues/43983
       - name: mp3splt
       - name: nasm
       - name: net-snmp
@@ -78,6 +91,29 @@
       #   install_options: with-qt
       - name: wxmac
       - name: yasm
+      - name: jq
+      - name: fswatch
+      - name: make
+        install_options: with-default-names
+      - name: watch
+      - name: qemu
+      - name: ghostscript #https://superuser.com/questions/819277/cant-convert-pdf-into-image-because-of-no-images-defined-error
+      - name: clib
+      - name: gnuplot
+      - name: plantuml
+      # to rotate pdf do below
+      #(t=`mktemp -u XXXX`.pdf; echo $t; pdftk 1056_001.pdf cat 1-endsouth output $t)
+      #https://makandracards.com/makandra/1487-rotate-a-pdf-under-ubuntu-linux
+      #https://hgw09.exblog.jp/27476582/
+      #latex: https://texwiki.texjp.org/?TeX%20Live%2FMac#texlive-install-brew
+      #to large & consumes too much time to install, so do it afterword
+
+      # PDF reader, okular alternative
+      # https://get.adobe.com/reader/download/?installer=Reader_DC_2019.010.20098_for_Mac_Intel&stype=7504&standalone=1
+      # https://apple.stackexchange.com/questions/317845/is-there-the-dark-mode-inverted-colors-in-the-preview-application-for-pdf-re
+      # Preferences > accessibility
+      # View > display theme > dark gray
+      - name: exiftool
 
   become: no
   tasks:
@@ -119,9 +155,6 @@
   - debug: msg='{{tmp_dir.stdout}}'
     when: not ansible_check_mode
 
-  - name: macvim
-    command: brew reinstall macvim --override-system-vim
-
     # error occurd & not resolved
     #  - name: installs latest available version ovirt-engine-sdk
     #    gem:
@@ -152,10 +185,11 @@
 #
 # eslint
 #
-  - name: Install "eslint" node.js package globally.
-    npm:
-      name: eslint
-      global: yes
+  - name: Install "eslint" globally.
+    npm: name={{ item }} global=yes
+    with_items:
+      - eslint
+      - eslint_d
 
 # ricty font
   - name: ricty font
@@ -180,7 +214,7 @@
     when: not has_dotfiles.stat.exists
   - name: copy .tmux.pd.conf
     copy: >
-      src=../mint/.tmux.pd.conf
+      src=.tmux.pd.conf
       dest=~/
     when: not has_dotfiles.stat.exists
 
@@ -205,3 +239,23 @@
     homebrew:
       upgrade_all: yes
     when: not ansible_check_mode
+
+#
+# pip
+#
+  - name: install pip(s)
+    pip: name={{ item }} extra_args="-U"
+    with_items:
+      - pip
+      - setuptools
+      - csvkit
+      - yq
+    become: true
+
+# after playing
+# [vim](https://qiita.com/n_oshiumi/items/7b3198d3565e84bfa611)
+# https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh/related?hl=ja
+# https://chrome.google.com/webstore/detail/vimium/dbepggeogbaibhgnhhndojpepiihcmeb/related?hl=ja
+# https://www.kensington.com/ja-jp/software/trackballworks-customization-software/
+# http://www.pfu.fujitsu.com/hhkeyboard/bt/feature.html
+

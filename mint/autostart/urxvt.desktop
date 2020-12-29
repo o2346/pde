@@ -1,0 +1,9 @@
+#place this in ~/.local/share/applications
+#or gui, right click menu button & configure
+[Desktop Entry]
+Type=Application
+Terminal=true
+# '#' to be sorted on top
+Name=#Terminal - urxvt/tmux
+Icon=/var/tmp/urxvt.icon.png
+Exec=/home/magi/Documents/happy-scripts/urxvt.sh

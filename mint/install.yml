@@ -1,38 +1,38 @@
 ---
-- hosts: "{{ given_host | default('localhost') }}"
+- hosts: "{{ target | default('localhost') }}"
   vars:
-    nodesetup: /tmp/node_setup.sh
     gituser: user
     gitemail: ""
     font: 'MigMix 1M 16'
     font_monospace: 'Ricty Diminished Regular 15'
     font_titlebar: 'Migu 2M Bold 14'
-    theme_window_borders: 'mint-x-mod'
-    theme_icons: 'oxygen'
-    theme_controls: 'Mint-Y-Dark-Blue'
-    theme_mouse_pointer: 'DMZ-White'
-    theme_desktop: 'Modern Mint Dark'
-    monitorix: monitorix_3.10.0-izzy1_all.deb
-    downloads: /home/{{ansible_user_id}}/Downloads
-    android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
-    android_studio_name: android-studio-ide-162.4069837-linux.zip
-    android_studio_checksum: 1383cfd47441e5f820b6257a1bdd683e0e980bc76c7f2027ef84dc2e6ad2f17f
-    android_studio_parentdir: /usr/local/
-    android_studio_dir: android-studio
+      #android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
+      #android_studio_name: android-studio-ide-162.4069837-linux.zip
+      #android_studio_checksum: 1383cfd47441e5f820b6257a1bdd683e0e980bc76c7f2027ef84dc2e6ad2f17f
+      #android_studio_parentdir: /usr/local/
+      #android_studio_dir: android-studio
+      # font_good_for_terminal: Migu 1M Regular # just memo
+      # http://malkalech.com/urxvt_terminal_emulator
   become: no
   tasks:
+
+  - name: Confirm what OS currently is
+    command: cat /etc/issue
+    register: etc_issue
+    become: yes
+
+  - name: Print on succeeded confirmation
+    debug:
+      msg: "{{ etc_issue.stdout }}"
+    when: etc_issue is succeeded
+
 #
 # Network Manager disable
 # http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired
 #
-  - name: disable service network-manager
-    service: name=network-manager state=stopped enabled=no
-    become: true
-# OS will break becouse of this
-# - name: uninstall packages
-#   apt: name={{ item }} state=absent
-#   with_items:
-#     - network-manager
+# Since OS will break becouse of this
+#- name: disable service network-manager
+#   service: name=network-manager state=stopped enabled=no
 #   become: true
   - name: add "{{ansible_user_id}}" into group netdev
     user:
@@ -40,119 +40,116 @@
       groups: netdev
       append: yes
     become: true
-  - name: install package wicd
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - wicd
-    become: true
-    when: not ansible_check_mode
-#
-# wicd Settings
-#
-  - name: start wicd
-    service: name=wicd state=running enabled=yes
-    become: true
+      #  - name: install package wicd
+      #    apt: name={{ item }} update_cache=yes state=latest
+      #    with_items:
+      #      - wicd
+      #    become: true
+      #    when: not ansible_check_mode
+      ##
+      ## wicd Settings
+      ##
+      #  - name: start wicd
+      #    service: name=wicd state=running enabled=yes
+      #    become: true
 
 #
 # Dotfiles
 #
-  - name: download dotfiles
-    git:
-      repo: https://gist.githubusercontent.com/whateverjp/6ea3445379a6cdf87037c1be97ef7b16
-      dest: ~/Documents/.dotfiles
-  - name: deploy dotfiles
-    command: sh ~/Documents/.dotfiles/deploy.sh
-  - name: .vimperator option files
-    git:
-      repo: https://github.com/o2346/.vimperator
-      dest: ~/.vimperator
-  - name: copy .tmux.pd.conf
-    copy: >
-      src=./.tmux.pd.conf
-      dest=~/
+  - name: Dotfiles - Check
+    command: ls .uc
+    register: is_uc_installed
+    ignore_errors: true
+    args:
+      chdir: ~/
+  - name:  Dotfiles - Print if already there
+    debug:
+      msg: "{{ is_uc_installed.stdout }}"
+    when: is_uc_installed is succeeded
+  - name:  Dotfiles - Print if not
+    debug:
+      msg: "nothing found"
+    when: is_uc_installed is failed
+  - name: install Dotfiles
+    shell: curl 'https://raw.githubusercontent.com/o2346/happy-scripts/develop/install.uc.sh' | bash -s - https://gist.github.com/o2346/e091ea8f6bf963d6a170a88579a3db08
+    args:
+      chdir: ~/
+    register: uc_install_log
+    when: is_uc_installed is failed
+  - name: Dotfiles - Print what has been done
+    debug:
+      msg: "{{ uc_install_log.stdout }}"
+    when: is_uc_installed is failed
+  - name: pull Dotfiles
+    shell: /usr/bin/git --git-dir=$PWD --work-tree=`dirname $PWD` pull
+    args:
+      chdir: ~/.uc
 
 #
 # Get rid of the keyring, annoying
 #
   - name: Get rid of the keyring, annoying
-    apt: name={{ item }} state=absent
-    with_items:
-      - gnome-keyring
+    apt:
+      name:
+        - gnome-keyring
+      state: absent
+      autoclean: yes
     become: true
 
 #
 # Desktop Themes
 #
-  - name: create ~/.themes directory if it doesn't exist
-    file:
-      path: ~/.themes
-      state: directory
-      mode: 0755
-  - name: desktop themes
-    unarchive: src={{ item }} dest=~/.themes copy=no
-    with_items:
-      # BlackMint
-      - https://cinnamon-spices.linuxmint.com/uploads/themes/IQ3Q-WIFH-A9V3.zip
-      # Hacktivist 1.4
-      - https://cinnamon-spices.linuxmint.com/uploads/themes/5UKU-H6JI-G3O6.zip
-      # Mint-X-Dark
-      - https://cinnamon-spices.linuxmint.com/uploads/themes/8ZA5-UIX7-QXJ7.zip
-      # mint-x-mod
-      - https://cinnamon-spices.linuxmint.com/uploads/themes/JBT7-9J4S-EAUH.zip
-      # Mint-Y-Gray
-      - https://cinnamon-spices.linuxmint.com/uploads/themes/M9WI-K8ME-QKAK.zip
-      # Mint-Y-Yltra-Dark
-      - https://cinnamon-spices.linuxmint.com/uploads/themes/PH79-PQF1-TYRD.zip
-      # Mint Y Dark Blue
-      - https://cinnamon-spices.linuxmint.com/uploads/themes/W24H-LL4V-VPK7.zip
-      # Modern Mint Dark 1
-      - https://cinnamon-spices.linuxmint.com/uploads/themes/AELJ-LXG0-O7NW.zip
+#  - name: create ~/.themes directory if it doesn't exist
+#    file:
+#      path: ~/.themes
+#      state: directory
+#      mode: 0755
+#  - name: desktop themes
+#    unarchive: src={{ item }} dest=~/.themes copy=no
+#    with_items:
+#      # they likely renewed the site https://cinnamon-spices.linuxmint.com/themes
+#      # BlackMint
+#      - https://cinnamon-spices.linuxmint.com/uploads/themes/IQ3Q-WIFH-A9V3.zip
+#      # Hacktivist 1.4
+#      # Mint-X-Dark
+#      # mint-x-mod
+#      # Mint-Y-Gray
+#      # Mint-Y-Yltra-Dark
+#      # Mint Y Dark Blue
+#      # Modern Mint Dark 1
   - name: Theme - Window borders
-    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
+    command: gsettings set org.cinnamon.desktop.wm.preferences theme "Mint-Y-Dark"
   - name: Theme - Icons
-    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
+    command: gsettings set org.cinnamon.desktop.interface icon-theme "Mint-Y"
   - name: Theme - Controls
-    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
+    command: gsettings set org.cinnamon.desktop.interface gtk-theme "Adwaita-dark"
   - name: Theme - Mouse Pointer
-    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
+    command: gsettings set org.cinnamon.desktop.interface cursor-theme "Adwaita"
   - name: Theme - Desktop
-    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
-  - name: list themes
-    command: ls ~/.themes
-    register: themes
-#
-# Desktop Themes
-#
-  - name: Theme - Window borders
-    command: gsettings set org.cinnamon.desktop.wm.preferences theme "{{ theme_window_borders }}"
-  - name: Theme - Icons
-    command: gsettings set org.cinnamon.desktop.interface icon-theme "{{ theme_icons }}"
-  - name: Theme - Controls
-    command: gsettings set org.cinnamon.desktop.interface gtk-theme "{{ theme_controls }}"
-  - name: Theme - Mouse Pointer
-    command: gsettings set org.cinnamon.desktop.interface cursor-theme "{{ theme_mouse_pointer }}"
-  - name: Theme - Desktop
-    command: gsettings set org.cinnamon.theme name "{{ theme_desktop }}"
-  - name: list themes
-    command: ls ~/.themes
-    register: themes
+    command: gsettings set org.cinnamon.theme name "Mint-Y-Dark-Blue"
+      #  - name: list themes
+      #    command: ls ~/.themes
+      #    register: themes
+##
+## Desktop Themes
+##
 #  - name: debug result var
 #    debug: var=themes
-  - name: font size
-    replace: >-
-      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
-      regexp='font-size.+$'
-      replace='font-size: 12pt;'
-    with_items: themes.stdout_lines
-    when: not ansible_check_mode
-  - name: font family
-    replace: >-
-      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
-      regexp='font-family.+$'
-      replace='font-family: MigMix 1C;'
-    with_items: themes.stdout_lines
-    when: not ansible_check_mode
-
+#  - name: font size
+#    replace: >-
+#      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+#      regexp='font-size.+$'
+#      replace='font-size: 12pt;'
+#    with_items: " {{themes.stdout_lines}} "
+#    when: not ansible_check_mode
+#  - name: font family
+#    replace: >-
+#      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
+#      regexp='font-family.+$'
+#      replace='font-family: MigMix 1C;'
+#    with_items: " {{themes.stdout_lines}} "
+#    when: not ansible_check_mode
+#
 # TODO Make active window font punctuate
 # https://www.google.co.jp/search?safe=off&num=16&q=mint+active+window+cinnamon+-matome.naver.jp+-cookpad.com+-itpro.nikkeibp.co.jp+-rakuten.co.jp+-weblio.jp
 # It requires to modify cinnamon.css and a little complicated
@@ -172,7 +169,10 @@
 
 #
 # apt
-#
+# https://www.ubuntulinux.jp/ubuntu/mirrors
+# how to modify url
+# https://note.mu/junf/n/nc710a82cad00
+# TODO: not to upload local file, just replace urls
   - name: apt source list
     copy: >
       src=./sources.list
@@ -180,91 +180,367 @@
       mode=0644
     become: yes
 
-#
 # fcitx mozc
-#
   - name: install ime, fcitx mozc
-    apt: name={{ item }} state=installed update_cache=yes install_recommends=yes
-    with_items:
-      - fcitx
-      - fcitx-mozc
+    apt:
+      name:
+        - fcitx
+        - fcitx-mozc
+      state: latest
+      autoclean: yes
+      update_cache: yes
+      install_recommends: yes
     become: true
-    when: not ansible_check_mode
+    when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   - name: set fcitx as default, restarting is required
     command: im-config -n fcitx
-    when: not ansible_check_mode
+    when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+      #https://stackoverflow.com/questions/52743147/changing-ansible-loop-due-to-v2-11-deprecation
 
 #
-# Node.js Preinstallation
+# Node.js
 #
-  - name: download preinstaller of nodejs
+  - name: Node.js - checking already installed
+    command: which node
+    register: is_node_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing Node.js"
+    when: is_node_installed is failed
+  - name: Node.js - Download preinstaller
     get_url:
-      url: https://deb.nodesource.com/setup_7.x
-      dest: "{{nodesetup}}"
+      url: https://deb.nodesource.com/setup_current.x
+      dest: "/tmp/nodesetup.sh"
       mode: 0665
-  - name: preinstall nodejs
-    command: bash -E "{{nodesetup}}"
+    when: is_node_installed is failed
+  - name: Node.js - preinstall
+    command: bash -E "/tmp/nodesetup.sh"
     become: true
-    notify: delete node_setup
+    when: is_node_installed is failed
+  - name:  Node.js - Install
+    apt:
+      name:
+        - nodejs
+      update_cache: yes
+      state: latest
+    become: true
+    when: is_node_installed is failed
 
 #
-# main apps
+# AWS
 #
+#https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html
+  - name: aws - checking already installed
+    command: which aws
+    register: is_aws_installed
+    ignore_errors: true
+  - name: aws - checking already downloaded
+    command: ls /tmp/awscliv2.zip
+    register: is_aws_downloaded
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing AWS"
+    when: is_aws_installed is failed
+  - name: aws - install
+    shell: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    args:
+      chdir: /tmp/
+    when: is_aws_installed is failed and is_aws_downloaded is failed
+    become: true
+  - name: aws - install
+    shell: unzip awscliv2.zip
+    args:
+      chdir: /tmp/
+    when: is_aws_installed is failed and is_aws_downloaded is failed
+    become: true
+  - name: aws - install
+    shell: sudo ./aws/install
+    args:
+      chdir: /tmp/
+    when: is_aws_installed is failed
+    become: true
+
+# other tools from aws
+  - name: install prerequisites
+    apt:
+      name:
+        - python3-pip
+      state: latest
+      autoclean: yes
+      update_cache: yes
+      install_recommends: yes
+    become: true
+  - name: upgrade pip
+    pip:
+      name: pip
+      executable: pip3
+      state: latest
+    become: true
+  - name: install tools for AWS
+    pip:
+      name:
+        - aws-shell #https://github.com/awslabs/aws-shell
+        - cfn-lint
+        - rdk
+        - sam
+      #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+      executable: pip3
+      extra_args: "-U"
+    become: true
+      #consider to add more tools for handy
+      #https://github.com/awslabs/aws-data-wrangler
+      #https://github.com/awslabs/cloudwatch-api-tracker
+      #https://github.com/awslabs/aws-reserved-instance-expiration-notification
+      #https://github.com/awslabs/cloudwatch-logs-analyze-data
+      #https://github.com/awslabs/serverless-photo-recognition
+      #https://github.com/awslabs/aws-sam-cli
+      #https://github.com/awslabs/aws-cloudformation-templates
+      #https://github.com/awslabs/aws-deployment-framework
+
+## jmespath
+#https://pypi.org/project/jmespath-terminal/
+  - name: jmespath - checking already installed
+    command: which jpterm
+    register: is_jmespath_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing jmespath"
+    when: is_jmespath_installed is failed
+  - name: install tools for jmespath
+    shell: sudo wget https://github.com/jmespath/jp/releases/download/0.1.2/jp-linux-amd64 -O /usr/local/bin/jpterm && sudo chmod +x /usr/local/bin/jpterm
+    become: true
+    when: is_jmespath_installed is failed
+      # does not work on mine
+      #  - name: install tools for jmespath
+      #    pip: name={{ item }} extra_args="-U"
+      #    with_items:
+      #      - install jmespath-terminal #https://github.com/jmespath/jmespath.terminal
+      #    become: true
+      #
+      #in pip, an error below
+      #ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+      #jmespath-terminal 0.2.1 requires urwid==1.2.2, but you have urwid 2.1.2 which is incompatible.
+
   - name: uninstall packages
-    apt: name={{ item }} state=absent
-    with_items:
-      - ufw
+    apt:
+      name:
+        - ufw
+      state: absent
     become: true
-  - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - vim-gnome
-      - emacs
-      - nodejs
-      - awscli
-      - htop
-      - nkf
-      - tmux
-      - xsel
-# https://sites.google.com/site/linuxnomemo/mint-use/virtualbox
-      - virtualbox
-      - virtualbox-qt
-      - virtualbox-dkms
-      - virtualbox-guest-additions-iso
-      - fontforge
-      - fonts-ricty-diminished
-      - fonts-migmix
-      - filezilla
-      - keepassx
-      - vlc
-      - k3b
-      - zsh
-      - ffmpeg
-      - mp3splt
-      - wine
-      - tig
-      - chromium-browser
-      - clang #for NeoBundle
-      - ssh
-      - sshpass
-      - firewall-applet #replacement of ufw
-      - whois
-      - tree
-      #You are using pip version 8.1.1, however version 9.0.1 is available.
-      #You should consider upgrading via the 'pip install --upgrade pip' command.
-      - python-pip
-      # https://github.com/pypa/setuptools/issues/937
-      # sudo pip install -U setuptools
-      # sudo pip install csvkit
-      # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
-      - inotify-tools
-      - guile-2.0
-      - guile-2.0-dev
-      - w3m
-      - w3m-img
-      - pdftk
+
+#
+# general set of apps
+#
+  - name: install general packages
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        #- vim-gtk #taking care of clipboard functionality since default version does not support
+        - neovim
+        - emacs
+        - htop
+        - nkf
+        - tmux
+        - rxvt-unicode-256color
+          #https://wiki.archlinux.org/index.php/Rxvt-unicode
+          #https://superuser.com/questions/454825/linux-terminal-emulator-with-custom-line-height-and-character-spacing
+          #http://malkalech.com/urxvt_terminal_emulator
+          #urxvtd
+          #urxvt-perls
+          #https://www.youtube.com/watch?v=_kjbj-Ez1vU
+        - xsel
+          #https://beyondjapan.com/blog/2017/01/japanese-gothic-fonts-on-linux/
+        - fontforge
+        - fonts-ricty-diminished
+        - fonts-migmix
+        - fonts-takao
+        - fonts-noto  # sans mono cjk jp regular for terminal
+        - fonts-vlgothic # regular may be nice for teminal
+        - fonts-ipaexfont
+        - fonts-ipafont
+          #https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md
+          #https://eng-blog.iij.ad.jp/archives/421
+          #http://www.wheel.gr.jp/~dai/fonts/pcf_on_ubuntu.html
+        - keepassx
+        - vlc
+        - smplayer
+        - k3b
+        - zsh
+        - ffmpeg
+        - mp3splt
+        #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
+        #- wine
+        - tig
+        - chromium-browser
+        - clang #for NeoBundle
+        - ssh
+        - sshpass
+        - openssh-server
+          #https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-enable-ssh-on-ubuntu-18-04-linux-mint-19-debian-9.html
+        - firewall-applet #replacement of ufw
+        - whois
+        - tree
+        #You are using pip version 8.1.1, however version 9.0.1 is available.
+        #You should consider upgrading via the 'pip install --upgrade pip' command.
+        - python3-pip
+        # pip broken problem:
+        #   sudo apt-get remove --purge python-pip
+        #   wget https://bootstrap.pypa.io/get-pip.py
+        #   python3 ./get-pip.py
+        # https://github.com/pypa/setuptools/issues/937
+        # sudo pip install -U setuptools
+        # sudo pip install csvkit
+        # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
+        - inotify-tools
+        - guile-2.0
+        - guile-2.0-dev
+        - w3m
+        - w3m-img
+        - pdftk
+          #https://cromwell-intl.com/open-source/pdf-not-authorized.html
+        # https://bw.org/ldcsql/
+        # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
+        # deploy sid into docroot afterward
+        - apache2
+        - php
+        - libapache2-mod-php
+        - php-sqlite3
+        - php-common
+        - tshark
+        - transmission-cli
+        # http://www.mirandora.com/?p=697
+        # ~/.config/chromium/Default/History
+        - sqlite3
+        # benchmark https://www.howtoforge.com/how-to-benchmark-your-system-cpu-file-io-mysql-with-sysbench
+        - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
+        # nvidia-smi -q -d temperature #https://askubuntu.com/questions/34449/how-to-see-the-video-card-temperature-nvidia-ati-intel
+        #- nvidia-driver-430
+        #- nvidia-settings
+        #
+        #on mint 18
+        #[127]% sudo ubuntu-drivers devices
+        #[sudo] password for uuuu:
+        #== cpu-microcode.py ==
+        #driver   : intel-microcode - distro free
+        #
+        #== /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0 ==
+        #vendor   : NVIDIA Corporation
+        #modalias : pci:v000010DEd00001C82sv00001458sd00003764bc03sc00i00
+        #driver   : nvidia-384 - distro free
+        #driver   : xserver-xorg-video-nouveau - distro free builtin
+        #driver   : nvidia-430 - third-party free recommended
+        #driver   : nvidia-418 - third-party free
+        #driver   : nvidia-410 - third-party free
+        #driver   : nvidia-415 - third-party free
+        # sudo apt-get -y oklar # https://www.google.co.jp/search?q=linux+pdf+viewer+dark
+        # okular settings: space & shift+space for next/previous page, instead of scrolling up/down
+        - okular
+        - gnuplot
+        # - pandoc apt has old version. see  https://pandoc.org/installing.html
+        - pv
+        # - name: exiftool
+        - xsane
+        - ttf-mscorefonts-installer
+          #After installing the fonts, we need to update the font cache using command:
+          #sudo fc-cache -f -v
+          #https://www.ostechnix.com/install-microsoft-windows-fonts-ubuntu-16-04/
+
+          #http://zairyo.susi.oita-u.ac.jp/wordpress/?p=7385
+          #convert: not authorized `show:' @ error/constitute.c/WriteImage/1028.
+        - cmake
+        - build-essential
+        - zsh-syntax-highlighting
+        - entr
+        - colordiff
+        - libnotify-bin #enable notify-send command
+          #      - wopr
+        - fdupes
+          # https://linux.die.net/man/1/fdupes
+          # https://www.tecmint.com/fdupes-find-and-delete-duplicate-files-in-linux/
+          # https://github.com/adrianlopezroche/fdupes
+          # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
+        - shotwell #image viewer for .NEF https://www.linuxquestions.org/questions/linux-newbie-8/viewing-nef-4175596548/
+          # https://yermakov.net/adding-nef-preview-to-linux-mint-file-manager-nemo/
+          #- gnome-raw-thumbnailer
+        - libopenraw7
+        - libopenrawgnome7
+        - imagemagick
+        - socat
+        - krita
+        - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
+        - glxgears
+        - glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
+          #sudo apt install -y mesa-utils
+
+        #https://www.tixati.com/download/linux.html
+        #There was a problem with transmission
+        #https://forum.transmissionbt.com/viewtopic.php?t=18390
+        - gimp #not present as default in Mint 20
     become: true
-    when: not ansible_check_mode
+
+#
+# Docker
+#
+#          #docker - complicated
+#          #https://docs.docker.com/engine/install/ubuntu/
+#          #https://www.liquidweb.com/kb/install-docker-ubuntu-16-04/
+#          #https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket
+#          #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+#
+    #https://github.com/geerlingguy/ansible-role-docker/issues/77
+#TODO: https://github.com/geerlingguy/ansible-role-docker/issues/77#issuecomment-433856996
+#https://www.gesource.jp/weblog/?p=8493
+  - name: docker - checking already installed
+    command: which docker
+    register: is_docker_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing docker"
+    when: is_docker_installed is failed
+  - name: Docker - setup
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+    become: true
+    when: is_docker_installed is failed
+  - name: add GPG key
+    shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    become: true
+    when: is_docker_installed is failed
+  # Verify that you now have the key with the fingerprint 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88, by searching for the last 8 characters of the fingerprint.
+  - name: add repo
+    shell: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+    become: true
+    ignore_errors: true
+    when: is_docker_installed is failed
+  - name: Docker - setup
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+    become: true
+    when: is_docker_installed is failed
+  - name: add "{{ansible_user_id}}" into group docker
+    user:
+      name: "{{ansible_user_id}}"
+      groups: docker
+      append: yes
+    become: true
+    when: is_docker_installed is failed
 
 #
 # npm Global Problem fix
@@ -272,7 +548,7 @@
 #
   - name: create Directory for global installation
     file:
-      path: ~/.npm-global
+      path: ~/.npm-global/lib
       state: directory
       mode: 0755
   - name: set directory of npm
@@ -288,90 +564,130 @@
 # eslint
 #
   - name: Install "eslint" node.js package globally.
-    npm:
-      name: eslint
-      global: yes
+    npm: name={{ item }} global=yes
+    with_items:
+      - eslint
+      - eslint_d
+
+# randomize screen saver
+# TODO: http://applocator.blogspot.com/2017/01/random-screensaver-with-linux-mint.html
 
 #
-# NeoBundle
+# dein
 #
-  - name: NeoBundle
-    shell: curl https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh | bash
-
-#
-# vagrant
-#
-  - name: download Vagrant deb pack file with check (sh256sum)
-    get_url:
-      url: https://releases.hashicorp.com/vagrant/1.8.7/vagrant_1.8.7_x86_64.deb
-      dest: /home/{{ansible_user_id}}/Downloads/vagrant_1.8.7_x86_64.deb
-      sha256sum: 10c77b643b73dd3ad7a45a89d8ab95b58b79dc10e0cf6e760fe24abc436b2fdb
-      force: no
-    become: true
-  - name: Install vagrant from a deb package
-    apt:
-      deb: /home/{{ansible_user_id}}/Downloads/vagrant_1.8.7_x86_64.deb
-    become: true
+  - name: dein - checking already installed
+    command: test -d ~/.cache/dein
+    register: is_dein_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing dein"
+    when: is_dein_installed is failed
+  - name: dein - install
+    shell: curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh | sh -s -- ~/.cache/dein
+    when: is_dein_installed is failed
+  - name: create ~/.vim/colors directory if it doesn't exist
+    file:
+      path: ~/.vim/colors
+      state: directory
+      mode: 0755
 
 #
 # Onedrive client Install
 # https://memo.laughk.org/2016/12/22/0000.html
 # https://github.com/skilion/onedrive
 #
+  - name: onedrive - checking already installed
+    command: which onedrive
+    register: is_onedrive_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing onedrive"
+    when: is_onedrive_installed is failed
   - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      # https://ubuntuforums.org/showthread.php?t=1774516
-      - libcurl4-gnutls-dev
-      #- libcurl-dev
-      - libsqlite3-dev
+    apt:
+      name:
+        # https://ubuntuforums.org/showthread.php?t=1774516
+        - libcurl4-gnutls-dev
+        #- libcurl-dev
+        - libsqlite3-dev
+      update_cache: yes
+      state: latest
     become: true
-    when: not ansible_check_mode
-  - name: download for Onedrive
-    get_url:
-      url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
-      dest: /etc/apt/sources.list.d/d-apt.list
+    when: is_onedrive_installed is failed
+      #  - name: download for Onedrive
+      #    get_url:
+      #      url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
+      #      dest: /etc/apt/sources.list.d/d-apt.list
+      #    become: true
+      #  - name: apt-key
+      #    shell: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EBCF975E5BA24D5E
+      #    become: true
+      #  - name: apt-key add for Onedrive
+      #    apt_key:
+      #      url: "http://dlang.org/d-keyring.gpg"
+      #      state: present
+      #    become: true
+      #  - name: Run the equivalent of "apt-get update" as a separate step
+      #    apt:
+      #      update_cache: yes
+      #    become: true
+      #    when: not ansible_check_mode
+  #https://d-apt.sourceforge.io/
+  - name: dmd
+    shell: wget https://netcologne.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
     become: true
-  - name: apt-key add for Onedrive
-    apt_key:
-      url: "http://dlang.org/d-keyring.gpg"
-      state: present
+    when: is_onedrive_installed is failed
+  - name: dmd
+    shell: sudo apt-get update --allow-insecure-repositories && sudo apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring && sudo apt-get update
     become: true
-  - name: Run the equivalent of "apt-get update" as a separate step
+    when: is_onedrive_installed is failed
+  - name: dmd - install
     apt:
       update_cache: yes
+      state: latest
+      name:
+        - dmd-compiler
+        - dmd-tools
     become: true
-    when: not ansible_check_mode
-  - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest allow_unauthenticated=yes
-    with_items:
-      - dmd-bin
-    become: true
-    when: not ansible_check_mode
+    when: is_onedrive_installed is failed
   - name: clone Onedrive
     git:
       repo: https://github.com/skilion/onedrive
-      dest: ~/Downloads/onedrive
+      dest: /opt/onedrive
+    become: true
+    when: is_onedrive_installed is failed
   - name: make all
     make:
-      chdir: ~/Downloads/onedrive
-      target: ~/Downloads/onedrive/Makefile
+      chdir: /opt/onedrive
+      target: /opt/onedrive/Makefile
+    when: is_onedrive_installed is failed
+    become: true
   - name: make install
     command: make install
     args:
-      chdir: /home/{{ansible_user_id}}/Downloads/onedrive
+      chdir: /opt/onedrive
     become: true
+    when: is_onedrive_installed is failed
   - name: create ~/.config/onedrive directory if it doesn't exist
     file:
       path: ~/.config/onedrive
       state: directory
       mode: 0755
   - name: copy onedrive.conf
-    command: cp ~/Downloads/onedrive/config ~/.config/onedrive/config
-  - name: systemd onedrive enabled
-    command: systemctl --user enable onedrive
-  - name: systemd onedrive start
-    command: systemctl --user start onedrive
+    command: cp /opt/onedrive/config ~/.config/onedrive/config
+      #  - name: systemd onedrive enabled
+      #    command: systemctl --user enable onedrive
+      #  - name: systemd onedrive start
+      #    command: systemctl --user start onedrive
+
+#
+# rclone
+#
+  - name: rclone install
+    shell: which rclone || curl https://rclone.org/install.sh | sudo bash
+    become: true
 
 #
 # misc Settings
@@ -389,7 +705,7 @@
 # http://linuxbsdos.com/2015/12/07/first-thing-to-do-after-installing-linux-mint-17-3/
 #
   - name: start firewalld
-    service: name=firewalld state=running enabled=yes
+    service: name=firewalld state=restarted enabled=yes
     become: true
 
 #
@@ -431,8 +747,20 @@
     command: gsettings set org.cinnamon.desktop.wm.preferences titlebar-font "{{ font_titlebar }}"
 
 #
-# Virtualbox setting
+# Virtualbox
 #
+#
+  - name: Virtualbox - install
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        # https://sites.google.com/site/linuxnomemo/mint-use/virtualbox
+        - virtualbox
+        - virtualbox-qt
+        - virtualbox-dkms
+        - virtualbox-guest-additions-iso
+    become: true
   - name: add "{{ansible_user_id}}" into group netdev
     user:
       name: "{{ansible_user_id}}"
@@ -441,50 +769,14 @@
     become: true
 
 #
-# Monitorix
-#
-# Works without installation of libs listed below despite official instruction
-# http://www.monitorix.org/doc-debian.html
-# - name: install packages
-#   apt: name={{ item }} update_cache=yes state=latest
-#   with_items:
-#     - rrdtool
-#     - perl
-#     - libwww-perl
-#     - libmailtools-perl
-#     - libmime-lite-perl
-#     - librrds-perl
-#     - libdbi-perl
-#     - libxml-simple-perl
-#     - libhttp-server-simple-perl
-#     - libconfig-general-perl
-#     - libio-socket-ssl-perl
-#   become: true
-  - name: download Monitorix deb pack file with check (sh256sum)
-    get_url: >-
-      url=http://www.monitorix.org/{{ monitorix }}
-      dest={{ downloads }}/{{ monitorix }}
-      sha256sum=3fb8b4a4f7aeeeafccc6dc5b232f82d5761be80fe8e82008bc768f805fe5a744
-      force=no
-    become: true
-  - name: Install Monitorix from a deb package
-    apt: >-
-      deb={{ downloads }}/{{ monitorix }}
-    become: true
-    when: not ansible_check_mode
-  - name: start monitorix
-    service: name=monitorix state=running enabled=yes
-    become: true
-
-#
 # pip
 #
-  - name: install pip(s)
-    pip: name={{ item }} extra_args="-U"
-    with_items:
-      - pip
-      - setuptools
-      - csvkit
+  - name: pip - install general packages
+    pip:
+      name:
+        - pip
+        - setuptools
+        - csvkit
     become: true
 
   - name: sitecustomize.py
@@ -499,13 +791,14 @@
 #
 # mail command settings
 #
-  - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - mailutils
-      - exim4
+  - name: mail utils install
+    apt:
+      name:
+        - mailutils
+        - exim4
+      update_cache: yes
+      state: latest
     become: true
-    when: not ansible_check_mode
   - name: copy exim4 cfg file
     copy: >
       src=./src/update-exim4.conf.conf
@@ -515,67 +808,145 @@
     become: true
 # tail -f /var/log/exim4/mainlog
 
-#
-# Android
-#https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
-  - name: check if android_studio_zip exists
-    stat: path={{ downloads }}/{{ android_studio_name }}
-    register: has_android_studio_zip
-  - name: show stat if NO android_studio_zip exists
-    debug: var=has_android_studio_zip
-    when: not has_android_studio_zip.stat.exists
-  - name: download Android Studio (sh256sum)
-    get_url: >-
-      url={{ android_studio_url }}/{{ android_studio_name }}
-      dest={{ downloads }}
-      sha256sum={{android_studio_checksum}}
-      force=no
-    become: true
-    when: not has_android_studio_zip.stat.exists
-  - name: Unzip Android Studio
-    command: unzip -o {{ downloads }}/{{ android_studio_name }}
-    args:
-        chdir: "{{ android_studio_parentdir }}"
-    become: true
   - name: kvm install packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-     - qemu-kvm
-     - kvm
-     - virt-manager
-     - ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
-     - libvirt-bin
-     - bridge-utils
+    apt:
+      name:
+        - qemu #https://fosspost.org/tutorials/use-qemu-test-operating-systems-distributions
+        - qemu-kvm
+        - virt-manager
+        - ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
+        - bridge-utils
+        - libvirt-daemon-system
+        - libvirt-clients
+      update_cache: yes
+      state: latest
     become: true
-    when: not ansible_check_mode
-  - name: start libvirt-bin
-    service: name=libvirt-bin state=running enabled=yes
-    become: true
+      #  - name: start libvirt-bin
+      #    service: name=libvirt-bin state=restarted enabled=yes
+      #    become: true
   #http://acchi-muite-hoi.hatenablog.com/entry/2016/08/18/102709
   - name: add vhost_net to load module
     lineinfile:
       dest: /etc/modules
       line: 'vhost_net'
     become: true
-  - name: chown
-    file: >-
-      path={{ android_studio_parentdir }}{{ android_studio_dir }}
-      group=root
-      owner={{ansible_user_id}}
-    become: true
-  # http://www.techscore.com/blog/2016/08/26/debianstretch%E3%81%A7%E3%80%81android-studio2-1-3-%E3%81%AE-%E5%BF%AB%E9%81%A9-%E3%81%AAavd%E8%B5%B7%E5%8B%95%E7%92%B0%E5%A2%83%E3%82%92%E5%AE%9F%E7%8F%BE%E3%81%99%E3%82%8B/
   - name: adduser
     user: >-
       name={{ansible_user_id}}
-      groups=root,libvirtd,kvm
+      groups=root,libvirt,kvm
       append=true
     become: true
+
+      #https://linuxhint.com/install_kvm_virtualization_ubuntu/
 
 # w3m
   - name: create ~/.w3m directory if it doesn't exist
     file:
       path: ~/.w3m
       state: directory
+
+# remove screen reader
+# https://askubuntu.com/questions/278693/how-do-i-stop-orca-screen-reader
+
+#
+# plantUML
+# https://www.hiroom2.com/2018/07/02/ubuntu-1804-plantuml-en/
+  - name: install dependencies for PlantUML
+    apt:
+      name:
+        - graphviz
+        - default-jre
+      update_cache: yes
+      state: latest
+    become: true
+  - name: Creates directory
+    file:
+      path: /opt/plantuml
+      state: directory
+    become: true
+  - name: check existence of plantuml
+    stat: path=/opt/plantuml/plantuml.jar
+    register: has_plantml
+  - name: download PlantUML
+    get_url:
+      url: http://sourceforge.net/projects/plantuml/files/plantuml.jar/download
+      dest: /opt/plantuml/
+      mode: 0555
+    become: true
+    when: not has_plantml.stat.exists
+
+#
+# latex
+#
+# do it manually for now, because it's time-consuming
+#  - command: sudo apt install texlive-full
+  - name: install latex(instead of texlive-full)
+    apt:
+      name:
+        - texlive-base
+        - texlive-lang-japanese
+          #        - texlive-fonts-recommended
+      update_cache: yes
+      state: latest
+    become: true
+# https://texwiki.texjp.org/?Linux%2FLinux%20Mint
+# https://linuxconfig.org/how-to-install-latex-on-ubuntu-20-04-focal-fossa-linux
+
+#
+# mitmdump
+#
+  - name: install dependencies for mitmproxy
+    apt:
+      name:
+        - python3-dev
+        - python3-pip
+        - libffi-dev
+        - libssl-dev
+      update_cache: yes
+      state: latest
+    become: true
+
+  - name: upgrade pip
+    pip:
+      name: pip
+      executable: pip3
+      state: latest
+    become: true
+
+  - name: mitmproxy
+    command: pip3 install --ignore-installed mitmproxy
+    become: true
+
+#
+# stderred
+# https://github.com/sickill/stderred
+#
+  - name: stdtrred - Check
+    command: ls /opt/stderred
+    register: is_stderred_installed
+    ignore_errors: true
+  - name: install dependencies for stderred
+    apt:
+      name:
+        - gcc-multilib #https://askubuntu.com/questions/904929/gcc-compile-32-bit-code-on-64-bit-system
+        - cmake
+      update_cache: yes
+      state: latest
+    become: true
+    when: is_stderred_installed is failed
+  - name: clone stderred
+    git:
+      repo: https://github.com/sickill/stderred
+      dest: /opt/stderred
+    become: true
+    when: is_stderred_installed is failed
+  - name: make stderred
+    command: make
+    args:
+      chdir: /opt/stderred
+    become: true
+    #issue: >&2 would not be colored even 'make 32 && make 64'
+    #ERROR: ld.so: object '/home/uuuu/tmp/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
 
 #
 # dist-upgrade, autoremove
@@ -585,14 +956,85 @@
       upgrade: dist
       autoremove: yes
     become: true
-    when: not ansible_check_mode
 
   handlers:
   - name: restart ssh
     service: name=sshd state=restarted
     become: true
-  - name: delete node_setup
-    file:
-      name: "{{nodesetup}}"
-      state: absent
 
+#
+# Android
+#https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+#  - name: check if android_studio_zip exists
+#    stat: path={{ downloads }}/{{ android_studio_name }}
+#    register: has_android_studio_zip
+#  - name: show stat if NO android_studio_zip exists
+#    debug: var=has_android_studio_zip
+#    when: not has_android_studio_zip.stat.exists
+#  - name: download Android Studio (sh256sum)
+#    get_url: >-
+#      url={{ android_studio_url }}/{{ android_studio_name }}
+#      dest={{ downloads }}
+#      sha256sum={{android_studio_checksum}}
+#      force=no
+#    become: true
+#    when: not has_android_studio_zip.stat.exists
+#  - name: Unzip Android Studio
+#    command: unzip -o {{ downloads }}/{{ android_studio_name }}
+#    args:
+#        chdir: "{{ android_studio_parentdir }}"
+#    become: true
+
+      #  - name: chown
+      #    file: >-
+      #      path={{ android_studio_parentdir }}{{ android_studio_dir }}
+      #      group=root
+      #      owner={{ansible_user_id}}
+      #    become: true
+  # http://www.techscore.com/blog/2016/08/26/debianstretch%E3%81%A7%E3%80%81android-studio2-1-3-%E3%81%AE-%E5%BF%AB%E9%81%A9-%E3%81%AAavd%E8%B5%B7%E5%8B%95%E7%92%B0%E5%A2%83%E3%82%92%E5%AE%9F%E7%8F%BE%E3%81%99%E3%82%8B/
+
+# todo: add useful tools https://qiita.com/onokatio/items/50fb616f71bf3c5021b9
+# todo: apt-fast https://news.mynavi.jp/article/20161101-a177/
+#
+# memo:
+#
+#file manager
+#[Dark theme in Dolphin file manager](https://unix.stackexchange.com/a/566789)
+#dark theme for nemo
+#https://forums.linuxmint.com/viewtopic.php?p=1130585#p1130585
+#~/.themes/Mint-X-Dark/gtk-3.0/apps
+#
+#note
+#systemctl --user restart pulseaudio.service
+#https://askubuntu.com/a/1123869
+#
+#memo:
+# vagrant - unnecessary lately. just a reminder
+
+#transfer host repo to guest for development
+#scp -r -P 47122 ~/Documents/pde mint@localhost:/tmp/
+#port may vary
+#
+#https://stackoverflow.com/questions/34333058/ansible-change-ssh-port-in-playbook
+
+#https://stackoverflow.com/a/60301387
+#ansible-playbook --extra-vars "ansible_sudo_pass=UNDEFINED" install.yml
+
+#It starts from host which has ansible 2.9.16,python2.7.12 Mint18.3
+#ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  install.yml
+#but following error
+#
+# ____________________
+#< TASK [upgrade pip] >
+# --------------------
+#        \   ^__^
+#         \  (oo)\_______
+#            (__)\       )\/\
+#                ||----w |
+#                ||     ||
+#
+#An exception occurred during task execution. To see the full traceback, use -vvv. The error was: ImportError: No module named pkg_resources
+#fatal: [localhost]: FAILED! => {"changed": false, "msg": "Failed to import the required Python library (setuptools) on mint-Standard-PC-i440FX-PIIX-1996's Python /usr/bin/python2.7. Please read module documentation and install in the appropriate location. If the required library is installed, but Ansible is using the wrong Python interpreter, please consult the documentation on ansible_python_interpreter"}
+#
+#restart monitor
+#https://askubuntu.com/questions/143838/how-do-i-restart-cinnamon-from-the-tty

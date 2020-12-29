@@ -1,24 +1,27 @@
 ---
-- hosts: "{{ given_host | default('localhost') }}"
+- hosts: "{{ target | default('localhost') }}"
   vars:
     downloads: /home/{{ansible_user_id}}/Downloads
   become: no
   tasks:
 
-#
-# mail command settings
-#
-  - name: install packages
-    apt: name={{ item }} update_cache=yes state=latest
-    with_items:
-      - mailutils
-      - exim4
-    become: true
-  - name: copy exim4 cfg file
-    copy: >
-      src=./src/update-exim4.conf.conf
-      dest=/etc/exim4/update-exim4.conf.conf
-    become: true
-  - shell: update-exim4.conf
-    become: true
+  #https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html
+  - name: Check
+    command: cat /etc/issue
+    register: etc_issue
+    ignore_errors: true
+    args:
+      chdir: ~/
+    become: yes
 
+  - name: Print on succeeded
+    debug:
+      msg: "{{ etc_issue.stdout }}"
+    when: etc_issue is succeeded
+
+  - name: Print on failed
+    debug:
+      msg: "nothing found"
+    when: etc_issue is failed
+
+#ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  exam.yml
