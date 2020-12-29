@@ -45,11 +45,12 @@ preinstall_apt() {
 
   if [ -z `which ansible` ]; then
     export DEBIAN_FRONTEND=noninteractive
-    sudo apt update
+    sudo apt update                       &&
     sudo apt                               \
       -o Dpkg::Options::="--force-confdef" \
       -o Dpkg::Options::="--force-confold" \
     -yq dist-upgrade
+    #https://askubuntu.com/a/734871
 
     sudo apt install -y software-properties-common
     sudo apt-add-repository ppa:ansible/ansible

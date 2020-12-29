@@ -191,6 +191,7 @@
       mode=0644
     become: yes
     when: ansible_distribution == 'Linux Mint'
+#https://www.kali.org/docs/general-use/kali-linux-sources-list-repositories/
 
 # fcitx mozc
   - name: install ime, fcitx mozc
