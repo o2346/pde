@@ -190,6 +190,7 @@
       dest=/etc/apt/sources.list
       mode=0644
     become: yes
+    when: ansible_distribution == 'Linux Mint'
 
 # fcitx mozc
   - name: install ime, fcitx mozc
@@ -202,10 +203,10 @@
       update_cache: yes
       install_recommends: yes
     become: true
-    when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    #when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   - name: set fcitx as default, restarting is required
     command: im-config -n fcitx
-    when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    #when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
       #https://stackoverflow.com/questions/52743147/changing-ansible-loop-due-to-v2-11-deprecation
 
 #
@@ -802,21 +803,21 @@
 #
 # mail command settings
 #
-  - name: mail utils install
-    apt:
-      name:
-        - mailutils
-        - exim4
-      update_cache: yes
-      state: latest
-    become: true
-  - name: copy exim4 cfg file
-    copy: >
-      src=./src/update-exim4.conf.conf
-      dest=/etc/exim4/update-exim4.conf.conf
-    become: true
-  - shell: update-exim4.conf
-    become: true
+#  - name: mail utils install
+#    apt:
+#      name:
+#        - mailutils
+#        - exim4
+#      update_cache: yes
+#      state: latest
+#    become: true
+#  - name: copy exim4 cfg file
+#    copy: >
+#      src=./src/update-exim4.conf.conf
+#      dest=/etc/exim4/update-exim4.conf.conf
+#    become: true
+#  - shell: update-exim4.conf
+#    become: true
 # tail -f /var/log/exim4/mainlog
 
   - name: kvm install packages
