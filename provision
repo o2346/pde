@@ -53,7 +53,9 @@ preinstall_apt() {
     #https://askubuntu.com/a/734871
 
     sudo apt install -y software-properties-common
-    sudo apt-add-repository ppa:ansible/ansible
+    #It causes error later apt update in kali
+    #sudo apt-add-repository ppa:ansible/ansible
+
     sudo apt update
     sudo apt install -y ansible
     sudo chown -R -v $USER ~/.ansible

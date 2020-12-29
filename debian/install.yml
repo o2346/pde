@@ -201,6 +201,7 @@
         - fcitx-mozc
       state: latest
       autoclean: yes
+      update_cache: yes
       install_recommends: yes
     become: true
     #when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
