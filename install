@@ -1,17 +1,12 @@
 #!/bin/bash
 
-getlinuxdir () {
+getosdir () {
   cat /etc/issue | grep -i 'mint' > /dev/null && echo mint && return 0
   cat /etc/issue | grep -i 'kali' > /dev/null && echo kali && return 0
-}
 
-getosdir () {
   if [ "$(uname)" = "Darwin" ]; then
     # Do something under Mac OS X platform
     echo "darwin"
-  elif [ "$(uname)" = "Linux" ]; then
-    # Do something under GNU/Linux platform
-    echo `getlinuxdir`
   elif [ "$(expr substr $(uname -s) 1 10)" = "MINGW32_NT" ]; then
     # Do something under Windows NT platform
     return "$(expr substr $(uname -s) 1 10)"
@@ -55,15 +50,12 @@ preinstall_apt() {
     sudo chown -R -v $USER ~/.ansible
   fi
 
-  sudo apt install -y git
-
-  cd /tmp
-  git clone https://github.com/o2346/pde
+  which git || sudo apt install -y git
 
 }
 
 preinstall_dnf() {
-  echo hoge
+  :
 }
 
 preinstall_brew() {
@@ -82,9 +74,6 @@ preinstall_brew() {
   if [ -z `which git` ]; then
     brew install git
   fi
-
-  cd /tmp
-  git clone https://github.com/o2346/pde
 
 }
 
@@ -119,6 +108,8 @@ while getopts "devi" OPT ; do
   case $OPT in
     d)  echo Branch: Develop OSDIR=$OSDIR
         preinstall
+        cd /tmp
+        git clone https://github.com/o2346/pde
         cd /tmp/pde
         git checkout develop
         git pull
@@ -127,6 +118,8 @@ while getopts "devi" OPT ; do
         ;;
     e)  echo Branch: Develop OSDIR=$OSDIR
         preinstall
+        cd /tmp
+        git clone https://github.com/o2346/pde
         cd /tmp/pde
         git checkout develop
         git pull
@@ -139,6 +132,8 @@ while getopts "devi" OPT ; do
         ;;
     i)  echo init mode
         preinstall
+        cd /tmp
+        git clone https://github.com/o2346/pde
         cd /tmp/pde
         git checkout develop
         git pull
