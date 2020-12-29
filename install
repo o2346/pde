@@ -1,28 +1,8 @@
 #!/bin/bash
 
 getlinuxdir () {
-  # https://pc.casey.jp/archives/153904527
-  # doesn't work by command sh
-  # /bin/sh -> dash problem
-  # shell Syntax error: ( unexpected (expecting })
-  declare -A dir
-  dir=(["LinuxMint"]="mint" ["kali"]="kali" ["CentOS_release_6"]="centos6")
-
   cat /etc/issue | grep -i 'mint' > /dev/null && echo mint && return 0
-
-  for type in ${!dir[@]} ; do
-    if echo `cat /etc/issue` | sed -e 's/\s/_/g' | grep -q $type ; then
-      echo ${dir[$type]}
-      return 0
-    fi
-  done
-
-  for type in ${!dir[@]} ; do
-    if echo `lsb_release -a 2>/dev/null` | sed -e 's/\s/_/g' | grep -q $type ; then
-      echo ${dir[$type]}
-      return 0
-    fi
-  done
+  cat /etc/issue | grep -i 'kali' > /dev/null && echo kali && return 0
 }
 
 getosdir () {
@@ -65,9 +45,6 @@ vmopt() {
   return 1
 
 }
-
-sudo apt update
-sudo apt dist-upgrade
 
 preinstall_apt() {
   if [ -z `which ansible` ]; then
@@ -127,6 +104,11 @@ preinstall() {
 OSDIR=`getosdir`
 USER=`whoami`
 
+echo "$OSDIR"
+echo "$USER"
+
+sudo apt update
+sudo apt dist-upgrade
 
 # switch playbook for master or test
 while getopts "devi" OPT ; do
