@@ -26,6 +26,12 @@
       msg: "{{ etc_issue.stdout }}"
     when: etc_issue is succeeded
 
+  - name: Print ansible_distribution
+    debug:
+      msg: "{{ ansible_distribution }}"
+#Kali GNU/Linux
+#https://raymii.org/s/tutorials/Ansible_-_Only_if_on_specific_distribution_or_distribution_version.html
+#
 #
 # Network Manager disable
 # http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired
@@ -119,14 +125,19 @@
 #      # Modern Mint Dark 1
   - name: Theme - Window borders
     command: gsettings set org.cinnamon.desktop.wm.preferences theme "Mint-Y-Dark"
+    when: ansible_distribution == 'Linux Mint'
   - name: Theme - Icons
     command: gsettings set org.cinnamon.desktop.interface icon-theme "Mint-Y"
+    when: ansible_distribution == 'Linux Mint'
   - name: Theme - Controls
     command: gsettings set org.cinnamon.desktop.interface gtk-theme "Adwaita-dark"
+    when: ansible_distribution == 'Linux Mint'
   - name: Theme - Mouse Pointer
     command: gsettings set org.cinnamon.desktop.interface cursor-theme "Adwaita"
+    when: ansible_distribution == 'Linux Mint'
   - name: Theme - Desktop
     command: gsettings set org.cinnamon.theme name "Mint-Y-Dark-Blue"
+    when: ansible_distribution == 'Linux Mint'
       #  - name: list themes
       #    command: ls ~/.themes
       #    register: themes

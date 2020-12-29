@@ -1,8 +1,8 @@
 #!/bin/bash
 
 whatplatform () {
-  cat /etc/issue | grep -i 'mint' > /dev/null && echo mint && return 0
-  cat /etc/issue | grep -i 'kali' > /dev/null && echo kali && return 0
+  cat /etc/issue | grep -i 'mint' > /dev/null && echo debian && return 0
+  cat /etc/issue | grep -i 'kali' > /dev/null && echo debian && return 0
 
   if [ "$(uname)" = "Darwin" ]; then
     # Do something under Mac OS X platform
