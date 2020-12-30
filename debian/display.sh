@@ -11,9 +11,14 @@
 #https://askubuntu.com/questions/1260809/cant-get-4k-60hz-only-30hz
 #https://www.google.co.jp/search?safe=off&num=24&hl=en&q=gdbus.error%3Aorg.gtk.gdbus.unmappedGerror.quark._gnome_2drr_2derror_2dquark.Code2%3A+could+not+set+the+configuration+for+CRTC+79
 
-# Assuming the 4k is already set as Primary moniter
-display_port="`xrandr | grep 'connected primary' | awk '{print $1}'`"
-# It should be something like HDMI-A-3
+if [ -z "$1" ]; then
+  # Assuming the 4k is already set as Primary moniter
+  display_port="`xrandr | grep 'connected primary' | awk '{print $1}'`"
+  # It should be something like HDMI-A-3
+else
+  display_port="$1"
+  #xrandr --output $display_port --primary
+fi
 
 mode_content="`cvt 3840 2160 -r | grep -E '^Modeline' | cut -d\  -f2-`"
 # It should be something like:
@@ -30,4 +35,4 @@ echo "$display_port $mode_content" >&2
 
 xrandr --addmode $display_port $mode_id
 
-# If success, Go to display settings on gui, Desired selection should be present
+xrandr --output $display_port --mode "$mode_id"
