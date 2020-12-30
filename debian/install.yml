@@ -79,6 +79,7 @@
   - name: Move Default .zshrc
     command: mv ~/.zshrc ~/_zshrc_default
     when: is_uc_installed is failed
+    ignore_errors: true
   - name: install Dotfiles
     shell: curl 'https://raw.githubusercontent.com/o2346/happy-scripts/develop/install.uc.sh' | bash -s - https://gist.github.com/o2346/e091ea8f6bf963d6a170a88579a3db08
     args:
@@ -838,10 +839,12 @@
   - name: zsh for login shell
     user: name={{ansible_user_id}} shell=/bin/zsh
     become: true
+    when: ansible_distribution == 'Linux Mint'
   - name: copy autostart
     copy: >
       src=./autostart/
       dest=~/.config/autostart
+    when: ansible_distribution == 'Linux Mint'
 
 #
 # FireWall Settings
