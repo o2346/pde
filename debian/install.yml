@@ -166,9 +166,6 @@
 # It requires to modify cinnamon.css and a little complicated
 
 #
-# Chomium setting ( gave up )
-
-#
 # Scripts
 #
   - name: copy scrpts to /usr/local/bin
@@ -343,6 +340,7 @@
         - ufw
       state: absent
     become: true
+    when: ansible_distribution == 'Linux Mint'
 
 #
 # general set of apps
@@ -392,11 +390,12 @@
         - k3b
         - zsh
         - ffmpeg
-        - mp3splt
+          #- mp3splt
         #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
         #- wine
         - tig
-        - chromium-browser
+          #- chromium-browser
+        - chromium
         - clang #for NeoBundle
         - ssh
         - sshpass
@@ -417,8 +416,8 @@
         # sudo pip install csvkit
         # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
         - inotify-tools
-        - guile-2.0
-        - guile-2.0-dev
+        - guile-3.0
+        - guile-3.0-dev
         - w3m
         - w3m-img
         - pdftk
@@ -493,8 +492,9 @@
         - socat
         - krita
         - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
-        - glxgears
-        - glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
+        - mesa-utils
+          #- glxgears
+          #- glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
           #sudo apt install -y mesa-utils
 
         #https://www.tixati.com/download/linux.html
@@ -759,14 +759,17 @@
 #
   - name: Fonts for Default
     command: gsettings set org.cinnamon.desktop.interface font-name "{{ font }}"
+    when: ansible_distribution == 'Linux Mint'
   - name: Fonts for Desktop
     command: gsettings set org.nemo.desktop font "{{ font }}"
+    when: ansible_distribution == 'Linux Mint'
   - name: Fonts for Document
     command: gsettings set org.gnome.desktop.interface document-font-name "{{ font }}"
   - name: Fonts for monospace
     command: gsettings set org.gnome.desktop.interface monospace-font-name "{{ font_monospace }}"
   - name: Fonts for Window Titlebar
     command: gsettings set org.cinnamon.desktop.wm.preferences titlebar-font "{{ font_titlebar }}"
+    when: ansible_distribution == 'Linux Mint'
 
 #
 # Virtualbox
