@@ -76,6 +76,9 @@
     debug:
       msg: "nothing found"
     when: is_uc_installed is failed
+  - name: Move Default .zshrc
+    command: mv ~/.zshrc ~/_zshrc_default
+    when: is_uc_installed is failed
   - name: install Dotfiles
     shell: curl 'https://raw.githubusercontent.com/o2346/happy-scripts/develop/install.uc.sh' | bash -s - https://gist.github.com/o2346/e091ea8f6bf963d6a170a88579a3db08
     args:
