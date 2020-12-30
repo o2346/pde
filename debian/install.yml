@@ -282,6 +282,29 @@
     when: is_aws_installed is failed
     become: true
 
+  - name: aws - checking version of aws
+    shell: aws --version | grep 'aws-cli/2'
+    register: is_awscliv2_present
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "aws2 is not present, assuming aws version 1 is the current one. Updating..."
+    when: is_awscliv2_present is failed
+  - name: aws - Let awscli version 2 is present instead of 1 that is up in default unexpectedly
+    command: sudo mv /usr/local/bin/aws /usr/local/bin/aws1
+    when: is_awscliv2_present is failed
+    become: true
+  - name: Create symbolic link for aws2
+    file:
+      src: "/usr/local/aws-cli/v2/current/bin/aws"
+      dest: "/usr/local/bin/aws"
+      state: link
+    when: is_awscliv2_present is failed
+    become: true
+    #cd /usr/local/bin/
+    #sudo mv ./aws ./aws1
+    #sudo ln -s /usr/local/aws-cli/v2/current/bin/aws aws
+
 # other tools from aws
   - name: install prerequisites
     apt:
@@ -351,6 +374,51 @@
       state: absent
     become: true
     when: ansible_distribution == 'Linux Mint'
+
+  #
+  # urxvt plugins
+  #
+  - name: urxvt - Create a directory if it does not exist
+    file:
+      path: ~/.urxvt/ext/
+      state: directory
+      mode: '0755'
+  - name: urxvt resize-font - checking already installed
+    command: ls ~/.urxvt/ext/resize-font
+    register: is_resizefont_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing"
+    when: is_resizefont_installed is failed
+  - name: urxvt - resize-font Download
+    get_url:
+      url: https://raw.githubusercontent.com/simmel/urxvt-resize-font/master/resize-font
+      dest: ~/.urxvt/ext/resize-font
+      mode: '0440'
+    when: is_resizefont_installed is failed
+
+  - name: urxvt config-reload - checking already installed
+    command: ls ~/.urxvt/ext/config-reload
+    register: is_configreload_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing"
+    when: is_configreload_installed is failed
+  - name: urxvt config-reload - Dependencies
+    command: sudo cpan AnyEvent Linux::FD common::sense
+    when: is_configreload_installed is failed
+    become: true
+  - name: urxvt config-reload - Clone a repo with separate git directory
+    #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/git_module.html
+    git:
+      repo: https://github.com/regnarg/urxvt-config-reload.git
+      dest: /tmp/urxvt-config-reload
+    when: is_configreload_installed is failed
+  - name: urxvt config-reload - Deploy elements
+    shell: "cp -u /tmp/urxvt-config-reload/config* ~/.urxvt/ext/"
+    when: is_configreload_installed is failed
 
 #
 # general set of apps
