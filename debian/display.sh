@@ -18,6 +18,7 @@ if [ -z "$1" ]; then
 else
   display_port="$1"
   #xrandr --output $display_port --primary
+  #https://askubuntu.com/a/449183
 fi
 
 mode_content="`cvt 3840 2160 -r | grep -E '^Modeline' | cut -d\  -f2-`"
@@ -36,3 +37,4 @@ echo "$display_port $mode_content" >&2
 xrandr --addmode $display_port $mode_id
 
 xrandr --output $display_port --mode "$mode_id"
+

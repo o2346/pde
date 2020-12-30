@@ -1,0 +1,69 @@
+% glmark2
+=======================================================
+    glmark2 2014.03+git20150611.fa71af2d
+=======================================================
+    OpenGL Information
+    GL_VENDOR:     X.Org
+    GL_RENDERER:   AMD Radeon RX 5600 XT (NAVI10, DRM 3.35.0, 5.4.0-58-generic, LLVM 10.0.0)
+    GL_VERSION:    4.6 (Compatibility Profile) Mesa 20.0.8
+=======================================================
+[build] use-vbo=false: FPS: 7422 FrameTime: 0.135 ms
+[build] use-vbo=true: FPS: 13216 FrameTime: 0.076 ms
+[texture] texture-filter=nearest: FPS: 13460 FrameTime: 0.074 ms
+[texture] texture-filter=linear: FPS: 13389 FrameTime: 0.075 ms
+[texture] texture-filter=mipmap: FPS: 13335 FrameTime: 0.075 ms
+[shading] shading=gouraud: FPS: 13226 FrameTime: 0.076 ms
+[shading] shading=blinn-phong-inf: FPS: 13464 FrameTime: 0.074 ms
+[shading] shading=phong: FPS: 13415 FrameTime: 0.075 ms
+[shading] shading=cel: FPS: 13177 FrameTime: 0.076 ms
+[bump] bump-render=high-poly: FPS: 12330 FrameTime: 0.081 ms
+[bump] bump-render=normals: FPS: 13249 FrameTime: 0.075 ms
+[bump] bump-render=height: FPS: 13226 FrameTime: 0.076 ms
+[effect2d] kernel=0,1,0;1,-4,1;0,1,0;: FPS: 13819 FrameTime: 0.072 ms
+[effect2d] kernel=1,1,1,1,1;1,1,1,1,1;1,1,1,1,1;: FPS: 11961 FrameTime: 0.084 ms
+[pulsar] light=false:quads=5:texture=false: FPS: 11892 FrameTime: 0.084 ms
+[desktop] blur-radius=5:effect=blur:passes=1:separable=true:windows=4: FPS: 6304 FrameTime: 0.159 ms
+[desktop] effect=shadow:windows=4: FPS: 6307 FrameTime: 0.159 ms
+[buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 961 FrameTime: 1.041 ms
+[buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=subdata: FPS: 1236 FrameTime: 0.809 ms
+[buffer] columns=200:interleave=true:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 1045 FrameTime: 0.957 ms
+[ideas] speed=duration: FPS: 4497 FrameTime: 0.222 ms
+[jellyfish] <default>: FPS: 10710 FrameTime: 0.093 ms
+[terrain] <default>: FPS: 1869 FrameTime: 0.535 ms
+[shadow] <default>: FPS: 9774 FrameTime: 0.102 ms
+[refract] <default>: FPS: 5572 FrameTime: 0.179 ms
+[conditionals] fragment-steps=0:vertex-steps=0: FPS: 13765 FrameTime: 0.073 ms
+[conditionals] fragment-steps=5:vertex-steps=0: FPS: 13627 FrameTime: 0.073 ms
+[conditionals] fragment-steps=0:vertex-steps=5: FPS: 13369 FrameTime: 0.075 ms
+[function] fragment-complexity=low:fragment-steps=5: FPS: 13580 FrameTime: 0.074 ms
+[function] fragment-complexity=medium:fragment-steps=5: FPS: 13434 FrameTime: 0.074 ms
+[loop] fragment-loop=false:fragment-steps=5:vertex-steps=5: FPS: 13386 FrameTime: 0.075 ms
+[loop] fragment-steps=5:fragment-uniform=false:vertex-steps=5: FPS: 13445 FrameTime: 0.074 ms
+[loop] fragment-steps=5:fragment-uniform=true:vertex-steps=5: FPS: 13262 FrameTime: 0.075 ms
+=======================================================
+                                  glmark2 Score: 10506
+=======================================================
+% neofetch
+             ...-:::::-...                 xxxx@xxxx-desktop
+          .-MMMMMMMMMMMMMMM-.              -----------------
+      .-MMMM`..-:::::::-..`MMMM-.          OS: Linux Mint 20 x86_64
+    .:MMMM.:MMMMMMMMMMMMMMM:.MMMM:.        Kernel: 5.4.0-58-generic
+   -MMM-M---MMMMMMMMMMMMMMMMMMM.MMM-       Uptime: 1 hour, 3 mins
+ `:MMM:MM`  :MMMM:....::-...-MMMM:MMM:`    Packages: 2961 (dpkg), 13 (brew)
+ :MMM:MMM`  :MM:`  ``    ``  `:MMM:MMM:    Shell: zsh 5.8
+.MMM.MMMM`  :MM.  -MM.  .MM-  `MMMM.MMM.   Resolution: 3840x2160, 1920x1080
+:MMM:MMMM`  :MM.  -MM-  .MM:  `MMMM-MMM:   DE: Cinnamon
+:MMM:MMMM`  :MM.  -MM-  .MM:  `MMMM:MMM:   WM: Mutter (Muffin)
+:MMM:MMMM`  :MM.  -MM-  .MM:  `MMMM-MMM:   WM Theme: Mint-Y-Dark-Blue (Mint-Y-Dark)
+.MMM.MMMM`  :MM:--:MM:--:MM:  `MMMM.MMM.   Theme: Adwaita-dark [GTK2/3]
+ :MMM:MMM-  `-MMMMMMMMMMMM-`  -MMM-MMM:    Icons: Mint-Y [GTK2/3]
+  :MMM:MMM:`                `:MMM:MMM:     CPU: Intel i7-3770K (8) @ 3.900GHz
+   .MMM.MMMM:--------------:MMMM.MMM.      GPU: Intel HD Graphics
+     '-MMMM.-MMMMMMMMMMMMMMM-.MMMM-'       GPU: AMD ATI Radeon RX 5600 OEM/5600 XT / 5700/5700
+       '.-MMMM``--:::::--``MMMM-.'         Memory: 5703MiB / 31999MiB
+            '-MMMMMMMMMMMMM-'
+               ``-:::::-``
+
+
+
+%
