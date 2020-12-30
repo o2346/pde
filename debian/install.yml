@@ -617,6 +617,21 @@
       mode: 0755
 
 #
+# neovim
+#
+#
+  - name: Create a directory if it does not exist
+    file:
+      path: ~/.config/nvim/
+      state: directory
+      mode: '0755'
+  - name: Create symbolic link for neovim vimrc
+    file:
+      src: "~/.vimrc"
+      dest: "~/.config/nvim/init.vim"
+      state: link
+      #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+#
 # Onedrive client Install
 # https://memo.laughk.org/2016/12/22/0000.html
 # https://github.com/skilion/onedrive
