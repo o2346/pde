@@ -327,10 +327,9 @@
         - aws-shell #https://github.com/awslabs/aws-shell
         - cfn-lint
         - rdk
-        - sam
+          #- sam
       #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
       executable: pip3
-      extra_args: "-U"
     become: true
       #consider to add more tools for handy
       #https://github.com/awslabs/aws-data-wrangler
@@ -341,6 +340,35 @@
       #https://github.com/awslabs/aws-sam-cli
       #https://github.com/awslabs/aws-cloudformation-templates
       #https://github.com/awslabs/aws-deployment-framework
+
+    #/home/linuxbrew/.linuxbrew/bin
+#
+#SAM
+#
+#https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+#  - name: homwbrew - checking already installed
+#    command: which brewno
+#    register: is_brew_installed
+#    ignore_errors: true
+#  - name: install homebrew - 1
+#    shell: '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"'
+#    when: is_brew_installed is failed
+#    #  - name: install homebrew - 1.1
+#    #    shell: ln '/home/linuxbrew/.linuxbrew/brew/bin/brew'
+#    #    when: is_brew_installed is failed
+#  - name: install homebrew - 2
+#    shell: 'test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv); test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv); test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile; echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile'
+#    when: is_brew_installed is failed
+#  - name: aws sam - checking already installed
+#    command: which sam
+#    register: is_sam_installed
+#    ignore_errors: true
+#  - name: install sam
+#    shell: 'brew tap aws/tap && brew install aws-sam-cli'
+#    when: is_sam_installed is failed
+#  - name: install sam, No idea but required twice to complete
+#    shell: 'install aws-sam-cli'
+#    when: is_sam_installed is failed
 
 ## jmespath
 #https://pypi.org/project/jmespath-terminal/
