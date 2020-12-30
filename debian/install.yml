@@ -106,6 +106,13 @@
     become: true
 
 #
+# Get rid of old driver causes problem
+#
+  - name: Get rid of old driver causes problem
+    command: apt remove -y xserver-xorg-video-intel
+    become: true
+
+#
 # Desktop Themes
 #
 #  - name: create ~/.themes directory if it doesn't exist
