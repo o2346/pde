@@ -839,7 +839,7 @@
         - qemu #https://fosspost.org/tutorials/use-qemu-test-operating-systems-distributions
         - qemu-kvm
         - virt-manager
-        - ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
+          #- ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
         - bridge-utils
         - libvirt-daemon-system
         - libvirt-clients
