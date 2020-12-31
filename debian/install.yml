@@ -1161,11 +1161,13 @@
     become: true
     when: avoid_some is failed
 
+#
+# apt autoclean, autoremove
+#
   - name: Remove useless packages from the cache
     apt:
       autoclean: yes
     become: true
-
   - name: Remove dependencies that are no longer required
     apt:
       autoremove: yes
