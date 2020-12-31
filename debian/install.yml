@@ -36,7 +36,7 @@
     command: ls /var/tmp/pde_is_dist_upgraded
     register: is_dist_upgraded
     ignore_errors: true
-  - name: Update all packages to the latest version
+  - name: dist-upgrade - Update all packages to the latest version
     apt:
       upgrade: dist
       update_cache: yes
@@ -44,6 +44,30 @@
     when: is_dist_upgraded is failed
   - name: Settle flag it has been done
     command: touch /var/tmp/pde_is_dist_upgraded
+    become: true
+
+#
+# full-upgrade
+#
+  #https://www.kali.org/docs/general-use/updating-kali/
+  - name: To update Kali, first ensure that /etc/apt/sources.list is properly populated
+    lineinfile:
+      path: /etc/apt/sources.list
+      regexp: '^#deb-src http://http.kali.org/kali'
+      line: 'deb-src http://http.kali.org/kali kali-rolling main contrib non-free'
+    become: true
+  - name: refer flag that indicates full-upgrade has been done
+    command: ls /var/tmp/pde_is_full_upgraded
+    register: is_full_upgraded
+    ignore_errors: true
+  - name: full-upgrade
+    apt:
+      upgrade: full
+      update_cache: yes
+    become: true
+    when: is_full_upgraded is failed
+  - name: Settle flag it has been done
+    command: touch /var/tmp/pde_is_full_upgraded
     become: true
 
 #
@@ -59,11 +83,12 @@
     when: is_brew_installed is failed
   - name: install sam - stupidly 2nd invocation
     shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
+    when: is_brew_installed is failed
     # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
     # In addition, ensure path to '/home/linuxbrew/.linuxbrew/bin/sam'. Then finally you could invoke the command 'sam'
 
 #
-# Omit some packages flag
+# Check 'omit some packages' flag
 #
   - name: refer flag that indicates to omit some packages for time saving
     command: ls /tmp/pde_avoid_some
