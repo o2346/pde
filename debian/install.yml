@@ -106,6 +106,36 @@
       #    become: true
 
 #
+# stderred
+# https://github.com/sickill/stderred
+#
+  - name: stdtrred - Check
+    command: ls /opt/stderred
+    register: is_stderred_installed
+    ignore_errors: true
+  - name: install dependencies for stderred
+    apt:
+      name:
+        - gcc-multilib #https://askubuntu.com/questions/904929/gcc-compile-32-bit-code-on-64-bit-system
+        - cmake
+      state: latest
+    become: true
+    when: is_stderred_installed is failed
+  - name: clone stderred
+    git:
+      repo: https://github.com/sickill/stderred
+      dest: /opt/stderred
+    become: true
+    when: is_stderred_installed is failed
+  - name: make stderred
+    command: make
+    args:
+      chdir: /opt/stderred
+    become: true
+    #issue: >&2 would not be colored even 'make 32 && make 64'
+    #ERROR: ld.so: object '/home/uuuu/tmp/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
+    #
+#
 # Dotfiles
 #
   - name: Dotfiles - Check
@@ -1086,36 +1116,6 @@
     command: pip3 install --ignore-installed mitmproxy
     become: true
     when: avoid_some is failed
-
-#
-# stderred
-# https://github.com/sickill/stderred
-#
-  - name: stdtrred - Check
-    command: ls /opt/stderred
-    register: is_stderred_installed
-    ignore_errors: true
-  - name: install dependencies for stderred
-    apt:
-      name:
-        - gcc-multilib #https://askubuntu.com/questions/904929/gcc-compile-32-bit-code-on-64-bit-system
-        - cmake
-      state: latest
-    become: true
-    when: is_stderred_installed is failed
-  - name: clone stderred
-    git:
-      repo: https://github.com/sickill/stderred
-      dest: /opt/stderred
-    become: true
-    when: is_stderred_installed is failed
-  - name: make stderred
-    command: make
-    args:
-      chdir: /opt/stderred
-    become: true
-    #issue: >&2 would not be colored even 'make 32 && make 64'
-    #ERROR: ld.so: object '/home/uuuu/tmp/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
 
   - name: Remove useless packages from the cache
     apt:
