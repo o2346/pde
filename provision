@@ -53,6 +53,7 @@ preinstall_apt() {
     #https://askubuntu.com/a/734871
 
     #sudo apt install -y software-properties-common
+
     #It causes error later apt update in kali
     #sudo apt-add-repository ppa:ansible/ansible
 
