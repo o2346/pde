@@ -1187,3 +1187,9 @@
 #
 #restart monitor
 #https://askubuntu.com/questions/143838/how-do-i-restart-cinnamon-from-the-tty
+#
+#preinstall packages for time saving in develop
+#sudo apt install -y 
+#cat debian/preinstallpacks.txt | sed -e 's/ *-//g' | sed -e 's/$/ \\/g' | sed '$ s/.$//'
+#cat debian/preinstallpacks.txt | sed -e 's/^ \+-//g' | tr -d '\n'
+#consider automate to generate preinstallpacks.txt like #<!--preinstall-dev [some-packs...] -->
