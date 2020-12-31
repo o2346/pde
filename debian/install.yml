@@ -440,11 +440,19 @@
     command: test -d /home/linuxbrew/.linuxbrew
     register: is_brew_installed
     ignore_errors: true
-  - name: install homebrew
+  - name: install homebrew & sam
     shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/brew-sam.sh | bash -s
     when: is_brew_installed is failed
-  - name: install sam
+  - name: install sam, 2nd stupid invocation, or will not be present
     shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
+     # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
+  - name: Create symbolic link for sam
+    file:
+      src: "/home/linuxbrew/.linuxbrew/bin/sam"
+      dest: "/usr/local/bin/sam"
+      state: link
+    become: true
+    # Gave up adding to PATH or alias in .zshenv, .zshrc, did not work
 
 ## jpterm/jmespath
 #https://pypi.org/project/jmespath-terminal/
