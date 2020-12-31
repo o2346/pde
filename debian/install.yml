@@ -51,7 +51,7 @@
 # Omit some packages flag
 #
   - name: refer flag that indicates to omit some packages for time saving
-    command: ls /var/tmp/pde_avoid_some
+    command: ls /tmp/pde_avoid_some
     register: avoid_some
     ignore_errors: true
   - name: Print on succeeded confirmation
@@ -307,7 +307,7 @@
     when: is_aws_installed is failed and is_aws_downloaded is failed
     become: true
   - name: aws - install
-    shell: sudo ./aws/install
+    shell: ./aws/install
     args:
       chdir: /tmp/
     when: is_aws_installed is failed
@@ -326,7 +326,7 @@
       msg: "{{ is_awscliv2_present.stdout }}"
     when: is_awscliv2_present is succeeded
   - name: aws - Let awscli version 2 is present instead of 1 that is up in default unexpectedly
-    command: sudo mv /usr/local/bin/aws /usr/local/bin/aws1
+    command: mv /usr/local/bin/aws /usr/local/bin/aws1
     when: is_awscliv2_present is failed
     become: true
   - name: Create symbolic link for aws2
@@ -640,6 +640,7 @@
         #https://forum.transmissionbt.com/viewtopic.php?t=18390
         - gimp #not present as default in Mint 20
     become: true
+    #when: avoid_some is failed
 
 #
 # Docker
