@@ -29,6 +29,17 @@
   - name: Print ansible_distribution
     debug:
       msg: "{{ ansible_distribution }}"
+
+#
+# dist-upgrade, autoremove
+#
+  - name: Update all packages to the latest version
+    apt:
+      upgrade: dist
+      update_cache: yes
+    become: true
+
+
 #Kali GNU/Linux
 #https://raymii.org/s/tutorials/Ansible_-_Only_if_on_specific_distribution_or_distribution_version.html
 #
@@ -209,7 +220,6 @@
         - fcitx-mozc
       state: latest
       autoclean: yes
-      update_cache: yes
       install_recommends: yes
     become: true
     #when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
@@ -313,7 +323,6 @@
         - python3-pip
       state: latest
       autoclean: yes
-      update_cache: yes
       install_recommends: yes
     become: true
   - name: upgrade pip
@@ -462,7 +471,6 @@
 #E: Unable to locate package glmark2
   - name: install general packages
     apt:
-      update_cache: yes
       state: latest
       name:
         #- vim-gtk #taking care of clipboard functionality since default version does not support
@@ -632,7 +640,6 @@
     when: is_docker_installed is failed
   - name: Docker - setup
     apt:
-      update_cache: yes
       state: latest
       name:
         - apt-transport-https
@@ -691,7 +698,7 @@
 #
 # eslint
 #
-  - name: Install "eslint" node.js package globally.
+  - name: Install "eslint" node.js package globally
     npm: name={{ item }} global=yes
     with_items:
       - eslint
@@ -755,7 +762,6 @@
         - libcurl4-gnutls-dev
         #- libcurl-dev
         - libsqlite3-dev
-      update_cache: yes
       state: latest
     become: true
     when: is_onedrive_installed is failed
@@ -901,7 +907,6 @@
 #
   - name: Virtualbox - install
     apt:
-      update_cache: yes
       state: latest
       name:
         # https://sites.google.com/site/linuxnomemo/mint-use/virtualbox
@@ -967,7 +972,6 @@
         - bridge-utils
         - libvirt-daemon-system
         - libvirt-clients
-      update_cache: yes
       state: latest
     become: true
       #  - name: start libvirt-bin
@@ -1005,7 +1009,6 @@
       name:
         - graphviz
         - default-jre
-      update_cache: yes
       state: latest
     become: true
   - name: Creates directory
@@ -1035,7 +1038,6 @@
         - texlive-base
         - texlive-lang-japanese
           #        - texlive-fonts-recommended
-      update_cache: yes
       state: latest
     become: true
 # https://texwiki.texjp.org/?Linux%2FLinux%20Mint
@@ -1051,7 +1053,6 @@
         - python3-pip
         - libffi-dev
         - libssl-dev
-      update_cache: yes
       state: latest
     become: true
 
@@ -1079,7 +1080,6 @@
       name:
         - gcc-multilib #https://askubuntu.com/questions/904929/gcc-compile-32-bit-code-on-64-bit-system
         - cmake
-      update_cache: yes
       state: latest
     become: true
     when: is_stderred_installed is failed
@@ -1097,14 +1097,15 @@
     #issue: >&2 would not be colored even 'make 32 && make 64'
     #ERROR: ld.so: object '/home/uuuu/tmp/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
 
-#
-# dist-upgrade, autoremove
-#
-#  - name: Update all packages to the latest version
-#    apt:
-#      upgrade: dist
-#      autoremove: yes
-#    become: true
+  - name: Remove useless packages from the cache
+    apt:
+      autoclean: yes
+    become: true
+
+  - name: Remove dependencies that are no longer required
+    apt:
+      autoremove: yes
+    become: true
 
   handlers:
   - name: restart ssh
@@ -1190,6 +1191,7 @@
 #
 #preinstall packages for time saving in develop
 #sudo apt install -y 
+#https://stackoverflow.com/questions/27305177/how-can-i-remove-the-last-character-of-a-file-in-unix
 #cat debian/preinstallpacks.txt | sed -e 's/ *-//g' | sed -e 's/$/ \\/g' | sed '$ s/.$//'
 #cat debian/preinstallpacks.txt | sed -e 's/^ \+-//g' | tr -d '\n'
 #consider automate to generate preinstallpacks.txt like #<!--preinstall-dev [some-packs...] -->

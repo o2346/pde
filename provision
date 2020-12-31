@@ -44,20 +44,21 @@ vmopt() {
 preinstall_apt() {
 
   if [ -z `which ansible` ]; then
-    export DEBIAN_FRONTEND=noninteractive
-    sudo apt update                       &&
-    sudo apt                               \
-      -o Dpkg::Options::="--force-confdef" \
-      -o Dpkg::Options::="--force-confold" \
-    -yq dist-upgrade
+    #export DEBIAN_FRONTEND=noninteractive
+    #sudo apt update                       &&
+    #sudo apt                               \
+    #  -o Dpkg::Options::="--force-confdef" \
+    #  -o Dpkg::Options::="--force-confold" \
+    #-yq dist-upgrade
     #https://askubuntu.com/a/734871
 
-    sudo apt install -y software-properties-common
+    #sudo apt install -y software-properties-common
     #It causes error later apt update in kali
     #sudo apt-add-repository ppa:ansible/ansible
 
     sudo apt update
     sudo apt install -y ansible
+    sudo apt upgrade -y ansible
     sudo chown -R -v $USER ~/.ansible
   fi
 
