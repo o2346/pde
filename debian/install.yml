@@ -591,6 +591,7 @@
         - transmission-cli
         - socat
         - neofetch
+        - tsung
     become: true
   - name: Packages - Programming
     apt:
