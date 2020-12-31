@@ -446,6 +446,7 @@
   - name: install sam, 2nd stupid invocation, or will not be present
     shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
      # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
+    when: is_brew_installed is failed
   - name: Create symbolic link for sam
     file:
       src: "/home/linuxbrew/.linuxbrew/bin/sam"
