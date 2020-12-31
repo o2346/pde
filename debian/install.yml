@@ -33,10 +33,18 @@
 #
 # dist-upgrade, autoremove
 #
+  - name: refer flag that indicates dist-upgrade has been done
+    command: ls /var/tmp/pde_is_dist_upgraded
+    register: is_dist_upgraded
+    ignore_errors: true
   - name: Update all packages to the latest version
     apt:
       upgrade: dist
       update_cache: yes
+    become: true
+    when: is_dist_upgraded is failed
+  - name: Settle flag it has been done
+    command: touch /var/tmp/pde_is_dist_upgraded
     become: true
 
 
@@ -868,8 +876,8 @@
               regexp="^PermitRootLogin"
               line="PermitRootLogin no"
               state=present
-    notify: restart ssh
     become: true
+    #notify: restart ssh
   - name: create ~/.ssh directory if it doesn't exist
     file:
       path: ~/.ssh
@@ -1107,10 +1115,10 @@
       autoremove: yes
     become: true
 
-  handlers:
-  - name: restart ssh
-    service: name=sshd state=restarted
-    become: true
+    #  handlers:
+    #  - name: restart ssh
+    #    service: name=sshd state=restarted
+    #    become: true
 
 #
 # Android
