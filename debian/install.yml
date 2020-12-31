@@ -29,6 +29,21 @@
   - name: Print ansible_distribution
     debug:
       msg: "{{ ansible_distribution }}"
+#
+#SAM
+#
+#https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+  - name: homwbrew - checking already installed
+    command: test -d /home/linuxbrew/.linuxbrew
+    register: is_brew_installed
+    ignore_errors: true
+  - name: install homebrew and sam
+    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/brew-sam.sh | bash -s
+    when: is_brew_installed is failed
+  - name: install sam - stupidly 2nd invocation
+    shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
+    # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
+    # In addition, ensure path to '/home/linuxbrew/.linuxbrew/bin/sam'. Then finally you could invoke the command 'sam'
 
 #
 # dist-upgrade
