@@ -561,6 +561,35 @@
           #http://www.wheel.gr.jp/~dai/fonts/pcf_on_ubuntu.html
         - zsh
     become: true
+  - name: Packages - Tools (dependency-free)
+    apt:
+      state: latest
+      name:
+        - emacs
+        - htop
+        - nkf
+        - keepassx
+          #- mp3splt
+        #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
+        - wine
+        - tig
+        - whois
+        - tree
+        - inotify-tools
+        - w3m
+        - w3m-img
+        - pdftk
+          #https://cromwell-intl.com/open-source/pdf-not-authorized.html
+        # okular settings: space & shift+space for next/previous page, instead of scrolling up/down
+        - okular
+        - entr
+        - colordiff
+        - fdupes
+          # https://linux.die.net/man/1/fdupes
+          # https://www.tecmint.com/fdupes-find-and-delete-duplicate-files-in-linux/
+          # https://github.com/adrianlopezroche/fdupes
+          # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
+    become: true
   - name: Packages - Graphichs,Video
     apt:
       state: latest
@@ -587,14 +616,6 @@
       state: latest
       name:
         #- vim-gtk #taking care of clipboard functionality since default version does not support
-        - emacs
-        - htop
-        - nkf
-        - keepassx
-          #- mp3splt
-        #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
-        - wine
-        - tig
         - chromium
         - clang #for NeoBundle
         - ssh
@@ -602,8 +623,6 @@
         - openssh-server
           #https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-enable-ssh-on-ubuntu-18-04-linux-mint-19-debian-9.html
         - firewall-applet #replacement of ufw
-        - whois
-        - tree
         #You are using pip version 8.1.1, however version 9.0.1 is available.
         #You should consider upgrading via the 'pip install --upgrade pip' command.
         - python3-pip
@@ -615,13 +634,8 @@
         # sudo pip install -U setuptools
         # sudo pip install csvkit
         # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
-        - inotify-tools
         - guile-3.0
         - guile-3.0-dev
-        - w3m
-        - w3m-img
-        - pdftk
-          #https://cromwell-intl.com/open-source/pdf-not-authorized.html
         # https://bw.org/ldcsql/
         # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
         # deploy sid into docroot afterward
@@ -656,9 +670,6 @@
         #driver   : nvidia-418 - third-party free
         #driver   : nvidia-410 - third-party free
         #driver   : nvidia-415 - third-party free
-        # sudo apt-get -y oklar # https://www.google.co.jp/search?q=linux+pdf+viewer+dark
-        # okular settings: space & shift+space for next/previous page, instead of scrolling up/down
-        - okular
         - gnuplot
         # - pandoc apt has old version. see  https://pandoc.org/installing.html
         - pv
@@ -674,15 +685,8 @@
         - cmake
         - build-essential
         - zsh-syntax-highlighting
-        - entr
-        - colordiff
         - libnotify-bin #enable notify-send command
           #      - wopr
-        - fdupes
-          # https://linux.die.net/man/1/fdupes
-          # https://www.tecmint.com/fdupes-find-and-delete-duplicate-files-in-linux/
-          # https://github.com/adrianlopezroche/fdupes
-          # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
         - socat
         - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
     become: true
