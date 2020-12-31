@@ -631,7 +631,6 @@
         - mesa-utils
           #- glxgears
           #- glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
-          # gimp is not present as default in Mint 20
         - gimp
         - exiftool
         - xsane
