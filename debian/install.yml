@@ -321,6 +321,10 @@
     debug:
       msg: "aws2 is not present, assuming aws version 1 is the current one. Updating..."
     when: is_awscliv2_present is failed
+  - name: Print on succeeded
+    debug:
+      msg: "{{ is_awscliv2_present.stdout }}"
+    when: is_awscliv2_present is succeeded
   - name: aws - Let awscli version 2 is present instead of 1 that is up in default unexpectedly
     command: sudo mv /usr/local/bin/aws /usr/local/bin/aws1
     when: is_awscliv2_present is failed
