@@ -531,17 +531,13 @@
     when: is_configreload_installed is failed
 
 #
-# general set of apps
+# general packages
 #
-  - name: install general packages
+  - name: Packages - Critical
     apt:
       state: latest
       name:
-        #- vim-gtk #taking care of clipboard functionality since default version does not support
         - neovim
-        - emacs
-        - htop
-        - nkf
         - tmux
         - rxvt-unicode-256color
           #https://wiki.archlinux.org/index.php/Rxvt-unicode
@@ -563,6 +559,15 @@
           #https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md
           #https://eng-blog.iij.ad.jp/archives/421
           #http://www.wheel.gr.jp/~dai/fonts/pcf_on_ubuntu.html
+    become: true
+  - name: install general packages
+    apt:
+      state: latest
+      name:
+        #- vim-gtk #taking care of clipboard functionality since default version does not support
+        - emacs
+        - htop
+        - nkf
         - keepassx
         - vlc
         - smplayer
