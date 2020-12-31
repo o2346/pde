@@ -31,7 +31,7 @@
       msg: "{{ ansible_distribution }}"
 
 #
-# dist-upgrade, autoremove
+# dist-upgrade
 #
   - name: refer flag that indicates dist-upgrade has been done
     command: ls /var/tmp/pde_is_dist_upgraded
@@ -47,6 +47,18 @@
     command: touch /var/tmp/pde_is_dist_upgraded
     become: true
 
+#
+# Omit some packages flag
+#
+  - name: refer flag that indicates to omit some packages for time saving
+    command: ls /var/tmp/pde_avoid_some
+    register: avoid_some
+    ignore_errors: true
+  - name: Print on succeeded confirmation
+    debug:
+      msg: "{{ avoid_some.stdout }}"
+
+    #when: avoid_some is failed
 
 #Kali GNU/Linux
 #https://raymii.org/s/tutorials/Ansible_-_Only_if_on_specific_distribution_or_distribution_version.html
@@ -122,7 +134,6 @@
       name:
         - gnome-keyring
       state: absent
-      autoclean: yes
     become: true
 
 #
@@ -227,12 +238,13 @@
         - fcitx
         - fcitx-mozc
       state: latest
-      autoclean: yes
       install_recommends: yes
     become: true
+    when: avoid_some is failed
     #when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   - name: set fcitx as default, restarting is required
     command: im-config -n fcitx
+    when: avoid_some is failed
     #when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
       #https://stackoverflow.com/questions/52743147/changing-ansible-loop-due-to-v2-11-deprecation
 
@@ -330,7 +342,6 @@
       name:
         - python3-pip
       state: latest
-      autoclean: yes
       install_recommends: yes
     become: true
   - name: upgrade pip
@@ -845,6 +856,7 @@
   - name: rclone install
     shell: which rclone || curl https://rclone.org/install.sh | sudo bash
     become: true
+    when: avoid_some is failed
     #TODO: consider to do it through apt, availabe both mint & kali lately
 
 #
@@ -923,12 +935,14 @@
         - virtualbox-dkms
         - virtualbox-guest-additions-iso
     become: true
+    when: avoid_some is failed
   - name: add "{{ansible_user_id}}" into group netdev
     user:
       name: "{{ansible_user_id}}"
       groups: vboxusers
       append: yes
     become: true
+    when: avoid_some is failed
 
 #
 # pip
@@ -940,6 +954,7 @@
         - setuptools
         - csvkit
     become: true
+    when: avoid_some is failed
 
   - name: sitecustomize.py
     blockinfile:
@@ -949,6 +964,7 @@
         import sys
         sys.setdefaultencoding('utf-8')
     become: true
+    when: avoid_some is failed
 
 #
 # mail command settings
@@ -982,6 +998,7 @@
         - libvirt-clients
       state: latest
     become: true
+    when: avoid_some is failed
       #  - name: start libvirt-bin
       #    service: name=libvirt-bin state=restarted enabled=yes
       #    become: true
@@ -991,12 +1008,14 @@
       dest: /etc/modules
       line: 'vhost_net'
     become: true
+    when: avoid_some is failed
   - name: adduser
     user: >-
       name={{ansible_user_id}}
       groups=root,libvirt,kvm
       append=true
     become: true
+    when: avoid_some is failed
 
       #https://linuxhint.com/install_kvm_virtualization_ubuntu/
 
@@ -1019,6 +1038,7 @@
         - default-jre
       state: latest
     become: true
+    when: avoid_some is failed
   - name: Creates directory
     file:
       path: /opt/plantuml
@@ -1048,6 +1068,7 @@
           #        - texlive-fonts-recommended
       state: latest
     become: true
+    when: avoid_some is failed
 # https://texwiki.texjp.org/?Linux%2FLinux%20Mint
 # https://linuxconfig.org/how-to-install-latex-on-ubuntu-20-04-focal-fossa-linux
 
@@ -1063,6 +1084,7 @@
         - libssl-dev
       state: latest
     become: true
+    when: avoid_some is failed
 
   - name: upgrade pip
     pip:
@@ -1070,10 +1092,12 @@
       executable: pip3
       state: latest
     become: true
+    when: avoid_some is failed
 
   - name: mitmproxy
     command: pip3 install --ignore-installed mitmproxy
     become: true
+    when: avoid_some is failed
 
 #
 # stderred
