@@ -313,76 +313,25 @@
     when: is_aws_installed is failed
     become: true
 
-  - name: aws - checking version of aws
-    shell: aws --version | grep 'aws-cli/2'
-    register: is_awscliv2_present
-    ignore_errors: true
-  - name: Print on failed
-    debug:
-      msg: "aws2 is not present, assuming aws version 1 is the current one. Updating..."
-    when: is_awscliv2_present is failed
-  - name: Print on succeeded
-    debug:
-      msg: "{{ is_awscliv2_present.stdout }}"
-    when: is_awscliv2_present is succeeded
-  - name: aws - Let awscli version 2 is present instead of 1 that is up in default unexpectedly
-    command: mv /usr/local/bin/aws /usr/local/bin/aws1
-    when: is_awscliv2_present is failed
-    become: true
-  - name: Create symbolic link for aws2
-    file:
-      src: "/usr/local/aws-cli/v2/current/bin/aws"
-      dest: "/usr/local/bin/aws"
-      state: link
-    when: is_awscliv2_present is failed
-    become: true
-    #cd /usr/local/bin/
-    #sudo mv ./aws ./aws1
-    #sudo ln -s /usr/local/aws-cli/v2/current/bin/aws aws
-
-  - name: aws - checking version of aws
-    shell: aws --version
-    register: awsversion
-    ignore_errors: true
-  - name: Print for aws version
-    debug:
-      msg: "{{ awsversion.stdout }}"
-
-# other tools from aws
-  - name: install prerequisites
+# Tools for aws
+  - name: Tools for aws - install prerequisites
     apt:
       name:
         - python3-pip
       state: latest
       install_recommends: yes
     become: true
-  - name: aws - checking version of aws
-    shell: aws --version
-    register: awsversion
-    ignore_errors: true
-  - name: Print for aws version
-    debug:
-      msg: "{{ awsversion.stdout }}"
   - name: upgrade pip
     pip:
       name: pip
       executable: pip3
       state: latest
     become: true
-  - name: aws - checking version of aws
-    shell: aws --version
-    register: awsversion
-    ignore_errors: true
-  - name: Print for aws version
-    debug:
-      msg: "{{ awsversion.stdout }}"
   - name: install tools for AWS
     pip:
       name:
-        #- aws-shell #https://github.com/awslabs/aws-shell
         - cfn-lint
         - rdk
-          #- sam
       #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
       executable: pip3
     become: true
@@ -404,6 +353,10 @@
   - name: Print for aws version
     debug:
       msg: "{{ awsversion.stdout }}"
+  - name: aws - checking version of aws
+    shell: aws --version | grep 'aws-cli/2'
+    register: is_awscliv2_present
+
 #
 #SAM
 #
