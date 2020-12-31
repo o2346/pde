@@ -559,6 +559,28 @@
           #https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md
           #https://eng-blog.iij.ad.jp/archives/421
           #http://www.wheel.gr.jp/~dai/fonts/pcf_on_ubuntu.html
+        - zsh
+    become: true
+  - name: Packages - Graphichs,Video
+    apt:
+      state: latest
+      name:
+        - vlc
+        - smplayer
+        - k3b
+        - ffmpeg
+        - shotwell #image viewer for .NEF https://www.linuxquestions.org/questions/linux-newbie-8/viewing-nef-4175596548/
+          # https://yermakov.net/adding-nef-preview-to-linux-mint-file-manager-nemo/
+          #- gnome-raw-thumbnailer
+        - libopenraw7
+        - libopenrawgnome7
+        - imagemagick
+        - krita
+        - mesa-utils
+          #- glxgears
+          #- glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
+          # gimp is not present as default in Mint 20
+        - gimp
     become: true
   - name: install general packages
     apt:
@@ -569,11 +591,6 @@
         - htop
         - nkf
         - keepassx
-        - vlc
-        - smplayer
-        - k3b
-        - zsh
-        - ffmpeg
           #- mp3splt
         #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
         - wine
@@ -666,20 +683,8 @@
           # https://www.tecmint.com/fdupes-find-and-delete-duplicate-files-in-linux/
           # https://github.com/adrianlopezroche/fdupes
           # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
-        - shotwell #image viewer for .NEF https://www.linuxquestions.org/questions/linux-newbie-8/viewing-nef-4175596548/
-          # https://yermakov.net/adding-nef-preview-to-linux-mint-file-manager-nemo/
-          #- gnome-raw-thumbnailer
-        - libopenraw7
-        - libopenrawgnome7
-        - imagemagick
         - socat
-        - krita
         - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
-        - mesa-utils
-          #- glxgears
-          #- glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
-          # gimp is not present as default in Mint 20
-        - gimp
     become: true
     #when: avoid_some is failed
 
