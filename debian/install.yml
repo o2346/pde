@@ -594,6 +594,8 @@
           # https://github.com/adrianlopezroche/fdupes
           # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
         - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
+        - transmission-cli
+        - socat
     become: true
   - name: Packages - Programming
     apt:
@@ -676,7 +678,6 @@
         - libapache2-mod-php
         - php-sqlite3
         - php-common
-        - transmission-cli
         # http://www.mirandora.com/?p=697
         # ~/.config/chromium/Default/History
         - sqlite3
@@ -693,7 +694,6 @@
           #convert: not authorized `show:' @ error/constitute.c/WriteImage/1028.
         - build-essential
           #      - wopr
-        - socat
     become: true
     #when: avoid_some is failed
 
