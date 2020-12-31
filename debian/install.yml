@@ -526,7 +526,7 @@
     when: is_configreload_installed is failed
 
 #
-# general packages
+# Packages for General use
 #
   - name: Packages - Critical
     apt:
@@ -590,6 +590,7 @@
         - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
         - transmission-cli
         - socat
+        - neofetch
     become: true
   - name: Packages - Programming
     apt:
