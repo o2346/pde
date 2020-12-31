@@ -560,6 +560,8 @@
           #https://eng-blog.iij.ad.jp/archives/421
           #http://www.wheel.gr.jp/~dai/fonts/pcf_on_ubuntu.html
         - zsh
+        - zsh-syntax-highlighting
+        - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
     become: true
   - name: Packages - Tools (dependency-free)
     apt:
@@ -576,6 +578,8 @@
         - whois
         - tree
         - inotify-tools
+          #enable notify-send command
+        - libnotify-bin
         - w3m
         - w3m-img
         - pdftk
@@ -589,6 +593,29 @@
           # https://www.tecmint.com/fdupes-find-and-delete-duplicate-files-in-linux/
           # https://github.com/adrianlopezroche/fdupes
           # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
+        - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
+    become: true
+  - name: Packages - Programming
+    apt:
+      state: latest
+      name:
+        - clang #for NeoBundle
+        - ssh
+        - sshpass
+        - openssh-server
+          #https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-enable-ssh-on-ubuntu-18-04-linux-mint-19-debian-9.html
+        - firewall-applet #replacement of ufw
+        #You are using pip version 8.1.1, however version 9.0.1 is available.
+        #You should consider upgrading via the 'pip install --upgrade pip' command.
+        - python3-pip
+        # pip broken problem:
+        #   sudo apt-get remove --purge python-pip
+        #   wget https://bootstrap.pypa.io/get-pip.py
+        #   python3 ./get-pip.py
+        # https://github.com/pypa/setuptools/issues/937
+        # sudo pip install -U setuptools
+        # sudo pip install csvkit
+        - cmake
     become: true
   - name: Packages - Graphichs,Video
     apt:
@@ -610,47 +637,8 @@
           #- glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
           # gimp is not present as default in Mint 20
         - gimp
-    become: true
-  - name: install general packages
-    apt:
-      state: latest
-      name:
-        #- vim-gtk #taking care of clipboard functionality since default version does not support
-        - chromium
-        - clang #for NeoBundle
-        - ssh
-        - sshpass
-        - openssh-server
-          #https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-enable-ssh-on-ubuntu-18-04-linux-mint-19-debian-9.html
-        - firewall-applet #replacement of ufw
-        #You are using pip version 8.1.1, however version 9.0.1 is available.
-        #You should consider upgrading via the 'pip install --upgrade pip' command.
-        - python3-pip
-        # pip broken problem:
-        #   sudo apt-get remove --purge python-pip
-        #   wget https://bootstrap.pypa.io/get-pip.py
-        #   python3 ./get-pip.py
-        # https://github.com/pypa/setuptools/issues/937
-        # sudo pip install -U setuptools
-        # sudo pip install csvkit
-        # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
-        - guile-3.0
-        - guile-3.0-dev
-        # https://bw.org/ldcsql/
-        # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
-        # deploy sid into docroot afterward
-        - apache2
-        - php
-        - libapache2-mod-php
-        - php-sqlite3
-        - php-common
-        - tshark
-        - transmission-cli
-        # http://www.mirandora.com/?p=697
-        # ~/.config/chromium/Default/History
-        - sqlite3
-        # benchmark https://www.howtoforge.com/how-to-benchmark-your-system-cpu-file-io-mysql-with-sysbench
-        - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
+        - exiftool
+        - xsane
         # nvidia-smi -q -d temperature #https://askubuntu.com/questions/34449/how-to-see-the-video-card-temperature-nvidia-ati-intel
         #- nvidia-driver-430
         #- nvidia-settings
@@ -670,11 +658,33 @@
         #driver   : nvidia-418 - third-party free
         #driver   : nvidia-410 - third-party free
         #driver   : nvidia-415 - third-party free
+    become: true
+  - name: Packages - Miscs
+    apt:
+      state: latest
+      name:
+        #- vim-gtk #taking care of clipboard functionality since default version does not support
+        - chromium
+        # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
+        - guile-3.0
+        - guile-3.0-dev
+        # https://bw.org/ldcsql/
+        # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
+        # deploy sid into docroot afterward
+        - apache2
+        - php
+        - libapache2-mod-php
+        - php-sqlite3
+        - php-common
+        - tshark
+        - transmission-cli
+        # http://www.mirandora.com/?p=697
+        # ~/.config/chromium/Default/History
+        - sqlite3
+        # benchmark https://www.howtoforge.com/how-to-benchmark-your-system-cpu-file-io-mysql-with-sysbench
         - gnuplot
         # - pandoc apt has old version. see  https://pandoc.org/installing.html
         - pv
-        - exiftool
-        - xsane
         - ttf-mscorefonts-installer
           #After installing the fonts, we need to update the font cache using command:
           #sudo fc-cache -f -v
@@ -682,13 +692,9 @@
 
           #http://zairyo.susi.oita-u.ac.jp/wordpress/?p=7385
           #convert: not authorized `show:' @ error/constitute.c/WriteImage/1028.
-        - cmake
         - build-essential
-        - zsh-syntax-highlighting
-        - libnotify-bin #enable notify-send command
           #      - wopr
         - socat
-        - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
     become: true
     #when: avoid_some is failed
 
