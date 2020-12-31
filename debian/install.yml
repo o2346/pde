@@ -567,7 +567,6 @@
     apt:
       state: latest
       name:
-        - emacs
         - htop
         - nkf
         - keepassx
