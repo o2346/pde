@@ -55,6 +55,7 @@
       path: /etc/apt/sources.list
       regexp: '^#deb-src http://http.kali.org/kali'
       line: 'deb-src http://http.kali.org/kali kali-rolling main contrib non-free'
+    when: ansible_distribution == 'Kali GNU/Linux'
     become: true
   - name: refer flag that indicates full-upgrade has been done
     command: ls /var/tmp/pde_is_full_upgraded
@@ -108,20 +109,19 @@
     #when: avoid_some is failed
 
 #Kali GNU/Linux
-#https://raymii.org/s/tutorials/Ansible_-_Only_if_on_specific_distribution_or_distribution_version.html
 #
   - name: Touch a file, to suppress login message on zsh
     file:
       path: ~/.hushlogin
       state: touch
     when: ansible_distribution == 'Kali GNU/Linux'
+#https://raymii.org/s/tutorials/Ansible_-_Only_if_on_specific_distribution_or_distribution_version.html
 
-#
 #
 # Network Manager disable
 # http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired
 #
-# Since OS will break becouse of this
+# Since OS will break becouse of this(mint)
 #- name: disable service network-manager
 #   service: name=network-manager state=stopped enabled=no
 #   become: true
@@ -173,7 +173,7 @@
     become: true
     #issue: >&2 would not be colored even 'make 32 && make 64'
     #ERROR: ld.so: object '/home/uuuu/tmp/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
-    #
+
 #
 # Dotfiles
 #
@@ -211,9 +211,9 @@
       chdir: ~/.uc
 
 #
-# Get rid of the keyring, annoying
+# Get rid of. annoying
 #
-  - name: Get rid of the keyring, annoying
+  - name: Get rid of keyring, annoying
     apt:
       name:
         - gnome-keyring
@@ -330,7 +330,7 @@
     command: im-config -n fcitx
     when: avoid_some is failed
     #when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-      #https://stackoverflow.com/questions/52743147/changing-ansible-loop-due-to-v2-11-deprecation
+    #https://stackoverflow.com/questions/52743147/changing-ansible-loop-due-to-v2-11-deprecation
 
 #
 # Node.js
@@ -428,8 +428,6 @@
       #https://github.com/awslabs/aws-sam-cli
       #https://github.com/awslabs/aws-cloudformation-templates
       #https://github.com/awslabs/aws-deployment-framework
-
-    #/home/linuxbrew/.linuxbrew/bin
   - name: aws - checking version of aws
     shell: aws --version
     register: awsversion
@@ -511,6 +509,7 @@
       mode: '0440'
     when: is_resizefont_installed is failed
 
+  #urxvt Plugins
   - name: urxvt config-reload - checking already installed
     command: ls ~/.urxvt/ext/config-reload
     register: is_configreload_installed
@@ -910,10 +909,16 @@
 #
 # rclone
 #
-  - name: rclone install
-    shell: which rclone || curl https://rclone.org/install.sh | sudo bash
+  - name: rclone - install
+    apt:
+      state: latest
+      name:
+        - rclone
     become: true
-    when: avoid_some is failed
+    #  - name: rclone install
+    #    shell: which rclone || curl https://rclone.org/install.sh | sudo bash
+    #    become: true
+    #    when: avoid_some is failed
     #TODO: consider to do it through apt, availabe both mint & kali lately
 
 #
