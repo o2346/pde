@@ -85,7 +85,14 @@
     shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
     when: is_brew_installed is failed
     # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
+  - name: Create symbolic link for sam
+    file:
+      src: "/home/linuxbrew/.linuxbrew/bin/sam"
+      dest: "/usr/local/bin/sam"
+      state: link
+    become: true
     # In addition, ensure path to '/home/linuxbrew/.linuxbrew/bin/sam'. Then finally you could invoke the command 'sam'
+    # Gave up adding to PATH or alias in .zshenv, .zshrc, did not work
 
 #
 # Check 'omit some packages' flag
@@ -102,6 +109,13 @@
 
 #Kali GNU/Linux
 #https://raymii.org/s/tutorials/Ansible_-_Only_if_on_specific_distribution_or_distribution_version.html
+#
+  - name: Touch a file, to suppress login message on zsh
+    file:
+      path: ~/.hushlogin
+      state: touch
+    when: ansible_distribution == 'Kali GNU/Linux'
+
 #
 #
 # Network Manager disable
