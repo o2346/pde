@@ -75,12 +75,12 @@ bash install -v
 
 Development mode. Checkout Branch "Develop" and play normal playbook
 ```
-curl https://raw.githubusercontent.com/o2346/pde/develop/install | bash -s - -d
+curl https://raw.githubusercontent.com/o2346/pde/develop/provision | bash -s - -d
 ```
 
 Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will be played instead of normal playbook)
 ```
-curl https://raw.githubusercontent.com/o2346/pde/master/install | bash -s - -e
+curl https://raw.githubusercontent.com/o2346/pde/master/provision | bash -s - -e
 ```
 
 ## Why I made this
