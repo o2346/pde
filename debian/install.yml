@@ -533,14 +533,6 @@
 #
 # general set of apps
 #
-#2020/12/29 , kali 2020.4
-#E: Package 'mp3splt' has no installation candidate
-#E: Package 'chromium-browser' has no installation candidate
-#E: Package 'guile-2.0' has no installation candidate
-#E: Unable to locate package guile-2.0-dev
-#E: Couldn't find any package by glob 'guile-2.0-dev'
-#E: Unable to locate package glxgears
-#E: Unable to locate package glmark2
   - name: install general packages
     apt:
       state: latest
@@ -579,9 +571,8 @@
         - ffmpeg
           #- mp3splt
         #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
-        #- wine
+        - wine
         - tig
-          #- chromium-browser
         - chromium
         - clang #for NeoBundle
         - ssh
@@ -682,14 +673,19 @@
         - mesa-utils
           #- glxgears
           #- glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
-          #sudo apt install -y mesa-utils
-
-        #https://www.tixati.com/download/linux.html
-        #There was a problem with transmission
-        #https://forum.transmissionbt.com/viewtopic.php?t=18390
-        - gimp #not present as default in Mint 20
+          # gimp is not present as default in Mint 20
+        - gimp
     become: true
     #when: avoid_some is failed
+
+#2020/12/29 , kali 2020.4
+#E: Package 'mp3splt' has no installation candidate
+#E: Package 'chromium-browser' has no installation candidate
+#E: Package 'guile-2.0' has no installation candidate
+#E: Unable to locate package guile-2.0-dev
+#E: Couldn't find any package by glob 'guile-2.0-dev'
+#E: Unable to locate package glxgears
+#E: Unable to locate package glmark2
 
 #
 # Docker
