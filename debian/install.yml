@@ -106,8 +106,6 @@
     debug:
       msg: "{{ avoid_some.stdout }}"
 
-    #when: avoid_some is failed
-
 #Kali GNU/Linux
 #
   - name: Touch a file, to suppress login message on zsh
