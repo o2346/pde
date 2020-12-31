@@ -446,9 +446,9 @@
   - name: install sam
     shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
 
-## jmespath
+## jpterm/jmespath
 #https://pypi.org/project/jmespath-terminal/
-  - name: jmespath - checking already installed
+  - name: jpterm/jmespath - checking already installed
     command: which jpterm
     register: is_jmespath_installed
     ignore_errors: true
