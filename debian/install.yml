@@ -340,6 +340,14 @@
     #sudo mv ./aws ./aws1
     #sudo ln -s /usr/local/aws-cli/v2/current/bin/aws aws
 
+  - name: aws - checking version of aws
+    shell: aws --version
+    register: awsversion
+    ignore_errors: true
+  - name: Print for aws version
+    debug:
+      msg: "{{ awsversion.stdout }}"
+
 # other tools from aws
   - name: install prerequisites
     apt:
@@ -348,16 +356,30 @@
       state: latest
       install_recommends: yes
     become: true
+  - name: aws - checking version of aws
+    shell: aws --version
+    register: awsversion
+    ignore_errors: true
+  - name: Print for aws version
+    debug:
+      msg: "{{ awsversion.stdout }}"
   - name: upgrade pip
     pip:
       name: pip
       executable: pip3
       state: latest
     become: true
+  - name: aws - checking version of aws
+    shell: aws --version
+    register: awsversion
+    ignore_errors: true
+  - name: Print for aws version
+    debug:
+      msg: "{{ awsversion.stdout }}"
   - name: install tools for AWS
     pip:
       name:
-        - aws-shell #https://github.com/awslabs/aws-shell
+        #- aws-shell #https://github.com/awslabs/aws-shell
         - cfn-lint
         - rdk
           #- sam
@@ -375,6 +397,13 @@
       #https://github.com/awslabs/aws-deployment-framework
 
     #/home/linuxbrew/.linuxbrew/bin
+  - name: aws - checking version of aws
+    shell: aws --version
+    register: awsversion
+    ignore_errors: true
+  - name: Print for aws version
+    debug:
+      msg: "{{ awsversion.stdout }}"
 #
 #SAM
 #
