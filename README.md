@@ -30,7 +30,7 @@ PDE(Provision Development Environment) is system configration for local developm
 
 ## What is this
 
-Configuration code like [Server provisioning](https://en.wikipedia.org/wiki/Provisioning#Server_provisioning), but this is for homebuild computer, or laptop I own.
+Configuration code like [Server provisioning](https://en.wikipedia.org/wiki/Provisioning#Server_provisioning), but this is for homebuild computer, or laptop, or something else I own.
 
 * ./provision
   * entry point
