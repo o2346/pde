@@ -1,5 +1,3 @@
-#!/bin/bash
-
 #This is to set refresh rate 60Hz as expected
 
 #In my case I use this 4k monitor but refresh rate was unexpectedly limited to 30 Hz in default on Linux mint.
@@ -11,7 +9,9 @@
 #https://askubuntu.com/questions/1260809/cant-get-4k-60hz-only-30hz
 #https://www.google.co.jp/search?safe=off&num=24&hl=en&q=gdbus.error%3Aorg.gtk.gdbus.unmappedGerror.quark._gnome_2drr_2derror_2dquark.Code2%3A+could+not+set+the+configuration+for+CRTC+79
 
-if [ -z "$1" ]; then
+echo "$0 called" > /tmp/dispconf_called
+
+if test -z "$1"; then
   # Assuming the 4k is already set as Primary moniter
   display_port="`xrandr | grep 'connected primary' | awk '{print $1}'`"
   # It should be something like HDMI-A-3
