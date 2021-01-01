@@ -55,7 +55,7 @@ curl https://raw.githubusercontent.com/o2346/pde/master/provision | bash -s
 curl https://raw.githubusercontent.com/o2346/pde/develop/provision | bash -s - -d
 ```
 
-with playbook `exam.yml` for experiment other than default
+with playbook `exam.yml` for experiment instead of default playbook `install.yml`
 
 ```
 curl https://raw.githubusercontent.com/o2346/pde/develop/provision | bash -s - -e
