@@ -183,8 +183,11 @@
     args:
       chdir: /opt/stderred
     become: true
-    #issue: >&2 would not be colored even 'make 32 && make 64'
+    #if https://www.google.co.jp/search?num=24&safe=off&hl=en&ei=AdvuX9ZUi_rAA6b3obgN&q=%22stderred%22+from+LD_PRELOAD+cannot+be+preloaded
     #ERROR: ld.so: object '/home/uuuu/tmp/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
+    # then issue following command
+    #cd /opt/stderred && sudo make clean && make
+    #Occured on Mint 20
 
 #
 # Dotfiles
