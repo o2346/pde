@@ -160,6 +160,7 @@
   - name: install dependencies for stderred
     apt:
       name:
+        #consider to remove, might not need
         - gcc-multilib #https://askubuntu.com/questions/904929/gcc-compile-32-bit-code-on-64-bit-system
         - cmake
       state: latest
