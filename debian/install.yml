@@ -70,13 +70,13 @@
 # Fix 4k monitor Refrash rate
 #
   - name: fix4k - checking 4k monitor is present
-    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | sh -
+    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | bash -s
     register: is_4kmonitor
     ignore_errors: true
-  - name: test script
-    shell: echo 'uname' | sh - > ~/.xprofile
+    #  - name: test script
+    #    shell: echo 'uname' | bash -s > ~/.xprofile
   - name: fix4k for specific monitor
-    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | sh - > ~/.xprofile
+    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | bash -s > ~/.xprofile
     when: is_4kmonitor is succeeded
 #
 #SAM
@@ -1235,3 +1235,6 @@
 #cat debian/preinstallpacks.txt | sed -e 's/ *-//g' | sed -e 's/$/ \\/g' | sed '$ s/.$//'
 #cat debian/preinstallpacks.txt | sed -e 's/^ \+-//g' | tr -d '\n'
 #consider automate to generate preinstallpacks.txt like #<!--preinstall-dev [some-packs...] -->
+#
+#for 2nd invocation;
+#ansible-playbook /tmp/pde/debian/install.yml -K --connection=local
