@@ -1,6 +1,6 @@
 # PDE
 
-PDE(Provision Development Environment) is system configration for local development machine(s) dedicated for me.
+PDE(Provision Development Environment) is system configration for local development machine(s) dedicated for **me**.
 
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
@@ -8,7 +8,7 @@ PDE(Provision Development Environment) is system configration for local developm
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Purpose</td>
-<td bgcolor="#FFFFFF" valign="top">Provision Unix-like machine for Personal Software Development</td>
+<td bgcolor="#FFFFFF" valign="top">Provision Unix-like machine for Personal use</td>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Operating system</td>
