@@ -49,7 +49,7 @@ Configuration code like [Server provisioning](https://en.wikipedia.org/wiki/Prov
 curl https://raw.githubusercontent.com/o2346/pde/master/provision | bash -s
 ```
 
-### Provision with playbook on the develop branch instead of master
+### [Optional] Provision with playbook on the develop branch instead of master
 
 ```
 curl https://raw.githubusercontent.com/o2346/pde/develop/provision | bash -s - -d
