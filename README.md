@@ -4,7 +4,7 @@ PDE(Provision Development Environment) is system configration for local developm
 
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<th colspan="2" bgcolor="#D0CDCD" align="center"><big>Personalized Development Environment</big></th>
+<th colspan="2" bgcolor="#D0CDCD" align="center"><big>Provision Development Environment</big></th>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Purpose</td>
@@ -12,7 +12,7 @@ PDE(Provision Development Environment) is system configration for local developm
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Operating system</td>
-<td bgcolor="#FFFFFF" valign="top"><a href="https://linuxmint.com/">some Debian based</a></td>
+<td bgcolor="#FFFFFF" valign="top"><a href="https://linuxmint.com/">Linux Mint 20</a></td>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Development status</td>
@@ -41,12 +41,9 @@ Automatically provision a Personal Computer like [Server provisioning](https://e
 
 ## Usase
 
-### Provisioner
-
 1. Install supported Operating System
 1. Run command shown below  
-**[WARNING]** _This may be cause of Destruction of your environment since the provisioner will run administratively.  
-Use disposable machine such as VM
+**[WARNING]** _This might cause of Destruction of your environment since it will run administratively. Use disposable machine such as VM_
 
 ```
 curl https://raw.githubusercontent.com/o2346/pde/master/provision | bash -s
@@ -68,7 +65,7 @@ curl https://raw.githubusercontent.com/o2346/pde/develop/provision | bash -s - -
 
 local environment as code
 
-* I wanted my local environment disposable and reproducible
+* I wanted mine disposable and reproducible
   * Even among separate machines. Not to depend on a specific one
   * Individuals may sometime crash unexpectedly
   * In such case no time to play with such crap
