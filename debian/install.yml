@@ -165,6 +165,13 @@
       state: latest
     become: true
     when: is_stderred_installed is failed
+  - name: install dependencies for stderred(ubuntu based)
+    apt:
+      name:
+        - build-essential
+      state: latest
+    become: true
+    when: ansible_distribution == 'Linux Mint'
   - name: clone stderred
     git:
       repo: https://github.com/sickill/stderred
