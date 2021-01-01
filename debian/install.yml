@@ -310,12 +310,12 @@
 #
 # Scripts
 #
-  - name: copy scrpts to /usr/local/bin
-    copy: >
-      src=./bin/
-      dest=/usr/local/bin
-      mode=755
-    become: true
+#  - name: copy scrpts to /usr/local/bin
+#    copy: >
+#      src=./bin/
+#      dest=/usr/local/bin
+#      mode=755
+#    become: true
 
 #
 # apt
