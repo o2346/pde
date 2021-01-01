@@ -567,7 +567,7 @@
         - zsh-syntax-highlighting
         - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
     become: true
-  - name: Packages - Tools (dependency-free)
+  - name: Packages - Tools (does not depend ot others)
     apt:
       state: latest
       name:
