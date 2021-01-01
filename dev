@@ -1,7 +1,0 @@
-#!/bin/bash
-
-cd `mktemp -d`
-pwd
-wget https://raw.githubusercontent.com/o2346/pde/develop/install
-chmod +x install
-./install -d

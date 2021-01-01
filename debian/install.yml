@@ -6,11 +6,6 @@
     font: 'MigMix 1M 16'
     font_monospace: 'Ricty Diminished Regular 15'
     font_titlebar: 'Migu 2M Bold 14'
-      #android_studio_url: https://dl.google.com/dl/android/studio/ide-zips/2.3.3.0
-      #android_studio_name: android-studio-ide-162.4069837-linux.zip
-      #android_studio_checksum: 1383cfd47441e5f820b6257a1bdd683e0e980bc76c7f2027ef84dc2e6ad2f17f
-      #android_studio_parentdir: /usr/local/
-      #android_studio_dir: android-studio
       # font_good_for_terminal: Migu 1M Regular # just memo
       # http://malkalech.com/urxvt_terminal_emulator
   become: no
@@ -26,11 +21,112 @@
       msg: "{{ etc_issue.stdout }}"
     when: etc_issue is succeeded
 
+  - name: Print ansible_distribution
+    debug:
+      msg: "{{ ansible_distribution }}"
+#
+# dist-upgrade
+#
+  - name: refer flag that indicates dist-upgrade has been done
+    command: ls /var/tmp/pde_is_dist_upgraded
+    register: is_dist_upgraded
+    ignore_errors: true
+  - name: dist-upgrade - Update all packages to the latest version
+    apt:
+      upgrade: dist
+      update_cache: yes
+    become: true
+    when: is_dist_upgraded is failed
+  - name: Settle flag it has been done
+    command: touch /var/tmp/pde_is_dist_upgraded
+    become: true
+
+#
+# full-upgrade
+#
+  #https://www.kali.org/docs/general-use/updating-kali/
+  - name: To update Kali, first ensure that /etc/apt/sources.list is properly populated
+    lineinfile:
+      path: /etc/apt/sources.list
+      regexp: '^#deb-src http://http.kali.org/kali'
+      line: 'deb-src http://http.kali.org/kali kali-rolling main contrib non-free'
+    when: ansible_distribution == 'Kali GNU/Linux'
+    become: true
+  - name: refer flag that indicates full-upgrade has been done
+    command: ls /var/tmp/pde_is_full_upgraded
+    register: is_full_upgraded
+    ignore_errors: true
+  - name: full-upgrade
+    apt:
+      upgrade: full
+      update_cache: yes
+    become: true
+    when: is_full_upgraded is failed
+  - name: Settle flag it has been done
+    command: touch /var/tmp/pde_is_full_upgraded
+    become: true
+
+#
+# Fix 4k monitor Refrash rate
+#
+  - name: fix4k - checking 4k monitor is present
+    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | bash -s
+    register: is_4kmonitor
+    ignore_errors: true
+    #  - name: test script
+    #    shell: echo 'uname' | bash -s > ~/.xprofile
+  - name: fix4k for specific monitor
+    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | bash -s > ~/.xprofile
+    when: is_4kmonitor is succeeded
+#
+#SAM
+#
+#https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+  - name: homwbrew - checking already installed
+    command: test -d /home/linuxbrew/.linuxbrew
+    register: is_brew_installed
+    ignore_errors: true
+  - name: install homebrew and sam
+    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/brew-sam.sh | bash -s
+    when: is_brew_installed is failed
+  - name: install sam - stupidly 2nd invocation
+    shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
+    when: is_brew_installed is failed
+    # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
+  - name: Create symbolic link for sam
+    file:
+      src: "/home/linuxbrew/.linuxbrew/bin/sam"
+      dest: "/usr/local/bin/sam"
+      state: link
+    become: true
+    # In addition, ensure path to '/home/linuxbrew/.linuxbrew/bin/sam'. Then finally you could invoke the command 'sam'
+    # Gave up adding to PATH or alias in .zshenv, .zshrc, did not work
+
+#
+# Check 'omit some packages' flag
+#
+  - name: refer flag that indicates to omit some packages for time saving
+    command: ls /tmp/pde_avoid_some
+    register: avoid_some
+    ignore_errors: true
+  - name: Print on succeeded confirmation
+    debug:
+      msg: "{{ avoid_some.stdout }}"
+
+#Kali GNU/Linux
+#
+  - name: Touch a file, to suppress login message on zsh
+    file:
+      path: ~/.hushlogin
+      state: touch
+    when: ansible_distribution == 'Kali GNU/Linux'
+#https://raymii.org/s/tutorials/Ansible_-_Only_if_on_specific_distribution_or_distribution_version.html
+
 #
 # Network Manager disable
 # http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired
 #
-# Since OS will break becouse of this
+# Since OS will break becouse of this(mint)
 #- name: disable service network-manager
 #   service: name=network-manager state=stopped enabled=no
 #   become: true
@@ -54,6 +150,47 @@
       #    become: true
 
 #
+# stderred
+# https://github.com/sickill/stderred
+#
+  - name: stdtrred - Check
+    command: ls /opt/stderred
+    register: is_stderred_installed
+    ignore_errors: true
+  - name: install dependencies for stderred
+    apt:
+      name:
+        #consider to remove, might not need
+        - gcc-multilib #https://askubuntu.com/questions/904929/gcc-compile-32-bit-code-on-64-bit-system
+        - cmake
+      state: latest
+    become: true
+    when: is_stderred_installed is failed
+  - name: install dependencies for stderred(ubuntu based)
+    apt:
+      name:
+        - build-essential
+      state: latest
+    become: true
+    when: ansible_distribution == 'Linux Mint'
+  - name: clone stderred
+    git:
+      repo: https://github.com/sickill/stderred
+      dest: /opt/stderred
+    become: true
+    when: is_stderred_installed is failed
+  - name: make stderred
+    command: make
+    args:
+      chdir: /opt/stderred
+    become: true
+    #if https://www.google.co.jp/search?num=24&safe=off&hl=en&ei=AdvuX9ZUi_rAA6b3obgN&q=%22stderred%22+from+LD_PRELOAD+cannot+be+preloaded
+    #ERROR: ld.so: object '/home/uuuu/tmp/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
+    # then issue following command
+    #cd /opt/stderred && sudo make clean && make
+    #Occured on Mint 20
+
+#
 # Dotfiles
 #
   - name: Dotfiles - Check
@@ -70,6 +207,10 @@
     debug:
       msg: "nothing found"
     when: is_uc_installed is failed
+  - name: Move Default .zshrc
+    command: mv ~/.zshrc ~/_zshrc_default
+    when: is_uc_installed is failed
+    ignore_errors: true
   - name: install Dotfiles
     shell: curl 'https://raw.githubusercontent.com/o2346/happy-scripts/develop/install.uc.sh' | bash -s - https://gist.github.com/o2346/e091ea8f6bf963d6a170a88579a3db08
     args:
@@ -86,14 +227,20 @@
       chdir: ~/.uc
 
 #
-# Get rid of the keyring, annoying
+# Get rid of. annoying
 #
-  - name: Get rid of the keyring, annoying
+  - name: Get rid of keyring, annoying
     apt:
       name:
         - gnome-keyring
       state: absent
-      autoclean: yes
+    become: true
+
+#
+# Get rid of old driver causes problem
+#
+  - name: Get rid of old driver causes problem
+    command: apt remove -y xserver-xorg-video-intel
     become: true
 
 #
@@ -119,14 +266,19 @@
 #      # Modern Mint Dark 1
   - name: Theme - Window borders
     command: gsettings set org.cinnamon.desktop.wm.preferences theme "Mint-Y-Dark"
+    when: ansible_distribution == 'Linux Mint'
   - name: Theme - Icons
     command: gsettings set org.cinnamon.desktop.interface icon-theme "Mint-Y"
+    when: ansible_distribution == 'Linux Mint'
   - name: Theme - Controls
     command: gsettings set org.cinnamon.desktop.interface gtk-theme "Adwaita-dark"
+    when: ansible_distribution == 'Linux Mint'
   - name: Theme - Mouse Pointer
     command: gsettings set org.cinnamon.desktop.interface cursor-theme "Adwaita"
+    when: ansible_distribution == 'Linux Mint'
   - name: Theme - Desktop
     command: gsettings set org.cinnamon.theme name "Mint-Y-Dark-Blue"
+    when: ansible_distribution == 'Linux Mint'
       #  - name: list themes
       #    command: ls ~/.themes
       #    register: themes
@@ -155,9 +307,6 @@
 # It requires to modify cinnamon.css and a little complicated
 
 #
-# Chomium setting ( gave up )
-
-#
 # Scripts
 #
   - name: copy scrpts to /usr/local/bin
@@ -179,6 +328,8 @@
       dest=/etc/apt/sources.list
       mode=0644
     become: yes
+    when: ansible_distribution == 'Linux Mint'
+#https://www.kali.org/docs/general-use/kali-linux-sources-list-repositories/
 
 # fcitx mozc
   - name: install ime, fcitx mozc
@@ -187,15 +338,15 @@
         - fcitx
         - fcitx-mozc
       state: latest
-      autoclean: yes
-      update_cache: yes
       install_recommends: yes
     become: true
-    when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    when: avoid_some is failed
+    #when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   - name: set fcitx as default, restarting is required
     command: im-config -n fcitx
-    when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-      #https://stackoverflow.com/questions/52743147/changing-ansible-loop-due-to-v2-11-deprecation
+    when: avoid_some is failed
+    #when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    #https://stackoverflow.com/questions/52743147/changing-ansible-loop-due-to-v2-11-deprecation
 
 #
 # Node.js
@@ -256,20 +407,18 @@
     when: is_aws_installed is failed and is_aws_downloaded is failed
     become: true
   - name: aws - install
-    shell: sudo ./aws/install
+    shell: ./aws/install
     args:
       chdir: /tmp/
     when: is_aws_installed is failed
     become: true
 
-# other tools from aws
-  - name: install prerequisites
+# Tools for aws
+  - name: Tools for aws - install prerequisites
     apt:
       name:
         - python3-pip
       state: latest
-      autoclean: yes
-      update_cache: yes
       install_recommends: yes
     become: true
   - name: upgrade pip
@@ -281,13 +430,10 @@
   - name: install tools for AWS
     pip:
       name:
-        - aws-shell #https://github.com/awslabs/aws-shell
         - cfn-lint
         - rdk
-        - sam
       #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
       executable: pip3
-      extra_args: "-U"
     become: true
       #consider to add more tools for handy
       #https://github.com/awslabs/aws-data-wrangler
@@ -298,10 +444,20 @@
       #https://github.com/awslabs/aws-sam-cli
       #https://github.com/awslabs/aws-cloudformation-templates
       #https://github.com/awslabs/aws-deployment-framework
+  - name: aws - checking version of aws
+    shell: aws --version
+    register: awsversion
+    ignore_errors: true
+  - name: Print for aws version
+    debug:
+      msg: "{{ awsversion.stdout }}"
+  - name: aws - checking version of aws
+    shell: aws --version | grep 'aws-cli/2'
+    register: is_awscliv2_present
 
-## jmespath
+## jpterm/jmespath
 #https://pypi.org/project/jmespath-terminal/
-  - name: jmespath - checking already installed
+  - name: jpterm/jmespath - checking already installed
     command: which jpterm
     register: is_jmespath_installed
     ignore_errors: true
@@ -330,20 +486,62 @@
         - ufw
       state: absent
     become: true
+    when: ansible_distribution == 'Linux Mint'
+
+  #
+  # urxvt plugins
+  #
+  - name: urxvt - Create a directory if it does not exist
+    file:
+      path: ~/.urxvt/ext/
+      state: directory
+      mode: '0755'
+  - name: urxvt resize-font - checking already installed
+    command: ls ~/.urxvt/ext/resize-font
+    register: is_resizefont_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing"
+    when: is_resizefont_installed is failed
+  - name: urxvt - resize-font Download
+    get_url:
+      url: https://raw.githubusercontent.com/simmel/urxvt-resize-font/master/resize-font
+      dest: ~/.urxvt/ext/resize-font
+      mode: '0440'
+    when: is_resizefont_installed is failed
+
+  #urxvt Plugins
+  - name: urxvt config-reload - checking already installed
+    command: ls ~/.urxvt/ext/config-reload
+    register: is_configreload_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing"
+    when: is_configreload_installed is failed
+  - name: urxvt config-reload - Dependencies
+    command: sudo cpan AnyEvent Linux::FD common::sense
+    when: is_configreload_installed is failed
+    become: true
+  - name: urxvt config-reload - Clone a repo with separate git directory
+    #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/git_module.html
+    git:
+      repo: https://github.com/regnarg/urxvt-config-reload.git
+      dest: /tmp/urxvt-config-reload
+    when: is_configreload_installed is failed
+  - name: urxvt config-reload - Deploy elements
+    shell: "cp -u /tmp/urxvt-config-reload/config* ~/.urxvt/ext/"
+    when: is_configreload_installed is failed
 
 #
-# general set of apps
+# Packages for General use
 #
-  - name: install general packages
+  - name: Packages - Critical
     apt:
-      update_cache: yes
       state: latest
       name:
-        #- vim-gtk #taking care of clipboard functionality since default version does not support
         - neovim
-        - emacs
-        - htop
-        - nkf
         - tmux
         - rxvt-unicode-256color
           #https://wiki.archlinux.org/index.php/Rxvt-unicode
@@ -365,25 +563,55 @@
           #https://github.com/ryanoasis/nerd-fonts/blob/master/readme.md
           #https://eng-blog.iij.ad.jp/archives/421
           #http://www.wheel.gr.jp/~dai/fonts/pcf_on_ubuntu.html
-        - keepassx
-        - vlc
-        - smplayer
-        - k3b
         - zsh
-        - ffmpeg
-        - mp3splt
+        - zsh-syntax-highlighting
+        - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
+    become: true
+  - name: Packages - Tools (may not depend on others)
+    apt:
+      state: latest
+      name:
+        - htop
+        - nkf
+        - keepassx
+          #- mp3splt
         #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
-        #- wine
+        - wine
         - tig
-        - chromium-browser
+        - whois
+        - tree
+        - inotify-tools
+          #enable notify-send command
+        - libnotify-bin
+        - w3m
+        - w3m-img
+        - pdftk
+          #https://cromwell-intl.com/open-source/pdf-not-authorized.html
+        # okular settings: space & shift+space for next/previous page, instead of scrolling up/down
+        - okular
+        - entr
+        - colordiff
+        - fdupes
+          # https://linux.die.net/man/1/fdupes
+          # https://www.tecmint.com/fdupes-find-and-delete-duplicate-files-in-linux/
+          # https://github.com/adrianlopezroche/fdupes
+          # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
+        - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
+        - transmission-cli
+        - socat
+        - neofetch
+        - tsung
+    become: true
+  - name: Packages - Programming
+    apt:
+      state: latest
+      name:
         - clang #for NeoBundle
         - ssh
         - sshpass
         - openssh-server
           #https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-enable-ssh-on-ubuntu-18-04-linux-mint-19-debian-9.html
         - firewall-applet #replacement of ufw
-        - whois
-        - tree
         #You are using pip version 8.1.1, however version 9.0.1 is available.
         #You should consider upgrading via the 'pip install --upgrade pip' command.
         - python3-pip
@@ -394,29 +622,29 @@
         # https://github.com/pypa/setuptools/issues/937
         # sudo pip install -U setuptools
         # sudo pip install csvkit
-        # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
-        - inotify-tools
-        - guile-2.0
-        - guile-2.0-dev
-        - w3m
-        - w3m-img
-        - pdftk
-          #https://cromwell-intl.com/open-source/pdf-not-authorized.html
-        # https://bw.org/ldcsql/
-        # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
-        # deploy sid into docroot afterward
-        - apache2
-        - php
-        - libapache2-mod-php
-        - php-sqlite3
-        - php-common
-        - tshark
-        - transmission-cli
-        # http://www.mirandora.com/?p=697
-        # ~/.config/chromium/Default/History
-        - sqlite3
-        # benchmark https://www.howtoforge.com/how-to-benchmark-your-system-cpu-file-io-mysql-with-sysbench
-        - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
+        - cmake
+    become: true
+  - name: Packages - Graphichs,Video
+    apt:
+      state: latest
+      name:
+        - vlc
+        - smplayer
+        - k3b
+        - ffmpeg
+        - shotwell #image viewer for .NEF https://www.linuxquestions.org/questions/linux-newbie-8/viewing-nef-4175596548/
+          # https://yermakov.net/adding-nef-preview-to-linux-mint-file-manager-nemo/
+          #- gnome-raw-thumbnailer
+        - libopenraw7
+        - libopenrawgnome7
+        - imagemagick
+        - krita
+        - mesa-utils
+          #- glxgears
+          #- glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
+        - gimp
+        - exiftool
+        - xsane
         # nvidia-smi -q -d temperature #https://askubuntu.com/questions/34449/how-to-see-the-video-card-temperature-nvidia-ati-intel
         #- nvidia-driver-430
         #- nvidia-settings
@@ -436,14 +664,31 @@
         #driver   : nvidia-418 - third-party free
         #driver   : nvidia-410 - third-party free
         #driver   : nvidia-415 - third-party free
-        # sudo apt-get -y oklar # https://www.google.co.jp/search?q=linux+pdf+viewer+dark
-        # okular settings: space & shift+space for next/previous page, instead of scrolling up/down
-        - okular
+    become: true
+  - name: Packages - Miscs
+    apt:
+      state: latest
+      name:
+        #- vim-gtk #taking care of clipboard functionality since default version does not support
+        - chromium
+        # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
+        - guile-3.0
+        - guile-3.0-dev
+        # https://bw.org/ldcsql/
+        # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
+        # deploy sid into docroot afterward
+        - apache2
+        - php
+        - libapache2-mod-php
+        - php-sqlite3
+        - php-common
+        # http://www.mirandora.com/?p=697
+        # ~/.config/chromium/Default/History
+        - sqlite3
+        # benchmark https://www.howtoforge.com/how-to-benchmark-your-system-cpu-file-io-mysql-with-sysbench
         - gnuplot
         # - pandoc apt has old version. see  https://pandoc.org/installing.html
         - pv
-        # - name: exiftool
-        - xsane
         - ttf-mscorefonts-installer
           #After installing the fonts, we need to update the font cache using command:
           #sudo fc-cache -f -v
@@ -451,36 +696,19 @@
 
           #http://zairyo.susi.oita-u.ac.jp/wordpress/?p=7385
           #convert: not authorized `show:' @ error/constitute.c/WriteImage/1028.
-        - cmake
         - build-essential
-        - zsh-syntax-highlighting
-        - entr
-        - colordiff
-        - libnotify-bin #enable notify-send command
           #      - wopr
-        - fdupes
-          # https://linux.die.net/man/1/fdupes
-          # https://www.tecmint.com/fdupes-find-and-delete-duplicate-files-in-linux/
-          # https://github.com/adrianlopezroche/fdupes
-          # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
-        - shotwell #image viewer for .NEF https://www.linuxquestions.org/questions/linux-newbie-8/viewing-nef-4175596548/
-          # https://yermakov.net/adding-nef-preview-to-linux-mint-file-manager-nemo/
-          #- gnome-raw-thumbnailer
-        - libopenraw7
-        - libopenrawgnome7
-        - imagemagick
-        - socat
-        - krita
-        - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
-        - glxgears
-        - glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
-          #sudo apt install -y mesa-utils
-
-        #https://www.tixati.com/download/linux.html
-        #There was a problem with transmission
-        #https://forum.transmissionbt.com/viewtopic.php?t=18390
-        - gimp #not present as default in Mint 20
     become: true
+    #when: avoid_some is failed
+
+#2020/12/29 , kali 2020.4
+#E: Package 'mp3splt' has no installation candidate
+#E: Package 'chromium-browser' has no installation candidate
+#E: Package 'guile-2.0' has no installation candidate
+#E: Unable to locate package guile-2.0-dev
+#E: Couldn't find any package by glob 'guile-2.0-dev'
+#E: Unable to locate package glxgears
+#E: Unable to locate package glmark2
 
 #
 # Docker
@@ -504,7 +732,6 @@
     when: is_docker_installed is failed
   - name: Docker - setup
     apt:
-      update_cache: yes
       state: latest
       name:
         - apt-transport-https
@@ -563,7 +790,7 @@
 #
 # eslint
 #
-  - name: Install "eslint" node.js package globally.
+  - name: Install "eslint" node.js package globally
     npm: name={{ item }} global=yes
     with_items:
       - eslint
@@ -593,6 +820,21 @@
       mode: 0755
 
 #
+# neovim
+#
+#
+  - name: Create a directory if it does not exist
+    file:
+      path: ~/.config/nvim/
+      state: directory
+      mode: '0755'
+  - name: Create symbolic link for neovim vimrc
+    file:
+      src: "~/.vimrc"
+      dest: "~/.config/nvim/init.vim"
+      state: link
+      #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
+#
 # Onedrive client Install
 # https://memo.laughk.org/2016/12/22/0000.html
 # https://github.com/skilion/onedrive
@@ -612,7 +854,6 @@
         - libcurl4-gnutls-dev
         #- libcurl-dev
         - libsqlite3-dev
-      update_cache: yes
       state: latest
     become: true
     when: is_onedrive_installed is failed
@@ -685,9 +926,17 @@
 #
 # rclone
 #
-  - name: rclone install
-    shell: which rclone || curl https://rclone.org/install.sh | sudo bash
+  - name: rclone - install
+    apt:
+      state: latest
+      name:
+        - rclone
     become: true
+    #  - name: rclone install
+    #    shell: which rclone || curl https://rclone.org/install.sh | sudo bash
+    #    become: true
+    #    when: avoid_some is failed
+    #TODO: consider to do it through apt, availabe both mint & kali lately
 
 #
 # misc Settings
@@ -695,10 +944,12 @@
   - name: zsh for login shell
     user: name={{ansible_user_id}} shell=/bin/zsh
     become: true
+    when: ansible_distribution == 'Linux Mint'
   - name: copy autostart
     copy: >
       src=./autostart/
       dest=~/.config/autostart
+    when: ansible_distribution == 'Linux Mint'
 
 #
 # FireWall Settings
@@ -716,8 +967,8 @@
               regexp="^PermitRootLogin"
               line="PermitRootLogin no"
               state=present
-    notify: restart ssh
     become: true
+    #notify: restart ssh
   - name: create ~/.ssh directory if it doesn't exist
     file:
       path: ~/.ssh
@@ -737,14 +988,17 @@
 #
   - name: Fonts for Default
     command: gsettings set org.cinnamon.desktop.interface font-name "{{ font }}"
+    when: ansible_distribution == 'Linux Mint'
   - name: Fonts for Desktop
     command: gsettings set org.nemo.desktop font "{{ font }}"
+    when: ansible_distribution == 'Linux Mint'
   - name: Fonts for Document
     command: gsettings set org.gnome.desktop.interface document-font-name "{{ font }}"
   - name: Fonts for monospace
     command: gsettings set org.gnome.desktop.interface monospace-font-name "{{ font_monospace }}"
   - name: Fonts for Window Titlebar
     command: gsettings set org.cinnamon.desktop.wm.preferences titlebar-font "{{ font_titlebar }}"
+    when: ansible_distribution == 'Linux Mint'
 
 #
 # Virtualbox
@@ -752,7 +1006,6 @@
 #
   - name: Virtualbox - install
     apt:
-      update_cache: yes
       state: latest
       name:
         # https://sites.google.com/site/linuxnomemo/mint-use/virtualbox
@@ -761,12 +1014,14 @@
         - virtualbox-dkms
         - virtualbox-guest-additions-iso
     become: true
+    when: avoid_some is failed
   - name: add "{{ansible_user_id}}" into group netdev
     user:
       name: "{{ansible_user_id}}"
       groups: vboxusers
       append: yes
     become: true
+    when: avoid_some is failed
 
 #
 # pip
@@ -778,6 +1033,7 @@
         - setuptools
         - csvkit
     become: true
+    when: avoid_some is failed
 
   - name: sitecustomize.py
     blockinfile:
@@ -787,25 +1043,26 @@
         import sys
         sys.setdefaultencoding('utf-8')
     become: true
+    when: avoid_some is failed
 
 #
 # mail command settings
 #
-  - name: mail utils install
-    apt:
-      name:
-        - mailutils
-        - exim4
-      update_cache: yes
-      state: latest
-    become: true
-  - name: copy exim4 cfg file
-    copy: >
-      src=./src/update-exim4.conf.conf
-      dest=/etc/exim4/update-exim4.conf.conf
-    become: true
-  - shell: update-exim4.conf
-    become: true
+#  - name: mail utils install
+#    apt:
+#      name:
+#        - mailutils
+#        - exim4
+#      update_cache: yes
+#      state: latest
+#    become: true
+#  - name: copy exim4 cfg file
+#    copy: >
+#      src=./src/update-exim4.conf.conf
+#      dest=/etc/exim4/update-exim4.conf.conf
+#    become: true
+#  - shell: update-exim4.conf
+#    become: true
 # tail -f /var/log/exim4/mainlog
 
   - name: kvm install packages
@@ -814,13 +1071,13 @@
         - qemu #https://fosspost.org/tutorials/use-qemu-test-operating-systems-distributions
         - qemu-kvm
         - virt-manager
-        - ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
+          #- ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
         - bridge-utils
         - libvirt-daemon-system
         - libvirt-clients
-      update_cache: yes
       state: latest
     become: true
+    when: avoid_some is failed
       #  - name: start libvirt-bin
       #    service: name=libvirt-bin state=restarted enabled=yes
       #    become: true
@@ -830,12 +1087,14 @@
       dest: /etc/modules
       line: 'vhost_net'
     become: true
+    when: avoid_some is failed
   - name: adduser
     user: >-
       name={{ansible_user_id}}
       groups=root,libvirt,kvm
       append=true
     become: true
+    when: avoid_some is failed
 
       #https://linuxhint.com/install_kvm_virtualization_ubuntu/
 
@@ -856,9 +1115,9 @@
       name:
         - graphviz
         - default-jre
-      update_cache: yes
       state: latest
     become: true
+    when: avoid_some is failed
   - name: Creates directory
     file:
       path: /opt/plantuml
@@ -886,15 +1145,16 @@
         - texlive-base
         - texlive-lang-japanese
           #        - texlive-fonts-recommended
-      update_cache: yes
       state: latest
     become: true
+    when: avoid_some is failed
 # https://texwiki.texjp.org/?Linux%2FLinux%20Mint
 # https://linuxconfig.org/how-to-install-latex-on-ubuntu-20-04-focal-fossa-linux
 
 #
 # mitmdump
 #
+#consider to migrate the way by apt. Available on latest distros
   - name: install dependencies for mitmproxy
     apt:
       name:
@@ -902,9 +1162,9 @@
         - python3-pip
         - libffi-dev
         - libssl-dev
-      update_cache: yes
       state: latest
     become: true
+    when: avoid_some is failed
 
   - name: upgrade pip
     pip:
@@ -912,86 +1172,29 @@
       executable: pip3
       state: latest
     become: true
+    when: avoid_some is failed
 
   - name: mitmproxy
     command: pip3 install --ignore-installed mitmproxy
     become: true
+    when: avoid_some is failed
 
 #
-# stderred
-# https://github.com/sickill/stderred
+# apt autoclean, autoremove
 #
-  - name: stdtrred - Check
-    command: ls /opt/stderred
-    register: is_stderred_installed
-    ignore_errors: true
-  - name: install dependencies for stderred
+  - name: Remove useless packages from the cache
     apt:
-      name:
-        - gcc-multilib #https://askubuntu.com/questions/904929/gcc-compile-32-bit-code-on-64-bit-system
-        - cmake
-      update_cache: yes
-      state: latest
+      autoclean: yes
     become: true
-    when: is_stderred_installed is failed
-  - name: clone stderred
-    git:
-      repo: https://github.com/sickill/stderred
-      dest: /opt/stderred
-    become: true
-    when: is_stderred_installed is failed
-  - name: make stderred
-    command: make
-    args:
-      chdir: /opt/stderred
-    become: true
-    #issue: >&2 would not be colored even 'make 32 && make 64'
-    #ERROR: ld.so: object '/home/uuuu/tmp/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
-
-#
-# dist-upgrade, autoremove
-#
-  - name: Update all packages to the latest version
+  - name: Remove dependencies that are no longer required
     apt:
-      upgrade: dist
       autoremove: yes
     become: true
 
-  handlers:
-  - name: restart ssh
-    service: name=sshd state=restarted
-    become: true
-
-#
-# Android
-#https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
-#  - name: check if android_studio_zip exists
-#    stat: path={{ downloads }}/{{ android_studio_name }}
-#    register: has_android_studio_zip
-#  - name: show stat if NO android_studio_zip exists
-#    debug: var=has_android_studio_zip
-#    when: not has_android_studio_zip.stat.exists
-#  - name: download Android Studio (sh256sum)
-#    get_url: >-
-#      url={{ android_studio_url }}/{{ android_studio_name }}
-#      dest={{ downloads }}
-#      sha256sum={{android_studio_checksum}}
-#      force=no
-#    become: true
-#    when: not has_android_studio_zip.stat.exists
-#  - name: Unzip Android Studio
-#    command: unzip -o {{ downloads }}/{{ android_studio_name }}
-#    args:
-#        chdir: "{{ android_studio_parentdir }}"
-#    become: true
-
-      #  - name: chown
-      #    file: >-
-      #      path={{ android_studio_parentdir }}{{ android_studio_dir }}
-      #      group=root
-      #      owner={{ansible_user_id}}
-      #    become: true
-  # http://www.techscore.com/blog/2016/08/26/debianstretch%E3%81%A7%E3%80%81android-studio2-1-3-%E3%81%AE-%E5%BF%AB%E9%81%A9-%E3%81%AAavd%E8%B5%B7%E5%8B%95%E7%92%B0%E5%A2%83%E3%82%92%E5%AE%9F%E7%8F%BE%E3%81%99%E3%82%8B/
+    #  handlers:
+    #  - name: restart ssh
+    #    service: name=sshd state=restarted
+    #    become: true
 
 # todo: add useful tools https://qiita.com/onokatio/items/50fb616f71bf3c5021b9
 # todo: apt-fast https://news.mynavi.jp/article/20161101-a177/
@@ -1008,8 +1211,6 @@
 #systemctl --user restart pulseaudio.service
 #https://askubuntu.com/a/1123869
 #
-#memo:
-# vagrant - unnecessary lately. just a reminder
 
 #transfer host repo to guest for development
 #scp -r -P 47122 ~/Documents/pde mint@localhost:/tmp/
@@ -1038,3 +1239,13 @@
 #
 #restart monitor
 #https://askubuntu.com/questions/143838/how-do-i-restart-cinnamon-from-the-tty
+#
+#preinstall packages for time saving in develop
+#sudo apt install -y 
+#https://stackoverflow.com/questions/27305177/how-can-i-remove-the-last-character-of-a-file-in-unix
+#cat debian/preinstallpacks.txt | sed -e 's/ *-//g' | sed -e 's/$/ \\/g' | sed '$ s/.$//'
+#cat debian/preinstallpacks.txt | sed -e 's/^ \+-//g' | tr -d '\n'
+#consider automate to generate preinstallpacks.txt like #<!--preinstall-dev [some-packs...] -->
+#
+#for 2nd invocation;
+#ansible-playbook /tmp/pde/debian/install.yml -K --connection=local

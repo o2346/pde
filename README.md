@@ -1,19 +1,18 @@
 # PDE
 
-PDE(Personalized Development Environment) is system configration for my work.
-"P" in PDE may also stand for _"Provisioner of -"_.
+PDE(Provision Development Environment) is system configration for local development machine(s) dedicated for **me**.
 
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<th colspan="2" bgcolor="#D0CDCD" align="center"><big>Personalized Development Environment</big></th>
+<th colspan="2" bgcolor="#D0CDCD" align="center"><big>Provision Development Environment</big></th>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Purpose</td>
-<td bgcolor="#FFFFFF" valign="top">Desktop, Software Development</td>
+<td bgcolor="#FFFFFF" valign="top">Provision Unix-like machine for Personal use</td>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Operating system</td>
-<td bgcolor="#FFFFFF" valign="top"><a href="https://linuxmint.com/">Linux Mint 18 Cinnamon 64-bit</a></td>
+<td bgcolor="#FFFFFF" valign="top"><a href="https://linuxmint.com/">Linux Mint 20</a></td>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Development status</td>
@@ -21,7 +20,7 @@ PDE(Personalized Development Environment) is system configration for my work.
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Version</td>
-<td bgcolor="#FFFFFF" valign="top">1.3.1</td>
+<td bgcolor="#FFFFFF" valign="top">2.0.0</td>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Written in</td>
@@ -31,86 +30,50 @@ PDE(Personalized Development Environment) is system configration for my work.
 
 ## What is this
 
-Automatic provisioning of a Personal Computer like [Server provisioning](https://en.wikipedia.org/wiki/Provisioning#Server_provisioning) as main function.  
-Secondary Guest Operating System setup helper. 
+Configuration code like [Server provisioning](https://en.wikipedia.org/wiki/Provisioning#Server_provisioning), but this is for homebuild computer, or laptop, or something else I own.
 
-* Provisioner
-  * [install packages][list_of_tools]
-  * remove packages that unnecessary([example][remove_keyring]) or malfunction([example](http://unix.stackexchange.com/questions/215371/linux-network-stops-functioning-after-random-time-wired))
+* ./provision
+  * entry point
+* debian/install.yml
+  * Install packages(apt or other way)
+  * Remove unnecessary packages
   * configure settings
-    * desktop themes
-    * fonts
-    * [trackball behaveior](mint/doc/trackball.md)
-  * dotfiles
-* Guest OS setup helper
-  * Use of guest machine is a sandbox in order to develop PDE itself.
-  * for example, install VMware Tool to enable sharing options
-  * VMware Workstation Player and VirtualBox are supported
-  * Hypervisor detection. Automatically find witch virtualization software provides current OS then run appropreate script
-
-* Some other tasks expected to be included in provisioner but still in progress, are indicated in [TODO-list](#todo)
 
 ## Usase
 
-### Provisioner
-
-1. Install Operating System any of listed above
+1. Install supported Operating System
 1. Run command shown below  
-**[WARNING]** _This may be cause of Destruction of your environment since the provisioner will run administratively.  
-Use disposable machine such as VM_
-```
-curl https://raw.githubusercontent.com/o2346/pde/master/install | bash -s
-```
-
-### <a name="helper">Guest OS setup helper
-
-__on Guest Machine__ , run
+**[WARNING]** _This might cause of Destruction of your environment since it will run administratively. Use disposable machine such as VM_
 
 ```
-wget https://raw.githubusercontent.com/o2346/pde/master/install
-bash install -v
+curl https://raw.githubusercontent.com/o2346/pde/master/provision | bash -s
 ```
 
-### for development of playbook
+### [Optional] Provision with playbook on the develop branch instead of master
 
-Development mode. Checkout Branch "Develop" and play normal playbook
 ```
-curl https://raw.githubusercontent.com/o2346/pde/develop/install | bash -s - -d
-```
-
-Examinational mode. Checkout Branch "Develop" and play for exam( exam.yml will be played instead of normal playbook)
-```
-curl https://raw.githubusercontent.com/o2346/pde/master/install | bash -s - -e
+curl https://raw.githubusercontent.com/o2346/pde/develop/provision | bash -s - -d
 ```
 
-## Why I made this
+with playbook `exam.yml` for experiment instead of default playbook `install.yml`
 
-* Because I wanted my development environment disposable.
-* Every machines may crash unexpectedly. And no time to play with such crap.
-  * Totally new one should be brought immediately by extremely easy way
-  * No instance dependency
-* Nowadays virtualization and auto-deployment tool things are modern technology
-  * They do not has to be only for server machines though.
-* When my own PC comes with UNIX-like system, why not to do it
+```
+curl https://raw.githubusercontent.com/o2346/pde/develop/provision | bash -s - -e
+```
 
-## Why Linux instead of Windows/macOS
+## Intention
 
-* Friendly with Infrastructure as Code
-* No [Vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in), Proprietary Free
-* Run on both [homebuilt computer](https://en.wikipedia.org/wiki/Homebuilt_computer) and VM
-* UNIX-like
-* I'm totally tired of Windows. It suck.
-  + No Thanks
-  + virtualization is available if needed
-* I'm little tired of Mac even if it was better than Windows
-  + It forcibly asks like AppleID and password, press "yes" or whatever at every turn such as lisence agreement or upgrade something etc.
-  + many popups to force restart or ask something like moron. Annoying
-  + AppleID dependency
-  + Hardware lock-in
+local environment as code
+
+* I wanted mine disposable and reproducible
+  * Even among separate machines. Not to depend on a specific one
+  * Individuals may sometime crash unexpectedly
+  * In such case no time to play with such crap
+  * Replace with complete new one by minimized effort instead
 
 ## <a name="todo"> TODO - Tasks requires Manual Operation
 
-The way of automation is not found yet for tasks shown below
+Desired automation is not found yet for tasks shown below
 
 ### Map `` Alt+` `` to Toggle input method
 
@@ -149,15 +112,6 @@ File Menu > Edit > Profile Preferenses > [As I like]
 |translator||plugin|
 |[Adblock for Youtube](https://chrome.google.com/webstore/detail/adblock-for-youtube/cmedhionkhpnakcndndgjdbohmhepckk/related?hl=en)||plugin|
 
-### Installation of VMware
-
-* Unfortunately vmware player comes with GUI installer
-* download `.bundle` from
-  * [player](https://my.vmware.com/jp/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0)
-  * [VIX](https://my.vmware.com/web/vmware/free#desktop_end_user_computing/vmware_workstation_player/12_0|PLAYER-1200|drivers_tools)
-    * this is for command [`vmrun`](https://communities.vmware.com/thread/521189?start=0&tstart=0) functional
-* `sudo sh VMxxxx.bundle` for each `.bundle` files
-
 ### others
 
 * screensaver
@@ -177,12 +131,10 @@ sudo bash ./linux-brjprinter-installer-2.2.1-1 DCP-J132
 
 ### /etc/fstab
 
-configure as necessary
+configure if necessary
 
 ## misc
 
-* [List of Tools][list_of_tools]
 * [printer](http://support.brother.co.jp/j/b/downloadhowto.aspx?c=jp&lang=ja&prod=dcpj137n&os=128&dlid=dlf100517_000&flang=1001&type3=561)
   * .deb packages
-* [DraftSight](https://www.3ds.com/ja/products-services/draftsight-cad-software/free-download/)
 
