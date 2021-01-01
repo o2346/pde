@@ -67,6 +67,18 @@
     become: true
 
 #
+# Fix 4k monitor Refrash rate
+#
+  - name: fix4k - checking 4k monitor is present
+    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | sh -
+    register: is_4kmonitor
+    ignore_errors: true
+  - name: test script
+    shell: echo 'uname' | sh - > ~/.xprofile
+  - name: fix4k for specific monitor
+    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | sh - > ~/.xprofile
+    when: is_4kmonitor is succeeded
+#
 #SAM
 #
 #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
