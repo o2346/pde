@@ -28,11 +28,15 @@
     debug:
       msg: "ansible-playbook {{playbook_dir}}/exam.yml --connection=local --extra-vars 'ansible_sudo_pass=UNDEFINED'"
 
-      #On gyi, it accepts 'Japan' though
+  #
+  # Set timezone
+  #
+  #On gyi, it accepts 'Japan' though
   - name: set timezone to Asia/Tokyo
     timezone:
       name: Asia/Tokyo
     become: yes
+
   #
   # Startup apps on boot
   #
