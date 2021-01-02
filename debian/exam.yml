@@ -33,6 +33,7 @@
   # Set timezone
   #
   #On GUI, it accepts 'Japan' though
+  #https://docs.ansible.com/ansible/2.3/timezone_module.html
   - name: set timezone to Asia/Tokyo
     timezone:
       name: Asia/Tokyo
