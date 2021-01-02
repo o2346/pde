@@ -314,9 +314,11 @@
   #
   # Startup apps on boot
   #
+  #Most useful instruction: https://superuser.com/a/1253718
     #https://superuser.com/a/1253718
     #https://wiki.archlinux.org/index.php/systemd#Basic_systemctl_usage
     #https://askubuntu.com/questions/903354/difference-between-systemctl-and-service-commands
+    #https://superuser.com/questions/1253707/linux-equivalent-of-windows-startup-folder
     #- name: copy scrpts to /opt
     #  copy: >
     #    src=./system/
