@@ -45,4 +45,40 @@
     #https://superuser.com/a/1253718
     #https://wiki.archlinux.org/index.php/systemd#Basic_systemctl_usage
     #https://askubuntu.com/questions/903354/difference-between-systemctl-and-service-commands
+  - name: copy scrpts to /usr/local/bin
+    copy: >
+      src=./system/
+      dest=/etc/systemd/system
+      mode=777
+    become: true
+
+  #
+  # Slimblade Trackball
+  #
+  - name: Device - Slimblade Trackball - copy scrpts to /usr/local/bin
+    copy: >
+      src=./devices/trackball/trackball.sh
+      dest=/usr/local/bin
+      mode=755
+    become: true
+
+  #
+  # Griffin Powermate
+  #
+  - name: Device - Griffin Powermate - copy scrpts to /usr/local/bin
+    copy: >
+      src=./devices/powermate/
+      dest=/usr/local/bin
+      mode=755
+    become: true
+  - name: Device - Griffin Powermate - Invoke command first
+    command: /usr/local/bin/powermate.sh
+    become: true
+    ignore_errors: true
+  - name: Device - Griffin Powermate - Make sure a service is running
+    systemd:
+      #state: started
+      enabled: yes
+      name: powermate
+    become: true
 
