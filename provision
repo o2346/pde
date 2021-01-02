@@ -59,7 +59,6 @@ preinstall_apt() {
 
     sudo apt update
     sudo apt install -y ansible
-    #sudo apt upgrade -y ansible
     sudo chown -R -v $USER ~/.ansible
   fi
 
