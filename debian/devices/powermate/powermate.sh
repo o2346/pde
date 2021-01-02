@@ -27,11 +27,23 @@ else
 fi
 
 setup() {
+  flag=/tmp/powermate_invoked
   echo "Setting up powermate with custom config" >&2
-  if ! ps aux | grep 'powermate \-c'; then
-    (./powermate -c $current_script_path/powermate.toml) &
-    echo "starging powermate" >&2
+
+  if [ -f "/tmp/powermate_invoked" ]; then
+    echo "It looks like already invoked at boot. Abort" >&2
+    return 1
   fi
+
+  if ps aux | grep 'powermate \-c'; then
+    echo "It looks like already invoked at boot. Abort" >&2
+    return 1
+  fi
+
+  echo "starging powermate" >&2
+  touch $flag
+  (./powermate -c $current_script_path/powermate.toml) &
+  return 0
 }
 
 setup
