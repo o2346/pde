@@ -24,6 +24,11 @@
   - name: Print ansible_distribution
     debug:
       msg: "{{ ansible_distribution }}"
+
+  - name: Print how re-run playbook for handy
+    debug:
+      msg: "ansible-playbook {{playbook_dir}}/install.yml --connection=local --extra-vars 'ansible_sudo_pass=UNDEFINED'"
+      #Another sample invocation: ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  install.yml
 #
 # dist-upgrade
 #
