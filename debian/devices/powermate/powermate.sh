@@ -11,7 +11,8 @@ readonly current_script_path=$(dirname $(readlink -f $0))
 
 cd /var/tmp
 
-if ! ls powermate-linux; then
+if ! ls powermate-linux > /dev/null; then
+  echo "Newly installing powermante.." >&2
   git clone --recurse-submodules https://github.com/stefansundin/powermate-linux.git
 fi
 
@@ -20,6 +21,7 @@ cd powermate-linux
 if [ -f "./powermate" ]; then
   :
 else
+  echo "Newly installing powermante.." >&2
   sudo cp 60-powermate.rules /etc/udev/rules.d/
   sudo apt-get install -y libpulse-dev libnotify-dev xdotool
   sudo apt-get update --fix-missing
