@@ -39,13 +39,14 @@
       name: Asia/Tokyo
     become: yes
 
+
   #
   # Startup apps on boot
   #
     #https://superuser.com/a/1253718
     #https://wiki.archlinux.org/index.php/systemd#Basic_systemctl_usage
     #https://askubuntu.com/questions/903354/difference-between-systemctl-and-service-commands
-  - name: copy scrpts to /usr/local/bin
+  - name: copy scrpts to /opt
     copy: >
       src=./system/
       dest=/etc/systemd/system
@@ -55,24 +56,55 @@
   #
   # Slimblade Trackball
   #
-  - name: Device - Slimblade Trackball - copy scrpts to /usr/local/bin
+  # Packages for 
+  - name: Device - Slimblade Trackball - Packages
+    apt:
+      state: latest
+      name:
+        - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
+    become: true
+  - name: Device - Slimblade Trackball - Create a directory if it does not exist
+    file:
+      path: /opt/trackball
+      state: directory
+      mode: '0755'
+    become: true
+  - name: Device - Slimblade Trackball - copy scrpts to /opt/trackball
     copy: >
       src=./devices/trackball/trackball.sh
-      dest=/usr/local/bin
+      dest=/opt/trackball
       mode=755
+    become: true
+  - name: Device - Slimblade Trackball - copy scrpts to /opt/trackball
+    copy: >
+      src=./devices/trackball/trackballw.sh
+      dest=/opt/trackball
+      mode=755
+    become: true
+  - name: Device - Slimblade Trackball - Make sure a service is running
+    systemd:
+      state: restarted
+      enabled: yes
+      name: trackball
     become: true
 
   #
   # Griffin Powermate
   #
-  - name: Device - Griffin Powermate - copy scrpts to /usr/local/bin
+  - name: Device - Griffin Powermate - Create a directory if it does not exist
+    file:
+      path: /opt/powermate
+      state: directory
+      mode: '0755'
+    become: true
+  - name: Device - Griffin Powermate - copy scrpts to /opt/powermate
     copy: >
       src=./devices/powermate/
-      dest=/usr/local/bin
+      dest=/opt/powermate
       mode=755
     become: true
-  - name: Device - Griffin Powermate - Invoke command first
-    command: /usr/local/bin/powermate.sh
+  - name: Device - Griffin Powermate - Invoke command 1st time for bootstrapping
+    command: /opt/powermate/powermate.sh
     become: true
     ignore_errors: true
   - name: Device - Griffin Powermate - Make sure a service is running

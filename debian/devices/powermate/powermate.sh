@@ -9,7 +9,7 @@
 
 readonly current_script_path=$(dirname $(readlink -f $0))
 
-cd /var/tmp
+cd /opt/
 
 if ! ls powermate-linux > /dev/null; then
   echo "Newly installing powermante.." >&2
