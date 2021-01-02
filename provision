@@ -57,7 +57,7 @@ preinstall_apt() {
     #It causes error later apt update in kali
     #sudo apt-add-repository ppa:ansible/ansible
 
-    sudo apt update
+    sudo apt search ansible | grep ansible || sudo apt update
     sudo apt install -y ansible
     sudo chown -R -v $USER ~/.ansible
   fi
