@@ -32,7 +32,7 @@
   #
   # Set timezone
   #
-  #On gyi, it accepts 'Japan' though
+  #On GUI, it accepts 'Japan' though
   - name: set timezone to Asia/Tokyo
     timezone:
       name: Asia/Tokyo
