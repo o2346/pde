@@ -99,6 +99,8 @@
       dest=/opt/trackball
       mode=755
     become: true
+  - name: Device - Slimblade Trackball - exec for current login
+    command: /opt/trackball/trackball.sh
     #- name: Device - Slimblade Trackball - Make sure a service is running
     #  systemd:
     #    state: restarted
@@ -123,7 +125,10 @@
     become: true
   - name: Device - Griffin Powermate - Invoke command 1st time for bootstrapping
     command: /opt/powermate/powermate.sh
+    ignore_errors: true
     become: true
+  - name: Device - Griffin Powermate - Invoke command 2st time for Current login
+    command: /opt/powermate/powermate.sh
     ignore_errors: true
     #- name: Device - Griffin Powermate - Make sure a service is running
     #  systemd:

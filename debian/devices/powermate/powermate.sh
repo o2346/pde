@@ -32,10 +32,10 @@ setup() {
   flag=/tmp/powermate_invoked
   echo "Setting up powermate with custom config" >&2
 
-  if [ -f "/tmp/powermate_invoked" ]; then
-    echo "It looks like already invoked at boot. Abort" >&2
-    return 1
-  fi
+  #if [ -f "/tmp/powermate_invoked" ]; then
+  #  echo "It looks like already invoked at boot. Abort" >&2
+  #  return 1
+  #fi
 
   if ps aux | grep 'powermate \-c'; then
     echo "It looks like already invoked at boot. Abort" >&2
