@@ -23,5 +23,20 @@
     debug:
       msg: "nothing found"
     when: etc_issue is failed
+    
+  - name: Print how re-run playbook for handy
+    debug:
+      msg: "ansible-playbook {{playbook_dir}}/exam.yml --connection=local --extra-vars 'ansible_sudo_pass=UNDEFINED'"
+
+  - name: set timezone to Asia/Tokyo
+    timezone:
+      name: Asia/Tokyo
+    become: yes
+  #
+  # Startup apps on boot
+  #
+    #https://superuser.com/a/1253718
+    #https://wiki.archlinux.org/index.php/systemd#Basic_systemctl_usage
+    #https://askubuntu.com/questions/903354/difference-between-systemctl-and-service-commands
 
 #ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  exam.yml
