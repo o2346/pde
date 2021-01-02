@@ -5,6 +5,9 @@
   become: no
   tasks:
 
+#
+#Sample tasks
+#
   #https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html
   - name: Check
     command: cat /etc/issue
@@ -28,5 +31,7 @@
   - name: Print how re-run playbook for handy
     debug:
       msg: "ansible-playbook {{playbook_dir}}/exam.yml --connection=local --extra-vars 'ansible_sudo_pass=UNDEFINED'"
-
+#
+#
+#END Sample tasks
 
