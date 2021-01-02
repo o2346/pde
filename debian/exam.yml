@@ -46,17 +46,35 @@
     #https://superuser.com/a/1253718
     #https://wiki.archlinux.org/index.php/systemd#Basic_systemctl_usage
     #https://askubuntu.com/questions/903354/difference-between-systemctl-and-service-commands
-  - name: copy scrpts to /opt
+    #- name: copy scrpts to /opt
+    #  copy: >
+    #    src=./system/
+    #    dest=/etc/systemd/system
+    #    mode=777
+    #  become: true
+  - name: autostart - Create a directory if it does not exist
+    file:
+      path: ~/.config/autostart
+      state: directory
+      mode: '0755'
+  - name: autostart - copy scrpts to autostart
     copy: >
-      src=./system/
-      dest=/etc/systemd/system
+      src=./autostart/
+      dest=~/.config/autostart
       mode=777
-    become: true
+  - name: Ensure ~/.local/share/applications/
+    file:
+      path: ~/.local/share/applications
+      state: directory
+      mode: '0755'
+  - name: autostart - create simlink to ~/.local/share/applications
+    shell: 'd=~/.config/autostart; ls $d | xargs -I{} ln -s $d/{} ~/.local/share/applications/{}'
+    ignore_errors: true
 
   #
   # Slimblade Trackball
   #
-  # Packages for 
+  # Packages for the device
   - name: Device - Slimblade Trackball - Packages
     apt:
       state: latest
@@ -81,12 +99,12 @@
       dest=/opt/trackball
       mode=755
     become: true
-  - name: Device - Slimblade Trackball - Make sure a service is running
-    systemd:
-      state: restarted
-      enabled: yes
-      name: trackball
-    become: true
+    #- name: Device - Slimblade Trackball - Make sure a service is running
+    #  systemd:
+    #    state: restarted
+    #    enabled: yes
+    #    name: trackball
+    #  become: true
 
   #
   # Griffin Powermate
@@ -107,10 +125,10 @@
     command: /opt/powermate/powermate.sh
     become: true
     ignore_errors: true
-  - name: Device - Griffin Powermate - Make sure a service is running
-    systemd:
-      #state: started
-      enabled: yes
-      name: powermate
-    become: true
+    #- name: Device - Griffin Powermate - Make sure a service is running
+    #  systemd:
+    #    #state: started
+    #    enabled: yes
+    #    name: powermate
+    #  become: true
 

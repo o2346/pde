@@ -1,0 +1,8 @@
+#place this in ~/.local/share/applications
+#or gui, right click menu button & configure
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=Powermate with Custom configuration
+#Icon=/var/tmp/urxvt.icon.png
+Exec=/opt/powermate/powermate.sh
