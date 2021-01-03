@@ -662,7 +662,7 @@
     when: is_configreload_installed is failed
 
 #
-# Packages for General use
+# Packages for Fulfillment
 #
   - name: Packages - Critical
     apt:
@@ -753,7 +753,7 @@
         - rsync
         - bc
     become: true
-  - name: Packages - Graphichs,Multimedia
+  - name: Packages - Multimedia
     apt:
       state: latest
       name:
