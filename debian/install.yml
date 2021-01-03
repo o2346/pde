@@ -798,7 +798,6 @@
     apt:
       state: latest
       name:
-        #- vim-gtk #taking care of clipboard functionality since default version does not support
         - chromium
         # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
         - guile-3.0
