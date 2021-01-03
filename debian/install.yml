@@ -742,6 +742,8 @@
         # sudo pip install -U setuptools
         # sudo pip install csvkit
         - cmake
+          #cpv:4: command not found: rsync
+          #cpv:8: command not found: bc
     become: true
   - name: Packages - Graphichs,Multimedia
     apt:
