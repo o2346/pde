@@ -401,9 +401,9 @@
     command: /opt/powermate/powermate.sh
     ignore_errors: true
     become: true
-  - name: Device - Griffin Powermate - kill from 1st one to Invoke 2st
-    shell: ps aux | grep 'powermate \-c' | awk '{print $2}' | xargs kill
-    become: true
+    #- name: Device - Griffin Powermate - kill from 1st one to Invoke 2st
+    #  shell: ps aux | grep 'powermate \-c' | awk '{print $2}' | xargs kill
+    #  become: true
     #  - name: Device - Griffin Powermate - Invoke command 2st time for Current login
     #    command: /opt/powermate/powermate.sh
     #- name: Device - Griffin Powermate - Make sure a service is running
