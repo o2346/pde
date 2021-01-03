@@ -215,7 +215,7 @@
       chdir: ~/.uc
 
 #
-# Get rid of. annoying
+# Get rid of, annoying
 #
 #https://community.linuxmint.com/tutorial/view/916
   - name: Get rid of keyring, annoying
