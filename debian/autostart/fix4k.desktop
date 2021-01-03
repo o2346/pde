@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=Fix 4k monitor
+Exec=/home/$USER/.xprofile
