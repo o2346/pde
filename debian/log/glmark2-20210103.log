@@ -1,0 +1,69 @@
+% glmark2
+=======================================================
+    glmark2 2020.04
+=======================================================
+    OpenGL Information
+    GL_VENDOR:     X.Org
+    GL_RENDERER:   AMD Radeon RX 5600 XT (NAVI10, DRM 3.39.0, 5.9.0-kali5-amd64, LLVM 11.0.0)
+    GL_VERSION:    4.6 (Compatibility Profile) Mesa 20.2.6
+=======================================================
+[build] use-vbo=false: FPS: 7928 FrameTime: 0.126 ms
+[build] use-vbo=true: FPS: 13532 FrameTime: 0.074 ms
+[texture] texture-filter=nearest: FPS: 13166 FrameTime: 0.076 ms
+[texture] texture-filter=linear: FPS: 13753 FrameTime: 0.073 ms
+[texture] texture-filter=mipmap: FPS: 13829 FrameTime: 0.072 ms
+[shading] shading=gouraud: FPS: 13778 FrameTime: 0.073 ms
+[shading] shading=blinn-phong-inf: FPS: 13757 FrameTime: 0.073 ms
+[shading] shading=phong: FPS: 13777 FrameTime: 0.073 ms
+[shading] shading=cel: FPS: 13748 FrameTime: 0.073 ms
+[bump] bump-render=high-poly: FPS: 13769 FrameTime: 0.073 ms
+[bump] bump-render=normals: FPS: 13762 FrameTime: 0.073 ms
+[bump] bump-render=height: FPS: 13615 FrameTime: 0.073 ms
+[effect2d] kernel=0,1,0;1,-4,1;0,1,0;: FPS: 13461 FrameTime: 0.074 ms
+[effect2d] kernel=1,1,1,1,1;1,1,1,1,1;1,1,1,1,1;: FPS: 12110 FrameTime: 0.083 ms
+[pulsar] light=false:quads=5:texture=false: FPS: 12906 FrameTime: 0.077 ms
+[desktop] blur-radius=5:effect=blur:passes=1:separable=true:windows=4: FPS: 7085 FrameTime: 0.141 ms
+[desktop] effect=shadow:windows=4: FPS: 7153 FrameTime: 0.140 ms
+[buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 1043 FrameTime: 0.959 ms
+[buffer] columns=200:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=subdata: FPS: 1287 FrameTime: 0.777 ms
+[buffer] columns=200:interleave=true:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 1235 FrameTime: 0.810 ms
+[ideas] speed=duration: FPS: 4980 FrameTime: 0.201 ms
+[jellyfish] <default>: FPS: 11585 FrameTime: 0.086 ms
+[terrain] <default>: FPS: 1868 FrameTime: 0.535 ms
+[shadow] <default>: FPS: 10275 FrameTime: 0.097 ms
+[refract] <default>: FPS: 5996 FrameTime: 0.167 ms
+[conditionals] fragment-steps=0:vertex-steps=0: FPS: 13712 FrameTime: 0.073 ms
+[conditionals] fragment-steps=5:vertex-steps=0: FPS: 14381 FrameTime: 0.070 ms
+[conditionals] fragment-steps=0:vertex-steps=5: FPS: 14171 FrameTime: 0.071 ms
+[function] fragment-complexity=low:fragment-steps=5: FPS: 14472 FrameTime: 0.069 ms
+[function] fragment-complexity=medium:fragment-steps=5: FPS: 14466 FrameTime: 0.069 ms
+[loop] fragment-loop=false:fragment-steps=5:vertex-steps=5: FPS: 14356 FrameTime: 0.070 ms
+[loop] fragment-steps=5:fragment-uniform=false:vertex-steps=5: FPS: 14500 FrameTime: 0.069 ms
+[loop] fragment-steps=5:fragment-uniform=true:vertex-steps=5: FPS: 14361 FrameTime: 0.070 ms
+=======================================================
+                                  glmark2 Score: 11024
+=======================================================
+% neofetch
+..............                                     o2@kali
+            ..,;:ccc,.                             -------
+          ......''';lxO.                           OS: Kali GNU/Linux Rolling x86_64
+.....''''..........,:ld;                           Kernel: 5.9.0-kali5-amd64
+           .';;;:::;,,.x,                          Uptime: 57 mins
+      ..'''.            0Xxoc:,.  ...              Packages: 3051 (dpkg)
+  ....                ,ONkc;,;cokOdc',.            Shell: zsh 5.8
+ .                   OMo           ':ddo.          Resolution: 1920x1080, 3840x2160
+                    dMc               :OO;         DE: Xfce 4.16
+                    0M.                 .:o.       WM: Xfwm4
+                    ;Wd                            WM Theme: Kali-Dark
+                     ;XO,                          Theme: Kali-Dark [GTK2/3]
+                       ,d0Odlc;,..                 Icons: Flat-Remix-Blue-Dark [GTK2/3]
+                           ..',;:cdOOd::,.         CPU: Intel i7-3770K (8) @ 3.900GHz
+                                    .:d;.':;.      GPU: Intel HD Graphics
+                                       'd,  .'     GPU: AMD ATI Radeon RX 5600 OEM/5600 XT /
+                                         ;l   ..   Memory: 4736MiB / 32002MiB
+                                          .o
+                                            c
+                                            .'
+                                             .
+
+%
