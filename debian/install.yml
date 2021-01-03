@@ -228,6 +228,10 @@
 #
 # Get rid of old driver causes problem
 #
+#It could be absent since Video card replacement solved actual problem
+#https://forums.linuxmint.com/viewtopic.php?p=1654109&sid=5e50071802f97b4131481bcc718cc484#p1654109
+#https://www.google.co.jp/search?safe=off&num=24&hl=en&q=graphic+low+paformance+linux+mint
+#If it is on nvidia card, open Driver Manager, switch to proprietary 445, reboot again.
   - name: Get rid of old driver causes problem
     command: apt remove -y xserver-xorg-video-intel
     become: true
