@@ -299,17 +299,6 @@
 # https://www.google.co.jp/search?safe=off&num=16&q=mint+active+window+cinnamon+-matome.naver.jp+-cookpad.com+-itpro.nikkeibp.co.jp+-rakuten.co.jp+-weblio.jp
 # It requires to modify cinnamon.css and a little complicated
 
-#
-# Scripts
-#
-#  - name: copy scrpts to /usr/local/bin
-#    copy: >
-#      src=./bin/
-#      dest=/usr/local/bin
-#      mode=755
-#    become: true
-
-
   #
   # Set timezone
   #
