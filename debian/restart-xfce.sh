@@ -10,6 +10,9 @@
 #  xfwm4 --replace --display=:$disp_id &&
 #  disown
 
+#https://www.google.co.jp/search?num=24&safe=off&hl=en&q=debian+freeze+restart+desktop
+#https://unix.stackexchange.com/questions/31818/what-to-do-when-a-linux-desktop-freezes
+
 #https://askubuntu.com/a/215633
 #pkill -KILL -u ${USER}
 
