@@ -1,5 +1,6 @@
-#place this in ~/.local/share/applications
-#or gui, right click menu button & configure
+#It Does not work on kali,
+#`echo "/opt/powermate/powermate.sh" >> ~/.xinputrc` instead
+#Consider implement it as a task on playbook
 [Desktop Entry]
 Type=Application
 Terminal=false
