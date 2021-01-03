@@ -350,6 +350,7 @@
     shell: 'd=~/.config/autostart; ls $d | xargs -I{} ln -s $d/{} ~/.local/share/applications/{}'
     ignore_errors: true
 
+#<!-- tasks.hardware
   #
   # Slimblade Trackball
   #
@@ -386,6 +387,7 @@
     #    enabled: yes
     #    name: trackball
     #  become: true
+#-->
 
   #
   # Griffin Powermate
