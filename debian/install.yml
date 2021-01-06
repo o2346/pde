@@ -124,6 +124,7 @@
       groups: netdev
       append: yes
     become: true
+    #https://devconnected.com/how-to-list-users-and-groups-on-linux/
       #  - name: install package wicd
       #    apt: name={{ item }} update_cache=yes state=latest
       #    with_items:
