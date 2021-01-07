@@ -74,3 +74,10 @@
 #https://wiki.debian.org/SynapticsTouchpad
 #https://bill.harding.blog/2017/12/27/toward-a-linux-touchpad-as-smooth-as-macbook-pro/
 
+# Bluetooth
+# Not sure yet
+# sudo apt instally -y bluez* bluetooth blueman
+# hciconfig
+#sudo hciconfig hci0 up
+#sudo systemctl start bluetooth.service
+#https://www.maketecheasier.com/setup-bluetooth-in-linux/
