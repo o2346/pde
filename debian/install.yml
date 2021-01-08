@@ -816,7 +816,6 @@
         - krita
         - mesa-utils
           #- glxgears
-          #- glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
         - gimp
         - exiftool
         - xsane
@@ -883,6 +882,13 @@
 #E: Couldn't find any package by glob 'guile-2.0-dev'
 #E: Unable to locate package glxgears
 #E: Unable to locate package glmark2
+
+#\begin{glmark2}
+#
+# glmark2
+#
+          #- glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
+#\end{glmark2}
 
 #
 # Docker
