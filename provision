@@ -161,7 +161,7 @@ done
 ansible-playbook $playbook --syntax-check || exit 1
 if [ "$syntax_check_only" = 0 ]; then
   cat $playbook
-  exit 0
+  exit $?
 fi
 
 echo $check
