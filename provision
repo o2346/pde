@@ -159,7 +159,10 @@ while getopts "dep:CS" OPT ; do
 done
 
 ansible-playbook $playbook --syntax-check || exit 1
-[ "$syntax_check_only" = 0 ] && cat $playbook && exit 0
+if [ "$syntax_check_only" = 0 ]; then
+  cat $playbook
+  exit 0
+fi
 
 echo $check
 
