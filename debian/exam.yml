@@ -35,32 +35,6 @@
 #
 #END Sample tasks
 
-#
-# [WORKED] Wireless Driver for broadcom BCM4360(macmini2014)
-#
-#https://forums.kali.org/showthread.php?25082-Broadcom-BCM43142&p=56071&viewfull=1#post56071
-#https://www.linuxquestions.org/questions/linux-newbie-8/kali-linux-%7C-no-wifi-%7C-macbook-%7C-bcm-4360-a-4175573495/
-#https://www.google.co.jp/search?num=24&safe=off&hl=en&ei=vlb1X5DjK7L09AP15ZPgCA&q=kali+linux+Broadcom+BCM4360+wireless+rev+03
-#
-# [WORKED] Wireless Driver TP-Link AC600 wireless Realtek RTL8811AU [Archer T2U Nano]
-# git clone https://github.com/aircrack-ng/rtl8812au  && cd rtl8812au && sudo make dkms_install
-# https://github.com/aircrack-ng/rtl8812au
-# https://linux-hardware.org/index.php?id=usb:2357-011e
-# https://www.google.com/search?q=IPERF3
-# https://www.google.co.jp/search?num=24&safe=off&hl=en&ei=zr32X52GNcyDtQa0xJHICg&q=2357%3A011e+TP-Link+AC600+wireless+Realtek+RTL8811AU
-# https://www.amazon.co.jp/s?k=wifi+usb+linux&ref=nb_sb_noss
-#TP-Link Archer T2U Nano WiFi Wireless LAN Subway AC600 433Mbps + 200Mbps Compatible with Windows and Mac OS Nano Design, Dual Band
-
-#
-# Wifi general
-#
-#https://wiki.debian.org/WiFi
-#
-#[SourcesList](https://wiki.debian.org/SourcesList)
-#https://wiki.archlinux.org/index.php/Network_configuration/Wireless
-#
-#[ip addr](https://superuser.com/a/239704)
-#
 
 #
 # Touchpad
@@ -68,12 +42,3 @@
 #https://wiki.debian.org/SynapticsTouchpad
 #https://bill.harding.blog/2017/12/27/toward-a-linux-touchpad-as-smooth-as-macbook-pro/
 
-# Bluetooth
-#Bus 002 Device 005: ID 0a12:0001 Cambridge Silicon Radio, Ltd Bluetooth Dongle (HCI mode)
-# Only below is neccessay
-#sudo systemctl start bluetooth.service
-# Following is not required
-# sudo apt instally -y bluez* bluetooth blueman
-# hciconfig
-#sudo hciconfig hci0 up
-#https://www.maketecheasier.com/setup-bluetooth-in-linux/
