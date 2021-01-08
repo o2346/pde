@@ -75,9 +75,11 @@
 #https://bill.harding.blog/2017/12/27/toward-a-linux-touchpad-as-smooth-as-macbook-pro/
 
 # Bluetooth
-# Not sure yet
+#Bus 002 Device 005: ID 0a12:0001 Cambridge Silicon Radio, Ltd Bluetooth Dongle (HCI mode)
+# Only below is neccessay
+#sudo systemctl start bluetooth.service
+# Following is not required
 # sudo apt instally -y bluez* bluetooth blueman
 # hciconfig
 #sudo hciconfig hci0 up
-#sudo systemctl start bluetooth.service
 #https://www.maketecheasier.com/setup-bluetooth-in-linux/
