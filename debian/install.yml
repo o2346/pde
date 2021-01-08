@@ -11,10 +11,12 @@
   become: no
   tasks:
 
+#\begin{test}
   - name: Confirm what OS currently is
     command: cat /etc/issue
     register: etc_issue
     become: yes
+#\end{test}
 
   - name: Print on succeeded confirmation
     debug:
@@ -25,10 +27,12 @@
     debug:
       msg: "{{ ansible_distribution }}"
 
+#\begin{exam}
   - name: Print how re-run playbook for handy
     debug:
       msg: "ansible-playbook {{playbook_dir}}/install.yml --connection=local --extra-vars 'ansible_sudo_pass=UNDEFINED'"
       #Another sample invocation: ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  install.yml
+#\end{exam}
 #
 # dist-upgrade
 #
