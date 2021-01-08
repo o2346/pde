@@ -33,7 +33,6 @@
       #Another sample invocation: ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  install.yml
 #\end{fundamental}
 
-#\begin{exam}
 #
 # dist-upgrade
 #
@@ -50,10 +49,7 @@
   - name: Settle flag it has been done
     command: touch /var/tmp/pde_is_dist_upgraded
     become: true
-#\end{exam}
-#
 
-#\begin{test}
 #
 # full-upgrade
 #
@@ -78,7 +74,6 @@
   - name: Settle flag it has been done
     command: touch /var/tmp/pde_is_full_upgraded
     become: true
-#\end{test}
 
 #
 # Fix 4k monitor Refrash rate
