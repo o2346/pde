@@ -1,6 +1,7 @@
 #!/bin/bash
 # Extract texts from stdin with Latex-like markup by indicated keyword
 # This is a kind of dirty workaround in order to execute only selected tasks from a playbook instead of the hole, without manually splitting the file apart
+# Nesting 'begin/end' is NOT supported
 
 cd $(dirname $(realpath $0))
 
@@ -19,5 +20,4 @@ grep  -Pzo '(?s).*\\documentclass{custom-partializer-incompatible}.*' |
 awk '/\\begin{'$key'}/,/\\end{'$key'}/'
 
 exit "`echo "${PIPESTATUS[*]}" | tr ' ' '+' | bc`"
-
 
