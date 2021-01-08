@@ -1,3 +1,5 @@
+#\documentclass{custom-partializer-incompatible}
+#\begin{fundamental}
 ---
 - hosts: "{{ target | default('localhost') }}"
   vars:
@@ -11,12 +13,10 @@
   become: no
   tasks:
 
-#\begin{test}
   - name: Confirm what OS currently is
     command: cat /etc/issue
     register: etc_issue
     become: yes
-#\end{test}
 
   - name: Print on succeeded confirmation
     debug:
@@ -27,12 +27,13 @@
     debug:
       msg: "{{ ansible_distribution }}"
 
-#\begin{exam}
   - name: Print how re-run playbook for handy
     debug:
       msg: "ansible-playbook {{playbook_dir}}/install.yml --connection=local --extra-vars 'ansible_sudo_pass=UNDEFINED'"
       #Another sample invocation: ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  install.yml
-#\end{exam}
+#\end{fundamental}
+
+#\begin{exam}
 #
 # dist-upgrade
 #
@@ -49,7 +50,10 @@
   - name: Settle flag it has been done
     command: touch /var/tmp/pde_is_dist_upgraded
     become: true
+#\end{exam}
+#
 
+#\begin{test}
 #
 # full-upgrade
 #
@@ -74,6 +78,7 @@
   - name: Settle flag it has been done
     command: touch /var/tmp/pde_is_full_upgraded
     become: true
+#\end{test}
 
 #
 # Fix 4k monitor Refrash rate
