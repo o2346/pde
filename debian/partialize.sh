@@ -6,8 +6,8 @@ cd $(dirname $(realpath $0))
 
 declare -r fundamental='fundamental'
 declare -r partial=$1
-declare -r fromto='('$(echo "$fundamental $*" | tr ' ' '|')')'
-echo $fromto >&2
+declare -r key='('$(echo "$fundamental $*" | tr ' ' '|')')'
+echo $key >&2
 #\documentclass{custom-partializer-incompatible}
 #test: git ls-tree --name-only HEAD | ciwl 'cat install.yml | ./partialize.sh test'
 #https://stackoverflow.com/a/3717989
@@ -16,7 +16,7 @@ echo $fromto >&2
 #https://en.wikibooks.org/wiki/LaTeX/Basics
 cat -                 |
 grep  -Pzo '(?s).*\\documentclass{custom-partializer-incompatible}.*' |
-awk '/\\begin{'$fromto'}/,/\\end{'$fromto'}/'
+awk '/\\begin{'$key'}/,/\\end{'$key'}/'
 
 exit "`echo "${PIPESTATUS[*]}" | tr ' ' '+' | bc`"
 
