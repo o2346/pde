@@ -125,7 +125,7 @@ playbook="$(realpath $OSDIR/install.yml)"
 branch=master
 check=''
 
-while getopts "dep:C" OPT ; do
+while getopts "dep:CS" OPT ; do
   case $OPT in
     d)
         branch=develop
@@ -138,6 +138,9 @@ while getopts "dep:C" OPT ; do
         branch=develop
         playbook="$(dirname $(mktemp -u))/partial.yml"
         cat ./$OSDIR/install.yml | ./$OSDIR/partialize.sh $OPTARG > $playbook
+        ;;
+    S)
+        syntax_check_only=0
         ;;
     C)
         check='--check'
@@ -156,6 +159,7 @@ while getopts "dep:C" OPT ; do
 done
 
 ansible-playbook $playbook --syntax-check || exit 1
+[ "$syntax_check_only" = 0 ] && cat $playbook && exit 0
 
 echo $check
 
