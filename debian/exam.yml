@@ -34,12 +34,6 @@
 #
 #
 #END Sample tasks
-#
-  - name: Install ntpdate
-    package:
-      name: ntpdate
-      state: present
-    become: yes
 
 #
 # [WORKED] Wireless Driver for broadcom BCM4360(macmini2014)
