@@ -102,13 +102,45 @@
 #https://www.google.co.jp/search?num=24&safe=off&hl=en&ei=vlb1X5DjK7L09AP15ZPgCA&q=kali+linux+Broadcom+BCM4360+wireless+rev+03
 #
 # [WORKED] Wireless Driver TP-Link AC600 wireless Realtek RTL8811AU [Archer T2U Nano]
-# git clone https://github.com/aircrack-ng/rtl8812au  && cd rtl8812au && sudo make dkms_install
 # https://github.com/aircrack-ng/rtl8812au
+# sudo apt install -y dkms && git clone https://github.com/aircrack-ng/rtl8812au  && cd rtl8812au && sudo make dkms_install
+#
+  - name: wifi:2357:011e - Check TP-Link AC600 wireless Realtek RTL8811AU [Archer T2U Nano]
+    shell: lsusb | grep '2357:011e'
+    register: is_tplink_ac600
+    ignore_errors: true
+  - name: wifi:2357:011e - Clone a repo with separate git directory
+    git:
+      repo: https://github.com/aircrack-ng/rtl8812au.git
+      dest: /tmp/rtl8812au
+    when: is_tplink_ac600 is succeeded
+  - name: wifi:2357:011e - install dependencies
+    apt:
+      name:
+        - dkms
+      state: latest
+    become: true
+    when: is_tplink_ac600 is succeeded
+  - name: wifi:2357:011e - dkms_remove, no matter the one has been installed or not
+    make:
+      chdir: /tmp/rtl8812au
+      target: dkms_remove
+    when: is_tplink_ac600 is succeeded
+    become: true
+  - name: wifi:2357:011e - Build target with a custom Makefile, may take some time..
+    make:
+      chdir: /tmp/rtl8812au
+      target: dkms_install
+    when: is_tplink_ac600 is succeeded
+    become: true
 # https://linux-hardware.org/index.php?id=usb:2357-011e
 # https://www.google.com/search?q=IPERF3
 # https://www.google.co.jp/search?num=24&safe=off&hl=en&ei=zr32X52GNcyDtQa0xJHICg&q=2357%3A011e+TP-Link+AC600+wireless+Realtek+RTL8811AU
 # https://www.amazon.co.jp/s?k=wifi+usb+linux&ref=nb_sb_noss
 #TP-Link Archer T2U Nano WiFi Wireless LAN Subway AC600 433Mbps + 200Mbps Compatible with Windows and Mac OS Nano Design, Dual Band
+##
+#└─$ lsusb | grep wireless
+#Bus 002 Device 003: ID 2357:011e TP-Link AC600 wireless Realtek RTL8811AU [Archer T2U Nano]
 
 #
 # Wifi general
