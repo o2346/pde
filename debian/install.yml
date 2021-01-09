@@ -885,7 +885,6 @@
 #
 # glmark2
 #
-#
   - name: glmark2 - install by apt, if supported
     apt:
       state: latest
