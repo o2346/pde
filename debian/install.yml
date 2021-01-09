@@ -123,11 +123,27 @@
 #\end{device.wireless}
 
 #\begin{device.bluetooth}
-# Bluetooth
+#
+# bluetooth
+#
+  - name: bluetooth - Confirm some device is present
+    command: lsusb | grep -i 'bluetooth'
+    register: is_bluetooth_attatched
+    ignore_errors: true
+  - name: bluetooth - Print on succeeded
+    debug:
+      msg: "nothing found, newly installing bluetooth"
+    when: is_bluetooth_attatched is succeeded
+  - name: bluetooth - Make sure a service is running
+    systemd:
+      state: started
+      name: bluetooth
+    when: is_bluetooth_attatched is succeeded
+    become: true
 #Bus 002 Device 005: ID 0a12:0001 Cambridge Silicon Radio, Ltd Bluetooth Dongle (HCI mode)
 # Only below is neccessay
 #sudo systemctl start bluetooth.service
-# Following is not required
+# Following is not required for now, but might, in some other cases
 # sudo apt instally -y bluez* bluetooth blueman
 # hciconfig
 #sudo hciconfig hci0 up
