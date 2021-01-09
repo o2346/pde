@@ -442,7 +442,7 @@
       path: ~/.config/autostart
       state: directory
       mode: '0755'
-  - name: autostart - copy scrpts to autostart
+  - name: autostart - copy scripts to autostart
     copy: >
       src=./autostart/
       dest=~/.config/autostart
@@ -460,10 +460,22 @@
       #    shell: 'd=~/.config/autostart; ls $d | xargs -I{} ln -s $d/{} ~/.local/share/applications/{}'
       #    ignore_errors: true
 #
-# Base Configuration file
+# My Configuration file
 #
 # .mydevices
 # .myservices
+  - name: mydevices - copy scripts to autostart
+    copy: >
+      src=./.mydevices
+      dest=/usr/local/sbin/
+      mode=777
+    become: true
+  - name: myservices - copy scripts to autostart
+    copy: >
+      src=./.myservices
+      dest=/usr/local/sbin/
+      mode=777
+    become: true
 
 #\end{userconfig}
 
@@ -537,11 +549,12 @@
     #  become: true
     #
     #TODO, instead of autostart/powermate.desktop 
-    #- name: Startup on boot
-    #  lineinfile:
-    #    dest: ~/.profile
-    #    line: '/opt/powermate/powermate.sh'
-    #when: ansible_distribution == 'Kali GNU/Linux'
+  - name: Device - Griffin Powermate - set Startup on boot
+    lineinfile:
+      dest: /usr/local/sbin/.mydevices
+      line: '/opt/powermate/powermate.sh'
+    when: ansible_distribution == 'Kali GNU/Linux'
+    become: true
 #\end{device.xinput}
 
 #
