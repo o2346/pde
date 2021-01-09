@@ -451,9 +451,9 @@
       path: ~/.local/share/applications
       state: directory
       mode: '0755'
-  - name: autostart - create simlink to ~/.local/share/applications
-    shell: 'd=~/.config/autostart; ls $d | xargs -I{} ln -s $d/{} ~/.local/share/applications/{}'
-    ignore_errors: true
+      #  - name: autostart - create simlink to ~/.local/share/applications
+      #    shell: 'd=~/.config/autostart; ls $d | xargs -I{} ln -s $d/{} ~/.local/share/applications/{}'
+      #    ignore_errors: true
 
 #\begin{device.xinput}
 #
