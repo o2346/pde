@@ -886,7 +886,66 @@
 #
 # glmark2
 #
-          #- glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
+#
+  - name: glmark2 - install by apt, if supported
+    apt:
+      state: latest
+      name:
+        - glmark2
+    when: ansible_distribution == 'Linux Mint'
+    # Task Abobe does not work on kali. Build from source following
+    #https://www.pcsuggest.com/install-glmark2-debian/
+  - name: glmark2 - checking already installed
+    command: which glmark2
+    register: is_glmark2_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing glmark2"
+    when: is_glmark2_installed is failed
+  - name: glmark2 - setup
+    apt:
+      state: latest
+      name:
+        - git
+        - g++
+        - build-essential
+        - pkg-config
+        - libx11-dev
+        - libgl1-mesa-dev
+        - libjpeg-dev
+        - libpng-dev # install libpng12-dev on Ubuntu/Mint
+    become: true
+    when: is_glmark2_installed is failed
+  - name: Clone a repo with separate git directory
+    git:
+      repo: https://github.com/glmark2/glmark2.git
+      dest: /tmp/glmark2
+    when: is_glmark2_installed is failed
+  - name: glmark2 - Configure, compile and install glmark2 in Debian
+    command: ./waf configure --with-flavors=x11-gl
+    args:
+      chdir: /tmp/glmark2
+    when: is_glmark2_installed is failed
+  - name: glmark2 - Configure, compile and install glmark2 in Debian
+    command: ./waf build -j 4
+    args:
+      chdir: /tmp/glmark2
+    when: is_glmark2_installed is failed
+  - name: glmark2 - Configure, compile and install glmark2 in Debian
+    command: ./waf install
+    args:
+      chdir: /tmp/glmark2
+    when: is_glmark2_installed is failed
+    become: true
+  - name: glmark2 - Stripping the debian glmark2 binary will reduce the overall binary size hence it will  make the application launch faster
+    command: strip -s /usr/local/bin/glmark2
+    args:
+      chdir: /tmp/glmark2
+    when: is_glmark2_installed is failed
+    become: true
+  - name: glmark2 - Confirm
+    command: which glmark2
 #\end{glmark2}
 
 #
