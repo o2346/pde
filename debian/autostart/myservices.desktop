@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=My Services
+Exec=/usr/local/sbin/.myservices

@@ -1,9 +1,0 @@
-#It Does not work on kali,
-#`echo "/opt/powermate/powermate.sh" >> ~/.xinputrc` instead
-#Consider implement it as a task on playbook
-[Desktop Entry]
-Type=Application
-Terminal=false
-Name=Powermate with Custom configuration
-#Icon=/var/tmp/urxvt.icon.png
-Exec=/opt/powermate/powermate.sh

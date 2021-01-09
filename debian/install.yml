@@ -510,12 +510,11 @@
     become: true
   - name: Device - Slimblade Trackball - exec for current login
     command: /opt/trackball/trackball.sh
-    #- name: Device - Slimblade Trackball - Make sure a service is running
-    #  systemd:
-    #    state: restarted
-    #    enabled: yes
-    #    name: trackball
-    #  become: true
+  - name: Device - Slimblade Trackball - Make sure a service is running
+    lineinfile:
+      dest: /usr/local/sbin/.mydevices
+      line: '/opt/trackball/trackball.sh'
+    become: true
 
 #
 # Griffin Powermate
