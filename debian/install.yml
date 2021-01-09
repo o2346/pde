@@ -446,7 +446,7 @@
     copy: >
       src=./autostart/
       dest=~/.config/autostart
-      mode=777
+      mode=666
 
 #
 # register items for Launcher
