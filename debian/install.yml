@@ -745,7 +745,6 @@
         - htop
         - nkf
         - keepassx
-          #- mp3splt
         #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
         - wine
         - tig
