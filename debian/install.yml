@@ -412,21 +412,21 @@
 # https://www.google.co.jp/search?safe=off&num=16&q=mint+active+window+cinnamon+-matome.naver.jp+-cookpad.com+-itpro.nikkeibp.co.jp+-rakuten.co.jp+-weblio.jp
 # It requires to modify cinnamon.css and a little complicated
 
-  #
-  # Set timezone
-  #
-  #On kali GUI, it accepts 'Japan' though
-  #https://docs.ansible.com/ansible/2.3/timezone_module.html
+#
+# Set timezone
+#
+#On kali GUI, it accepts 'Japan' though
+#https://docs.ansible.com/ansible/2.3/timezone_module.html
   - name: set timezone to Asia/Tokyo
     timezone:
       name: Asia/Tokyo
     become: yes
 
 
-  #
-  # Startup apps on boot
-  #
-  #Most useful instruction: https://superuser.com/a/1253718
+#
+# Startup apps on boot
+#
+#Most useful instruction: https://superuser.com/a/1253718
     #https://superuser.com/a/1253718
     #https://wiki.archlinux.org/index.php/systemd#Basic_systemctl_usage
     #https://askubuntu.com/questions/903354/difference-between-systemctl-and-service-commands
@@ -456,6 +456,7 @@
     shell: 'd=~/.config/autostart; ls $d | xargs -I{} ln -s $d/{} ~/.local/share/applications/{}'
     ignore_errors: true
 
+#\begin{device.xinput}
 #
 # Slimblade Trackball
 #
@@ -530,6 +531,7 @@
     #    dest: ~/.profile
     #    line: '/opt/powermate/powermate.sh'
     #when: ansible_distribution == 'Kali GNU/Linux'
+#\end{device.xinput}
 
 #
 # apt(for mint)
