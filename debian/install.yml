@@ -462,8 +462,8 @@
 #
 # Base Configuration file
 #
-# .usersdevices
-# .usersservices
+# .mydevices
+# .myservices
 
 #\end{userconfig}
 
