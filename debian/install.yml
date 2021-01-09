@@ -422,6 +422,7 @@
       name: Asia/Tokyo
     become: yes
 
+#\begin{userconfig}
 #
 # Startup apps on boot
 #
@@ -446,6 +447,10 @@
       src=./autostart/
       dest=~/.config/autostart
       mode=777
+
+#
+# register items for Launcher
+#
   - name: Ensure ~/.local/share/applications/
     file:
       path: ~/.local/share/applications
@@ -454,6 +459,13 @@
       #  - name: autostart - create simlink to ~/.local/share/applications
       #    shell: 'd=~/.config/autostart; ls $d | xargs -I{} ln -s $d/{} ~/.local/share/applications/{}'
       #    ignore_errors: true
+#
+# Base Configuration file
+#
+# .usersdevices
+# .usersservices
+
+#\end{userconfig}
 
 #\begin{device.xinput}
 #
