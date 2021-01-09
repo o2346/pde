@@ -872,14 +872,6 @@
     become: true
     #when: avoid_some is failed
 
-#2020/12/29 , kali 2020.4
-#E: Package 'mp3splt' has no installation candidate
-#E: Package 'chromium-browser' has no installation candidate
-#E: Package 'guile-2.0' has no installation candidate
-#E: Unable to locate package guile-2.0-dev
-#E: Couldn't find any package by glob 'guile-2.0-dev'
-#E: Unable to locate package glxgears
-#E: Unable to locate package glmark2
 #\begin{mp3splt}
 #
 # mp3splt
