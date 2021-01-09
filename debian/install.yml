@@ -74,25 +74,6 @@
     command: touch /var/tmp/pde_is_full_upgraded
     become: true
 
-#
-# Fix 4k monitor Refrash rate
-#
-  - name: fix4k - checking 4k monitor is present
-    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | bash -s
-    register: is_4kmonitor
-    ignore_errors: true
-    #  - name: test script
-    #    shell: echo 'uname' | bash -s > ~/.xprofile
-  - name: fix4k for specific monitor
-    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | bash -s > ~/.xprofile
-    when: is_4kmonitor is succeeded
-    #todo
-    #- name: Startup on boot
-    #  lineinfile: dest=~/.config/autostart/fix4k.desktop
-    #            regexp="^Exec=/home/$USER/.xprofile"
-    #            line="Exec=/home/{{ansible_user_id}}/.xprofile"
-    #            state=present
-
 #\begin{device.wireless}
 #
 # [WORKED, But not tested as the task] Wireless Driver for broadcom BCM4360(macmini2014)
@@ -480,6 +461,25 @@
 #\end{userconfig}
 
 #\begin{device.xinput}
+#
+# Fix 4k monitor Refrash rate
+#
+  - name: fix4k - checking 4k monitor is present
+    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | bash -s
+    register: is_4kmonitor
+    ignore_errors: true
+    #  - name: test script
+    #    shell: echo 'uname' | bash -s > ~/.xprofile
+  - name: fix4k for specific monitor
+    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | bash -s > ~/.xprofile
+    when: is_4kmonitor is succeeded
+    #todo
+    #- name: Startup on boot
+    #  lineinfile: dest=~/.config/autostart/fix4k.desktop
+    #            regexp="^Exec=/home/$USER/.xprofile"
+    #            line="Exec=/home/{{ansible_user_id}}/.xprofile"
+    #            state=present
+
 #
 # Slimblade Trackball
 #
