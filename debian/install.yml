@@ -553,7 +553,7 @@
     lineinfile:
       dest: /usr/local/sbin/.mydevices
       line: '/opt/powermate/powermate.sh'
-    when: ansible_distribution == 'Kali GNU/Linux'
+      #when: ansible_distribution == 'Kali GNU/Linux'
     become: true
 #\end{device.xinput}
 
