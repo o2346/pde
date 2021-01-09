@@ -95,13 +95,33 @@
 
 #\begin{device.wireless}
 #
-# [WORKED] Wireless Driver for broadcom BCM4360(macmini2014)
+# [WORKED, But not tested as the task] Wireless Driver for broadcom BCM4360(macmini2014)
 #
 #https://forums.kali.org/showthread.php?25082-Broadcom-BCM43142&p=56071&viewfull=1#post56071
+  - name: wifi:BCM4360 - Check the device is present
+    shell: lsusb | grep 'BCM4360'
+    register: is_BCM4360
+    ignore_errors: true
+  - name: wifi:BCM4360 - Install the relevant/latest linux-image, linux-headers and broadcom-sta-dkms packages
+    shell: apt-get install -y linux-image-$(uname -r|sed 's,[^-]*-[^-]*-,,') linux-headers-$(uname -r|sed 's,[^-]*-[^-]*-,,') broadcom-sta-dkms
+    when: is_BCM4360 is succeeded
+    become: true
+  - name: wifi:BCM4360 - Unload conflicting modules
+    shell: modprobe -r b44 b43 b43legacy ssb brcmsmac bcma
+    when: is_BCM4360 is succeeded
+    become: true
+  - name: wifi:BCM4360 - Load the wl module
+    shell: modprobe wl
+    when: is_BCM4360 is succeeded
+    become: true
+#
+#
 #https://www.linuxquestions.org/questions/linux-newbie-8/kali-linux-%7C-no-wifi-%7C-macbook-%7C-bcm-4360-a-4175573495/
 #https://www.google.co.jp/search?num=24&safe=off&hl=en&ei=vlb1X5DjK7L09AP15ZPgCA&q=kali+linux+Broadcom+BCM4360+wireless+rev+03
+
 #
-# [WORKED] Wireless Driver TP-Link AC600 wireless Realtek RTL8811AU [Archer T2U Nano]
+# Wireless Driver TP-Link AC600 wireless Realtek RTL8811AU [Archer T2U Nano]
+#
 # https://github.com/aircrack-ng/rtl8812au
 # sudo apt install -y dkms && git clone https://github.com/aircrack-ng/rtl8812au  && cd rtl8812au && sudo make dkms_install
 #
