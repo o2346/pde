@@ -462,17 +462,36 @@
 
 #\begin{device.xinput}
 #
-# Fix 4k monitor Refrash rate
+# [Went but not tested yet] Fix 4k monitor Refrash rate
 #
+  - name: fix4k - prepare solution script
+    copy: >
+      src=./fix4k.sh
+      dest=/tmp/
+      mode=777
   - name: fix4k - checking 4k monitor is present
-    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | bash -s
+    command: /tmp/fix4k.sh
     register: is_4kmonitor
     ignore_errors: true
+    become: true
     #  - name: test script
     #    shell: echo 'uname' | bash -s > ~/.xprofile
   - name: fix4k for specific monitor
-    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | bash -s > ~/.xprofile
+    shell: /tmp/fix4k.sh > /usr/local/sbin/.my4kmonitor
     when: is_4kmonitor is succeeded
+    become: true
+  - name: fix4k - ensure script executable
+    file:
+      path: /usr/local/sbin/.my4kmonitor
+      mode: '0777'
+    when: is_4kmonitor is succeeded
+    become: true
+  - name: fix4k bind startup
+    lineinfile:
+      dest: /usr/local/sbin/.mydevices
+      line: '/usr/local/sbin/.my4kmonitor'
+    when: is_4kmonitor is succeeded
+    become: true
     #todo
     #- name: Startup on boot
     #  lineinfile: dest=~/.config/autostart/fix4k.desktop
