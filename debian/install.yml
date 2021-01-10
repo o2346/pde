@@ -146,6 +146,7 @@
       chdir: /tmp/rtl8812au
       target: dkms_remove
     when: is_tplink_ac600 is succeeded
+    ignore_errors: true
     become: true
   - name: wifi:2357:011e - Build target with a custom Makefile, may take some time..
     make:
