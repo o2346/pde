@@ -1000,6 +1000,7 @@
           #convert: not authorized `show:' @ error/constitute.c/WriteImage/1028.
         - build-essential
           #      - wopr
+        - speedtest-cli
     become: true
     #when: avoid_some is failed
 
@@ -1329,6 +1330,14 @@
     #    become: true
     #    when: avoid_some is failed
     #TODO: consider to do it through apt, availabe both mint & kali lately
+
+#
+# fast-cli - alternative for speedtest-cli
+#
+  - name: fast-cli - alternative for speedtest-cli
+    npm: name={{ item }} global=yes
+    with_items:
+      - fast-cli
 
 #
 # misc Settings
