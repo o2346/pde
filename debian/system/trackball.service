@@ -1,0 +1,9 @@
+[Unit]
+Description=autostart SlimBlade Trackball
+
+[Service]
+Type=simple
+ExecStart=/opt/trackball/trackballw.sh
+
+[Install]
+WantedBy=multi-user.target

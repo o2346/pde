@@ -2,6 +2,6 @@
 Encoding=UTF-8
 Name=gnome-terminal
 Comment=gnome-terminal start
-Exec=/usr/bin/gnome-terminal --window --full-screen --hide-menubar -e tmux
+Exec=/usr/bin/gnome-terminal --window -screen --hide-menubar -e tmux
 Type=Application
 

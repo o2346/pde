@@ -5,6 +5,9 @@
   become: no
   tasks:
 
+#
+#Sample tasks
+#
   #https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html
   - name: Check
     command: cat /etc/issue
@@ -24,4 +27,18 @@
       msg: "nothing found"
     when: etc_issue is failed
 
-#ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  exam.yml
+  #ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  exam.yml
+  - name: Print how re-run playbook for handy
+    debug:
+      msg: "ansible-playbook {{playbook_dir}}/exam.yml --connection=local --extra-vars 'ansible_sudo_pass=UNDEFINED'"
+#
+#
+#END Sample tasks
+
+
+#
+# Touchpad
+#
+#https://wiki.debian.org/SynapticsTouchpad
+#https://bill.harding.blog/2017/12/27/toward-a-linux-touchpad-as-smooth-as-macbook-pro/
+

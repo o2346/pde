@@ -9,9 +9,10 @@
 
 readonly current_script_path=$(dirname $(readlink -f $0))
 
-cd /var/tmp
+cd /opt/
 
-if ! ls powermate-linux; then
+if ! ls powermate-linux > /dev/null; then
+  echo "Newly installing powermante.." >&2
   git clone --recurse-submodules https://github.com/stefansundin/powermate-linux.git
 fi
 
@@ -20,6 +21,7 @@ cd powermate-linux
 if [ -f "./powermate" ]; then
   :
 else
+  echo "Newly installing powermante.." >&2
   sudo cp 60-powermate.rules /etc/udev/rules.d/
   sudo apt-get install -y libpulse-dev libnotify-dev xdotool
   sudo apt-get update --fix-missing
@@ -27,11 +29,23 @@ else
 fi
 
 setup() {
+  flag=/tmp/powermate_invoked
   echo "Setting up powermate with custom config" >&2
-  if ! ps aux | grep 'powermate \-c'; then
-    (./powermate -c $current_script_path/powermate.toml) &
-    echo "starging powermate" >&2
+
+  #if [ -f "/tmp/powermate_invoked" ]; then
+  #  echo "It looks like already invoked at boot. Abort" >&2
+  #  return 1
+  #fi
+
+  if ps aux | grep 'powermate \-c'; then
+    echo "It looks like already invoked at boot. Abort" >&2
+    return 1
   fi
+
+  echo "starging powermate" >&2
+  touch $flag
+  (./powermate -c $current_script_path/powermate.toml) &
+  return 0
 }
 
 setup

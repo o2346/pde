@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=My Devices
+Exec=/usr/local/sbin/.mydevices

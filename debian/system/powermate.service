@@ -1,0 +1,9 @@
+[Unit]
+Description=autostart powermate
+
+[Service]
+Type=oneshot
+ExecStart=/opt/powermate/powermate.sh
+
+[Install]
+WantedBy=multi-user.target

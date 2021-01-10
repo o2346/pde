@@ -57,13 +57,13 @@ preinstall_apt() {
     #It causes error later apt update in kali
     #sudo apt-add-repository ppa:ansible/ansible
 
-    sudo apt update
+    sudo apt search ansible | grep ansible || sudo apt update
     sudo apt install -y ansible
-    #sudo apt upgrade -y ansible
     sudo chown -R -v $USER ~/.ansible
   fi
 
   which git || sudo apt install -y git
+  which bc || sudo apt install -y bc
 
 }
 
@@ -116,44 +116,70 @@ echo "$USER"
 #    exit 0
 #    ;;
 
+#for testing local repo for handy: ln -s ~/Documents/pde /tmp/pde
+
 preinstall
 cd /tmp
 test -d /tmp/pde || git clone https://github.com/o2346/pde
 cd /tmp/pde
+playbook="$(realpath $OSDIR/install.yml)"
+branch=master
+check=''
 
-while getopts "dev" OPT ; do
+while getopts "dep:CS" OPT ; do
   case $OPT in
-    d)  echo Branch: Develop OSDIR=$OSDIR
-        echo ansible playbook install.yml
-        git checkout develop
-        git pull --ff-only
-        cd /tmp/pde/$OSDIR
-        ansible-playbook install.yml -kK --connection=local
+    d)
+        branch=develop
         ;;
-    e)  echo Branch: Develop OSDIR=$OSDIR
-        echo ansible playbook exam.yml
-        git checkout develop
-        git pull --ff-only
-        cd /tmp/pde/$OSDIR
-        ansible-playbook exam.yml -kK --connection=local
+    e)
+        branch=develop
+        playbook="$(realpath $OSDIR/exam.yml)"
         ;;
-    v)  echo Branch: Develop OSDIR=$OSDIR
-        echo 'Set up target host vulnerable for handy'
-        git checkout develop
-        git pull --ff-only
-        cd /tmp/pde/$OSDIR
-        ./vulnerable.sh
-        exit 0
+    p)
+        branch=develop
+        playbook="$(dirname $(mktemp -u))/partial.yml"
+        cat ./$OSDIR/install.yml | ./$OSDIR/partialize.sh $OPTARG > $playbook
         ;;
+    S)
+        syntax_check_only=0
+        ;;
+    C)
+        check='--check'
+        ;;
+#    v)  echo Branch: Develop OSDIR=$OSDIR
+#        echo 'Set up target host vulnerable for handy'
+#        git checkout develop
+#        git pull --ff-only
+#        cd /tmp/pde/$OSDIR
+#        ./vulnerable.sh
+#        exit 0
+#        ;;
     *)
         ;;
   esac
 done
 
+ansible-playbook $playbook --syntax-check || exit 1
+if [ "$syntax_check_only" = 0 ]; then
+  cat $playbook
+  exit $?
+fi
+
+echo $check
+
 if [ "$#" = 0 ]; then
+  echo "Provisioning by master branch" >&2
   git checkout master
   git pull --ff-only
   cd /tmp/pde/$OSDIR
-  ansible-playbook install.yml -kK --connection=local
+  ansible-playbook $check install.yml -kK --connection=local
+  exit $?
+else
+  echo "Provisioning by $branch branch" >&2
+  echo $playbook
+  git checkout $branch
+  git pull --ff-only
+  cd /tmp/pde/$OSDIR
+  ansible-playbook $check $playbook -kK --connection=local
   exit $?
 fi

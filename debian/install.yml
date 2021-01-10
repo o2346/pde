@@ -1,3 +1,5 @@
+#\documentclass{custom-partializer-incompatible}
+#\begin{fundamental}
 ---
 - hosts: "{{ target | default('localhost') }}"
   vars:
@@ -24,6 +26,31 @@
   - name: Print ansible_distribution
     debug:
       msg: "{{ ansible_distribution }}"
+
+  - name: Print how re-run playbook for handy
+    debug:
+      msg: "ansible-playbook {{playbook_dir}}/install.yml --connection=local --extra-vars 'ansible_sudo_pass=UNDEFINED'"
+#\end{fundamental}
+
+#
+# Turn off screensaver & moniter auto blanking
+#
+# https://wiki.archlinux.org/index.php/Display_Power_Management_Signaling
+# https://community.spiceworks.com/topic/2223833-kali-linux-black-screen-cursor-blinking-vbox
+# https://superuser.com/questions/1185747/how-do-i-disable-the-screensaver-lock-in-kali-linux
+# https://unix.stackexchange.com/questions/162989/how-to-get-kali-linux-to-not-go-to-sleep
+# https://forums.linuxmint.com/viewtopic.php?t=303436
+  - name: Examine xset is available or not
+    command: xset q
+    register: is_xset
+    ignore_errors: true
+  - name: Disable screensaver & auto blanking, which may cause trouble - 1
+    command: xset s off -dpms
+    when: is_xset is succeeded
+  - name: Disable screensaver & auto blanking, which may cause trouble - 2
+    command: xset dpms 0 0 0
+    when: is_xset is succeeded
+
 #
 # dist-upgrade
 #
@@ -66,41 +93,114 @@
     command: touch /var/tmp/pde_is_full_upgraded
     become: true
 
+#\begin{device.wireless}
 #
-# Fix 4k monitor Refrash rate
+# [WORKED, But not tested as the task] Wireless Driver for broadcom BCM4360(macmini2014)
 #
-  - name: fix4k - checking 4k monitor is present
-    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | bash -s
-    register: is_4kmonitor
+#https://forums.kali.org/showthread.php?25082-Broadcom-BCM43142&p=56071&viewfull=1#post56071
+  - name: wifi:BCM4360 - Check the device is present
+    shell: lspci | grep 'BCM4360'
+    register: is_BCM4360
     ignore_errors: true
-    #  - name: test script
-    #    shell: echo 'uname' | bash -s > ~/.xprofile
-  - name: fix4k for specific monitor
-    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/fix4k.sh | bash -s > ~/.xprofile
-    when: is_4kmonitor is succeeded
-#
-#SAM
-#
-#https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
-  - name: homwbrew - checking already installed
-    command: test -d /home/linuxbrew/.linuxbrew
-    register: is_brew_installed
-    ignore_errors: true
-  - name: install homebrew and sam
-    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/brew-sam.sh | bash -s
-    when: is_brew_installed is failed
-  - name: install sam - stupidly 2nd invocation
-    shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
-    when: is_brew_installed is failed
-    # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
-  - name: Create symbolic link for sam
-    file:
-      src: "/home/linuxbrew/.linuxbrew/bin/sam"
-      dest: "/usr/local/bin/sam"
-      state: link
+  - name: wifi:BCM4360 - Install the relevant/latest linux-image, linux-headers and broadcom-sta-dkms packages
+    shell: apt-get install -y linux-image-$(uname -r|sed 's,[^-]*-[^-]*-,,') linux-headers-$(uname -r|sed 's,[^-]*-[^-]*-,,') broadcom-sta-dkms
+    when: is_BCM4360 is succeeded
     become: true
-    # In addition, ensure path to '/home/linuxbrew/.linuxbrew/bin/sam'. Then finally you could invoke the command 'sam'
-    # Gave up adding to PATH or alias in .zshenv, .zshrc, did not work
+  - name: wifi:BCM4360 - Unload conflicting modules
+    shell: modprobe -r b44 b43 b43legacy ssb brcmsmac bcma
+    when: is_BCM4360 is succeeded
+    become: true
+  - name: wifi:BCM4360 - Load the wl module
+    shell: modprobe wl
+    when: is_BCM4360 is succeeded
+    become: true
+#
+#
+#https://www.linuxquestions.org/questions/linux-newbie-8/kali-linux-%7C-no-wifi-%7C-macbook-%7C-bcm-4360-a-4175573495/
+#https://www.google.co.jp/search?num=24&safe=off&hl=en&ei=vlb1X5DjK7L09AP15ZPgCA&q=kali+linux+Broadcom+BCM4360+wireless+rev+03
+
+#
+# Wireless Driver TP-Link AC600 wireless Realtek RTL8811AU [Archer T2U Nano]
+#
+# https://github.com/aircrack-ng/rtl8812au
+# sudo apt install -y dkms && git clone https://github.com/aircrack-ng/rtl8812au  && cd rtl8812au && sudo make dkms_install
+#
+  - name: wifi:2357:011e - Check TP-Link AC600 wireless Realtek RTL8811AU [Archer T2U Nano]
+    shell: lsusb | grep '2357:011e'
+    register: is_tplink_ac600
+    ignore_errors: true
+  - name: wifi:2357:011e - Clone a repo with separate git directory
+    git:
+      repo: https://github.com/aircrack-ng/rtl8812au.git
+      dest: /tmp/rtl8812au
+    when: is_tplink_ac600 is succeeded
+  - name: wifi:2357:011e - install dependencies
+    apt:
+      name:
+        - dkms
+      state: latest
+    become: true
+    when: is_tplink_ac600 is succeeded
+  - name: wifi:2357:011e - dkms_remove, no matter the one has been installed or not
+    make:
+      chdir: /tmp/rtl8812au
+      target: dkms_remove
+    when: is_tplink_ac600 is succeeded
+    become: true
+  - name: wifi:2357:011e - Build target with a custom Makefile, may take some time..
+    make:
+      chdir: /tmp/rtl8812au
+      target: dkms_install
+    when: is_tplink_ac600 is succeeded
+    become: true
+# https://linux-hardware.org/index.php?id=usb:2357-011e
+# https://www.google.com/search?q=IPERF3
+# https://www.google.co.jp/search?num=24&safe=off&hl=en&ei=zr32X52GNcyDtQa0xJHICg&q=2357%3A011e+TP-Link+AC600+wireless+Realtek+RTL8811AU
+# https://www.amazon.co.jp/s?k=wifi+usb+linux&ref=nb_sb_noss
+#TP-Link Archer T2U Nano WiFi Wireless LAN Subway AC600 433Mbps + 200Mbps Compatible with Windows and Mac OS Nano Design, Dual Band
+##
+#└─$ lsusb | grep wireless
+#Bus 002 Device 003: ID 2357:011e TP-Link AC600 wireless Realtek RTL8811AU [Archer T2U Nano]
+
+#
+# Wifi general
+#
+#https://wiki.debian.org/WiFi
+#
+#[SourcesList](https://wiki.debian.org/SourcesList)
+#https://wiki.archlinux.org/index.php/Network_configuration/Wireless
+#
+#[ip addr](https://superuser.com/a/239704)
+#
+#\end{device.wireless}
+
+#\begin{device.bluetooth}
+#
+# bluetooth
+#
+  - name: bluetooth - Confirm some device is present
+    shell: lsusb | grep -i 'bluetooth' || lspci | grep -i 'bluetooth'
+    register: is_bluetooth_attatched
+    ignore_errors: true
+  - name: bluetooth - Print on succeeded
+    debug:
+      msg: "nothing found, newly installing bluetooth"
+    when: is_bluetooth_attatched is succeeded
+  - name: bluetooth - Make sure a service is running
+    systemd:
+      state: started
+      name: bluetooth
+    when: is_bluetooth_attatched is succeeded
+    become: true
+#Bus 002 Device 005: ID 0a12:0001 Cambridge Silicon Radio, Ltd Bluetooth Dongle (HCI mode)
+# Only below is neccessay
+#sudo systemctl start bluetooth.service
+# Following is not required for now, but might, in some other cases
+# sudo apt instally -y bluez* bluetooth blueman
+# hciconfig
+#sudo hciconfig hci0 up
+#https://www.maketecheasier.com/setup-bluetooth-in-linux/
+#\end{device.bluetooth}
 
 #
 # Check 'omit some packages' flag
@@ -136,6 +236,7 @@
       groups: netdev
       append: yes
     become: true
+    #https://devconnected.com/how-to-list-users-and-groups-on-linux/
       #  - name: install package wicd
       #    apt: name={{ item }} update_cache=yes state=latest
       #    with_items:
@@ -227,8 +328,9 @@
       chdir: ~/.uc
 
 #
-# Get rid of. annoying
+# Get rid of, annoying
 #
+#https://community.linuxmint.com/tutorial/view/916
   - name: Get rid of keyring, annoying
     apt:
       name:
@@ -239,6 +341,10 @@
 #
 # Get rid of old driver causes problem
 #
+#It could be absent since Video card replacement solved actual problem
+#https://forums.linuxmint.com/viewtopic.php?p=1654109&sid=5e50071802f97b4131481bcc718cc484#p1654109
+#https://www.google.co.jp/search?safe=off&num=24&hl=en&q=graphic+low+paformance+linux+mint
+#If it is on nvidia card, open Driver Manager, switch to proprietary 445, reboot again.
   - name: Get rid of old driver causes problem
     command: apt remove -y xserver-xorg-video-intel
     become: true
@@ -307,17 +413,190 @@
 # It requires to modify cinnamon.css and a little complicated
 
 #
-# Scripts
+# Set timezone
 #
-  - name: copy scrpts to /usr/local/bin
+#On kali GUI, it accepts 'Japan' though
+#https://docs.ansible.com/ansible/2.3/timezone_module.html
+  - name: set timezone to Asia/Tokyo
+    timezone:
+      name: Asia/Tokyo
+    become: yes
+
+#\begin{userconfig}
+#
+# Startup apps on boot
+#
+#Most useful instruction: https://superuser.com/a/1253718
+    #https://superuser.com/a/1253718
+    #https://wiki.archlinux.org/index.php/systemd#Basic_systemctl_usage
+    #https://askubuntu.com/questions/903354/difference-between-systemctl-and-service-commands
+    #https://superuser.com/questions/1253707/linux-equivalent-of-windows-startup-folder
+    #- name: copy scrpts to /opt
+    #  copy: >
+    #    src=./system/
+    #    dest=/etc/systemd/system
+    #    mode=777
+    #  become: true
+  - name: autostart - Create a directory if it does not exist
+    file:
+      path: ~/.config/autostart
+      state: directory
+      mode: '0755'
+  - name: autostart - copy scripts to autostart
     copy: >
-      src=./bin/
-      dest=/usr/local/bin
+      src=./autostart/
+      dest=~/.config/autostart
+      mode=666
+
+#
+# register items for Launcher
+#
+  - name: Ensure ~/.local/share/applications/
+    file:
+      path: ~/.local/share/applications
+      state: directory
+      mode: '0755'
+      #  - name: autostart - create simlink to ~/.local/share/applications
+      #    shell: 'd=~/.config/autostart; ls $d | xargs -I{} ln -s $d/{} ~/.local/share/applications/{}'
+      #    ignore_errors: true
+#
+# My Configuration file
+#
+# .mydevices
+# .myservices
+  - name: mydevices - copy scripts to autostart
+    copy: >
+      src=./.mydevices
+      dest=/usr/local/sbin/
+      mode=777
+    become: true
+  - name: myservices - copy scripts to autostart
+    copy: >
+      src=./.myservices
+      dest=/usr/local/sbin/
+      mode=777
+    become: true
+
+#\end{userconfig}
+
+#\begin{device.xinput}
+#
+# [Went but not tested yet] Fix 4k monitor Refrash rate
+#
+  - name: fix4k - prepare solution script
+    copy: >
+      src=./fix4k.sh
+      dest=/tmp/
+      mode=777
+  - name: fix4k - checking 4k monitor is present
+    command: /tmp/fix4k.sh
+    register: is_4kmonitor
+    ignore_errors: true
+    become: true
+    #  - name: test script
+    #    shell: echo 'uname' | bash -s > ~/.xprofile
+  - name: fix4k for specific monitor
+    shell: /tmp/fix4k.sh > /usr/local/sbin/.my4kmonitor
+    when: is_4kmonitor is succeeded
+    become: true
+  - name: fix4k - ensure script executable
+    file:
+      path: /usr/local/sbin/.my4kmonitor
+      mode: '0777'
+    when: is_4kmonitor is succeeded
+    become: true
+  - name: fix4k bind startup
+    lineinfile:
+      dest: /usr/local/sbin/.mydevices
+      line: '/usr/local/sbin/.my4kmonitor'
+    when: is_4kmonitor is succeeded
+    become: true
+    #todo
+    #- name: Startup on boot
+    #  lineinfile: dest=~/.config/autostart/fix4k.desktop
+    #            regexp="^Exec=/home/$USER/.xprofile"
+    #            line="Exec=/home/{{ansible_user_id}}/.xprofile"
+    #            state=present
+
+#
+# Slimblade Trackball
+#
+# Packages for the device
+  - name: Device - Slimblade Trackball - Packages
+    apt:
+      state: latest
+      name:
+        - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
+    become: true
+  - name: Device - Slimblade Trackball - Create a directory if it does not exist
+    file:
+      path: /opt/trackball
+      state: directory
+      mode: '0755'
+    become: true
+  - name: Device - Slimblade Trackball - copy scrpts to /opt/trackball
+    copy: >
+      src=./devices/trackball/trackball.sh
+      dest=/opt/trackball
       mode=755
+    become: true
+  - name: Device - Slimblade Trackball - copy scrpts to /opt/trackball/trackballw.sh
+    copy: >
+      src=./devices/trackball/trackballw.sh
+      dest=/opt/trackball
+      mode=755
+    become: true
+  - name: Device - Slimblade Trackball - exec for current login
+    command: /opt/trackball/trackball.sh
+  - name: Device - Slimblade Trackball - Make sure a service is running
+    lineinfile:
+      dest: /usr/local/sbin/.mydevices
+      line: '/opt/trackball/trackball.sh'
     become: true
 
 #
-# apt
+# Griffin Powermate
+#
+  - name: Device - Griffin Powermate - Create a directory if it does not exist
+    file:
+      path: /opt/powermate
+      state: directory
+      mode: '0755'
+    become: true
+  - name: Device - Griffin Powermate - copy scrpts to /opt/powermate
+    copy: >
+      src=./devices/powermate/
+      dest=/opt/powermate
+      mode=755
+    become: true
+  - name: Device - Griffin Powermate - Invoke command 1st time for bootstrapping
+    command: /opt/powermate/powermate.sh
+    ignore_errors: true
+    become: true
+    #- name: Device - Griffin Powermate - kill from 1st one to Invoke 2st
+    #  shell: ps aux | grep 'powermate \-c' | awk '{print $2}' | xargs kill
+    #  become: true
+    #  - name: Device - Griffin Powermate - Invoke command 2st time for Current login
+    #    command: /opt/powermate/powermate.sh
+    #- name: Device - Griffin Powermate - Make sure a service is running
+    #  systemd:
+    #    #state: started
+    #    enabled: yes
+    #    name: powermate
+    #  become: true
+    #
+    #TODO, instead of autostart/powermate.desktop 
+  - name: Device - Griffin Powermate - set Startup on boot
+    lineinfile:
+      dest: /usr/local/sbin/.mydevices
+      line: '/opt/powermate/powermate.sh'
+      #when: ansible_distribution == 'Kali GNU/Linux'
+    become: true
+#\end{device.xinput}
+
+#
+# apt(for mint)
+#
 # https://www.ubuntulinux.jp/ubuntu/mirrors
 # how to modify url
 # https://note.mu/junf/n/nc710a82cad00
@@ -488,6 +767,29 @@
     become: true
     when: ansible_distribution == 'Linux Mint'
 
+#
+#SAM
+#
+#https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+  - name: homwbrew - checking already installed
+    command: test -d /home/linuxbrew/.linuxbrew
+    register: is_brew_installed
+    ignore_errors: true
+  - name: install homebrew and sam
+    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/brew-sam.sh | bash -s
+    when: is_brew_installed is failed
+  - name: install sam - stupidly 2nd invocation
+    shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
+    when: is_brew_installed is failed
+    # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
+  - name: Create symbolic link for sam
+    file:
+      src: "/home/linuxbrew/.linuxbrew/bin/sam"
+      dest: "/usr/local/bin/sam"
+      state: link
+    become: true
+    # In addition, ensure path to '/home/linuxbrew/.linuxbrew/bin/sam'. Then finally you could invoke the command 'sam'
+    # Gave up adding to PATH or alias in .zshenv, .zshrc, did not work
   #
   # urxvt plugins
   #
@@ -535,7 +837,7 @@
     when: is_configreload_installed is failed
 
 #
-# Packages for General use
+# Packages for Fulfillment
 #
   - name: Packages - Critical
     apt:
@@ -574,7 +876,6 @@
         - htop
         - nkf
         - keepassx
-          #- mp3splt
         #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
         - wine
         - tig
@@ -623,8 +924,10 @@
         # sudo pip install -U setuptools
         # sudo pip install csvkit
         - cmake
+        - rsync
+        - bc
     become: true
-  - name: Packages - Graphichs,Video
+  - name: Packages - Multimedia
     apt:
       state: latest
       name:
@@ -641,7 +944,6 @@
         - krita
         - mesa-utils
           #- glxgears
-          #- glmark2 # This does not work on kali. Build from source following https://www.pcsuggest.com/install-glmark2-debian/
         - gimp
         - exiftool
         - xsane
@@ -669,7 +971,6 @@
     apt:
       state: latest
       name:
-        #- vim-gtk #taking care of clipboard functionality since default version does not support
         - chromium
         # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
         - guile-3.0
@@ -677,11 +978,11 @@
         # https://bw.org/ldcsql/
         # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
         # deploy sid into docroot afterward
-        - apache2
-        - php
-        - libapache2-mod-php
-        - php-sqlite3
-        - php-common
+        #- apache2
+        #- php
+        #- libapache2-mod-php
+        #- php-sqlite3
+        #- php-common
         # http://www.mirandora.com/?p=697
         # ~/.config/chromium/Default/History
         - sqlite3
@@ -701,14 +1002,104 @@
     become: true
     #when: avoid_some is failed
 
-#2020/12/29 , kali 2020.4
-#E: Package 'mp3splt' has no installation candidate
-#E: Package 'chromium-browser' has no installation candidate
-#E: Package 'guile-2.0' has no installation candidate
-#E: Unable to locate package guile-2.0-dev
-#E: Couldn't find any package by glob 'guile-2.0-dev'
-#E: Unable to locate package glxgears
-#E: Unable to locate package glmark2
+#\begin{mp3splt}
+#
+# mp3splt
+#
+  - name: mp3splt - install by apt, if supported
+    apt:
+      state: latest
+      name:
+        - mp3splt
+    when: ansible_distribution == 'Linux Mint'
+    # Task Abobe does not work on kali. Build from source following
+    # https://packages.debian.org/search?keywords=mp3splt
+  - name: mp3splt - checking already installed
+    command: which mp3splt
+    register: is_mp3splt_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing mp3splt"
+    when: is_mp3splt_installed is failed
+  - name: mp3splt - Install a .deb package
+    apt:
+      deb: http://ftp.us.debian.org/debian/pool/main/m/mp3splt/libmp3splt_0.9.2-3+b1_amd64.deb
+    become: true
+    when: is_mp3splt_installed is failed
+  - name: mp3splt - Install a .deb package
+    apt:
+      deb: http://ftp.us.debian.org/debian/pool/main/m/mp3splt/mp3splt_2.6.2+20170630-3+b1_amd64.deb
+    become: true
+    when: is_mp3splt_installed is failed
+  - name: mp3splt - Confirm
+    command: which mp3splt
+#\end{mp3splt}
+
+#\begin{glmark2}
+#
+# glmark2
+#
+  - name: glmark2 - install by apt, if supported
+    apt:
+      state: latest
+      name:
+        - glmark2
+    when: ansible_distribution == 'Linux Mint'
+    # Task Abobe does not work on kali. Build from source following
+    #https://www.pcsuggest.com/install-glmark2-debian/
+  - name: glmark2 - checking already installed
+    command: which glmark2
+    register: is_glmark2_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing glmark2"
+    when: is_glmark2_installed is failed
+  - name: glmark2 - setup
+    apt:
+      state: latest
+      name:
+        - git
+        - g++
+        - build-essential
+        - pkg-config
+        - libx11-dev
+        - libgl1-mesa-dev
+        - libjpeg-dev
+        - libpng-dev # install libpng12-dev on Ubuntu/Mint
+    become: true
+    when: is_glmark2_installed is failed
+  - name: Clone a repo with separate git directory
+    git:
+      repo: https://github.com/glmark2/glmark2.git
+      dest: /tmp/glmark2
+    when: is_glmark2_installed is failed
+  - name: glmark2 - Configure, compile and install glmark2 in Debian
+    command: ./waf configure --with-flavors=x11-gl
+    args:
+      chdir: /tmp/glmark2
+    when: is_glmark2_installed is failed
+  - name: glmark2 - Configure, compile and install glmark2 in Debian
+    command: ./waf build -j 4
+    args:
+      chdir: /tmp/glmark2
+    when: is_glmark2_installed is failed
+  - name: glmark2 - Configure, compile and install glmark2 in Debian
+    command: ./waf install
+    args:
+      chdir: /tmp/glmark2
+    when: is_glmark2_installed is failed
+    become: true
+  - name: glmark2 - Stripping the debian glmark2 binary will reduce the overall binary size hence it will  make the application launch faster
+    command: strip -s /usr/local/bin/glmark2
+    args:
+      chdir: /tmp/glmark2
+    when: is_glmark2_installed is failed
+    become: true
+  - name: glmark2 - Confirm
+    command: which glmark2
+#\end{glmark2}
 
 #
 # Docker
@@ -944,11 +1335,6 @@
   - name: zsh for login shell
     user: name={{ansible_user_id}} shell=/bin/zsh
     become: true
-    when: ansible_distribution == 'Linux Mint'
-  - name: copy autostart
-    copy: >
-      src=./autostart/
-      dest=~/.config/autostart
     when: ansible_distribution == 'Linux Mint'
 
 #

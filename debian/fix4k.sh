@@ -43,9 +43,10 @@ if [ -z "$display_port" ]; then
   exit 1
 fi
 
+echo "#!/bin/bash"
 echo "xrandr --newmode $mode_content"
 echo "xrandr --addmode $display_port $mode_id"
-#echo "xrandr --output $display_port --mode $mode_id"
+echo "xrandr --output $display_port --mode $mode_id"
 
 exit 0
 
