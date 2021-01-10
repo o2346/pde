@@ -44,10 +44,10 @@
     command: xset q
     register: is_xset
     ignore_errors: true
-  - name: Disable screensaver & auto blanking, which may cause truble - 1
+  - name: Disable screensaver & auto blanking, which may cause trouble - 1
     command: xset s off -dpms
     when: is_xset is succeeded
-  - name: Disable screensaver & auto blanking, which may cause truble - 2
+  - name: Disable screensaver & auto blanking, which may cause trouble - 2
     command: xset dpms 0 0 0
     when: is_xset is succeeded
 
