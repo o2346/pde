@@ -1334,6 +1334,7 @@
 #
 # fast-cli - alternative for speedtest-cli
 #
+#https://opensource.com/article/20/1/internet-speed-tests
   - name: fast-cli - alternative for speedtest-cli
     npm: name={{ item }} global=yes
     with_items:
