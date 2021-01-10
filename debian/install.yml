@@ -1179,6 +1179,7 @@
       line: 'export PATH=~/.npm-global/bin:$PATH'
   - name: source ~/.profile
     shell: source ~/.profile | bash
+  #TODO: consider altenative for ~/.profile since zsh as standard login shell
 
 #
 # eslint
