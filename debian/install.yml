@@ -132,7 +132,7 @@
   - name: wifi:2357:011e - Clone a repo with separate git directory
     git:
       repo: https://github.com/aircrack-ng/rtl8812au.git
-      dest: /tmp/rtl8812au
+      dest: /usr/local/src/rtl8812au
     when: is_tplink_ac600 is succeeded
   - name: wifi:2357:011e - install dependencies
     apt:
@@ -143,14 +143,14 @@
     when: is_tplink_ac600 is succeeded
   - name: wifi:2357:011e - dkms_remove, no matter the one has been installed or not
     make:
-      chdir: /tmp/rtl8812au
+      chdir: /usr/local/src/rtl8812au
       target: dkms_remove
     when: is_tplink_ac600 is succeeded
     ignore_errors: true
     become: true
   - name: wifi:2357:011e - Build target with a custom Makefile, may take some time..
     make:
-      chdir: /tmp/rtl8812au
+      chdir: /usr/local/src/rtl8812au
       target: dkms_install
     when: is_tplink_ac600 is succeeded
     become: true
