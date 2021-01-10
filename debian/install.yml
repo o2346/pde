@@ -33,6 +33,25 @@
 #\end{fundamental}
 
 #
+# Turn off screensaver & moniter auto blanking
+#
+# https://wiki.archlinux.org/index.php/Display_Power_Management_Signaling
+# https://community.spiceworks.com/topic/2223833-kali-linux-black-screen-cursor-blinking-vbox
+# https://superuser.com/questions/1185747/how-do-i-disable-the-screensaver-lock-in-kali-linux
+# https://unix.stackexchange.com/questions/162989/how-to-get-kali-linux-to-not-go-to-sleep
+# https://forums.linuxmint.com/viewtopic.php?t=303436
+  - name: Examine xset is available or not
+    command: xset q
+    register: is_xset
+    ignore_errors: true
+  - name: Disable screensaver & auto blanking, which may cause truble - 1
+    command: xset s off -dpms
+    when: is_xset is succeeded
+  - name: Disable screensaver & auto blanking, which may cause truble - 2
+    command: xset dpms 0 0 0
+    when: is_xset is succeeded
+
+#
 # dist-upgrade
 #
   - name: refer flag that indicates dist-upgrade has been done
