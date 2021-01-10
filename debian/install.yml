@@ -80,7 +80,7 @@
 #
 #https://forums.kali.org/showthread.php?25082-Broadcom-BCM43142&p=56071&viewfull=1#post56071
   - name: wifi:BCM4360 - Check the device is present
-    shell: lsusb | grep 'BCM4360'
+    shell: lspci | grep 'BCM4360'
     register: is_BCM4360
     ignore_errors: true
   - name: wifi:BCM4360 - Install the relevant/latest linux-image, linux-headers and broadcom-sta-dkms packages
@@ -160,7 +160,7 @@
 # bluetooth
 #
   - name: bluetooth - Confirm some device is present
-    command: lsusb | grep -i 'bluetooth'
+    shell: lsusb | grep -i 'bluetooth' || lspci | grep -i 'bluetooth'
     register: is_bluetooth_attatched
     ignore_errors: true
   - name: bluetooth - Print on succeeded
