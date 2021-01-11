@@ -611,7 +611,10 @@
     when: ansible_distribution == 'Linux Mint'
 #https://www.kali.org/docs/general-use/kali-linux-sources-list-repositories/
 
+#
 # fcitx mozc
+#
+# https://wiki.archlinux.org/index.php/fcitx
   - name: install ime, fcitx mozc
     apt:
       name:
