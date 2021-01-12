@@ -1383,6 +1383,8 @@
     command: git config --global user.name "{{ gituser }}"
   - name: git config email in global
     command: git config --global user.email "{{ gitemail }}"
+    #TODO:  git config --global pull.ff only
+    #https://blog.sffc.xyz/post/185195398930/why-you-should-use-git-pull-ff-only-git-is-a
 
 #
 # Fonts
