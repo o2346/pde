@@ -1616,6 +1616,7 @@
 #systemctl --user restart pulseaudio.service
 #https://askubuntu.com/a/1123869
 #
+#https://github.com/akopytov/sysbench
 
 #transfer host repo to guest for development
 #scp -r -P 47122 ~/Documents/pde mint@localhost:/tmp/
