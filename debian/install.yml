@@ -1585,6 +1585,13 @@
     when: avoid_some is failed
 
 #
+# vmplayer
+#
+#https://labunix.hateblo.jp/entry/20150411/1428762367
+#https://netlog.jpn.org/r271-635/2019/06/ubuntu_vmware_remember_recent.html
+#sudo mkdir -p /etc/vmware/hostd && echo -e "<config>\n</config>" | sudo tee /etc/vmware/hostd/proxy.xml
+#
+#
 # apt autoclean, autoremove
 #
   - name: Remove useless packages from the cache
