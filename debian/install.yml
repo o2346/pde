@@ -1673,3 +1673,9 @@
 #
 #for 2nd invocation;
 #ansible-playbook /tmp/pde/debian/install.yml -K --connection=local
+#
+#TODO: a path 'python' must be redirected to appropriate version, for instance python3.8
+#%sam build
+#Error: PythonPipBuilder:Validation - Binary validation failed for python, searched for python in following locations  : ['/usr/bin/python', '/bin/python'] which did not satisfy constraints for runtime: python3.8. Do you have python for runtime: python3.8 on your PATH?
+#% sudo unlink python
+#% sudo ln -s python3.8 ./python
