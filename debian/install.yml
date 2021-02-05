@@ -1560,6 +1560,8 @@
       name:
         - texlive-base
         - texlive-lang-japanese
+        - texlive-xetex
+        - pandoc
           #        - texlive-fonts-recommended
       state: latest
     become: true
