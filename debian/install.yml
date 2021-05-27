@@ -184,6 +184,8 @@
   - name: swap capslock and ctrl key
     command: /usr/bin/setxkbmap -option "ctrl:nocaps"
     #https://opensource.com/article/18/11/how-swap-ctrl-and-caps-lock-your-keyboard
+    become: true
+    when: is_xps13_9310 is succeeded
 
 #
 # Wifi general
