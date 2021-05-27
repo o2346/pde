@@ -1,5 +1,12 @@
 #!/bin/bash
 
+wget http://archive.ubuntu.com/ubuntu/pool/main/l/linux-meta-oem-5.6/linux-headers-oem-20.04_5.6.0.1056.52_amd64.deb
+wget http://archive.ubuntu.com/ubuntu/pool/main/l/linux-meta-oem-5.6/linux-image-oem-20.04_5.6.0.1056.52_amd64.deb
+wget http://archive.ubuntu.com/ubuntu/pool/main/l/linux-meta-oem-5.6/linux-oem-20.04_5.6.0.1056.52_amd64.deb
+#wget http://archive.ubuntu.com/ubuntu/pool/main/l/linux-meta-oem-5.6/linux-tools-oem-20.04_5.6.0.1056.52_amd64.deb
+wget http://archive.ubuntu.com/ubuntu/pool/main/l/linux-firmware/linux-firmware_1.198_all.deb
+sudo apt install ./linux-*
+
 #https://torlenor.org/linux/2020/10/31/mint_on_dell_xps_13.html
 printf '
 deb http://ppa.launchpad.net/somerville-dla-team/ppa/ubuntu bionic main
