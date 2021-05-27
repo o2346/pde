@@ -164,6 +164,28 @@
 #Bus 002 Device 003: ID 2357:011e TP-Link AC600 wireless Realtek RTL8811AU [Archer T2U Nano]
 
 #
+# xps13(9310)
+#
+#https://wiki.debian.org/iwlwifi
+#
+  - name: Wifi - check current system is xps13(9310) or not
+    shell: dmidecode -s system-product-name | grep 'XPS 13 9310'
+    register: is_xps13_9310
+    ignore_errors: true
+    become: true
+  - name: Wifi - install iwlwifi for xps13(9310)
+    apt:
+      name:
+        - firmware-iwlwifi
+      state: latest
+      update_cache: yes
+    become: true
+    when: is_xps13_9310 is succeeded
+  - name: swap capslock and ctrl key
+    command: /usr/bin/setxkbmap -option "ctrl:nocaps"
+    #https://opensource.com/article/18/11/how-swap-ctrl-and-caps-lock-your-keyboard
+
+#
 # Wifi general
 #
 #https://wiki.debian.org/WiFi
