@@ -890,7 +890,7 @@
     get_url:
       url: https://gist.github.com/o2346/4d2787d27db42b7f68032127a2f0c888/raw/547a59803de8fedf94bac66570a7699356a5ab8a/ursvt.icon.png
       dest: /var/tmp/urxvt.icon.png
-      mode: '0440'
+      mode: '0660'
 
 #
 # Packages for Fulfillment
@@ -1071,27 +1071,29 @@
       state: latest
       name:
         - mp3splt
-    when: ansible_distribution == 'Linux Mint'
-    # Task Abobe does not work on kali. Build from source following
-    # https://packages.debian.org/search?keywords=mp3splt
-  - name: mp3splt - checking already installed
-    command: which mp3splt
-    register: is_mp3splt_installed
-    ignore_errors: true
-  - name: Print on failed
-    debug:
-      msg: "nothing found, newly installing mp3splt"
-    when: is_mp3splt_installed is failed
-  - name: mp3splt - Install a .deb package
-    apt:
-      deb: http://ftp.us.debian.org/debian/pool/main/m/mp3splt/libmp3splt_0.9.2-3+b1_amd64.deb
     become: true
-    when: is_mp3splt_installed is failed
-  - name: mp3splt - Install a .deb package
-    apt:
-      deb: http://ftp.us.debian.org/debian/pool/main/m/mp3splt/mp3splt_2.6.2+20170630-3+b1_amd64.deb
-    become: true
-    when: is_mp3splt_installed is failed
+    # following may not need anymore, now apt supports it on even kali
+    #when: ansible_distribution == 'Linux Mint'
+    #    # Task Abobe does not work on kali. Build from source following
+    #    # https://packages.debian.org/search?keywords=mp3splt
+    #  - name: mp3splt - checking already installed
+    #    command: which mp3splt
+    #    register: is_mp3splt_installed
+    #    ignore_errors: true
+    #  - name: Print on failed
+    #    debug:
+    #      msg: "nothing found, newly installing mp3splt"
+    #    when: is_mp3splt_installed is failed
+    #  - name: mp3splt - Install a .deb package
+    #    apt:
+    #      deb: http://ftp.us.debian.org/debian/pool/main/m/mp3splt/libmp3splt_0.9.2-3+b1_amd64.deb
+    #    become: true
+    #    when: is_mp3splt_installed is failed
+    #  - name: mp3splt - Install a .deb package
+    #    apt:
+    #      deb: http://ftp.us.debian.org/debian/pool/main/m/mp3splt/mp3splt_2.6.2+20170630-3+b1_amd64.deb
+    #    become: true
+    #    when: is_mp3splt_installed is failed
   - name: mp3splt - Confirm
     command: which mp3splt
 #\end{mp3splt}
