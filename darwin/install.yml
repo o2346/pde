@@ -137,7 +137,7 @@
     homebrew:
       name: '{{ item.name }}'
       state: '{{ item.state | default("latest") }}'
-      install_options: '{{ item.install_options | default("None") }}'
+      install_options: '{{ item.install_options | default(omit) }}'
     with_items: '{{ homebrew_packages }}'
     when: not ansible_check_mode
 
