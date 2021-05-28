@@ -90,7 +90,6 @@
       #   install_options: with-qt
       - name: wxmac
       - name: yasm
-      - name: jq
       - name: fswatch
       - name: make
         install_options: with-default-names
