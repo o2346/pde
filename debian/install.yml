@@ -869,7 +869,7 @@
       msg: "nothing found, newly installing"
     when: is_configreload_installed is failed
   - name: urxvt config-reload - Dependencies
-    command: sudo cpan AnyEvent Linux::FD common::sense
+    shell: "yes | sudo cpan AnyEvent Linux::FD common::sense"
     when: is_configreload_installed is failed
     become: true
   - name: urxvt config-reload - Clone a repo with separate git directory
