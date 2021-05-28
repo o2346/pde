@@ -122,7 +122,7 @@ preinstall
 cd /tmp
 test -d /tmp/pde || git clone https://github.com/o2346/pde
 cd /tmp/pde
-playbook="$(realpath $OSDIR/install.yml)"
+playbook="$(realpath $PWD/$OSDIR/install.yml)"
 branch=master
 check=''
 
