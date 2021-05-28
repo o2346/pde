@@ -167,6 +167,7 @@
 # xps13(9310)
 #
 #https://wiki.debian.org/iwlwifi
+#https://wiki.archlinux.org/title/Dell_XPS_13_(9310)#Wifi
 #
   - name: Wifi - check current system is xps13(9310) or not
     shell: dmidecode -s system-product-name | grep 'XPS 13 9310'
@@ -757,7 +758,7 @@
         - rdk
       #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
       executable: pip3
-    become: true
+      #become: true
       #consider to add more tools for handy
       #https://github.com/awslabs/aws-data-wrangler
       #https://github.com/awslabs/cloudwatch-api-tracker
