@@ -2,9 +2,9 @@
 - hosts: "{{ given_host | default('localhost') }}"
   vars:
     homebrew_taps:
-      - caskroom/cask
+      - homebrew/cask
       - homebrew/cask-versions
-      - homebrew/boneyard
+        #- homebrew/boneyard
       - sanemat/font # ricty
       - homebrew/cask-fonts #migmix, migu
 
