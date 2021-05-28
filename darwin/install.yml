@@ -6,7 +6,7 @@
       - caskroom/versions
       - homebrew/boneyard
       - sanemat/font # ricty
-      - caskroom/fonts #migmix, migu
+      - homebrew/cask-fonts #migmix, migu
 
     homebrew_cask_packages:
       - name: appcleaner
