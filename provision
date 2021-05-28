@@ -73,6 +73,7 @@ preinstall_dnf() {
 
 preinstall_brew() {
 
+  softwareupdate -all --force
   if [ -z `which brew` ]; then
     # appleid required beforhand
     # is this better?
