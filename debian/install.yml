@@ -187,6 +187,11 @@
     #https://opensource.com/article/18/11/how-swap-ctrl-and-caps-lock-your-keyboard
     become: true
     when: is_xps13_9310 is succeeded
+#pm-suspend/pm-utils
+#https://www.reddit.com/r/linuxhardware/comments/nhl63r/dell_xps_13_9310_suspended_battery_drain/
+#https://unix.stackexchange.com/questions/128068/changing-systemd-handlelidswitch-setting-during-run-time
+#https://sites.google.com/site/easytipsforlinux/shutdown-laptop-by-closing-lid
+#https://wiki.archlinux.org/title/Dell_XPS_13_(9310)
 
 #
 # Wifi general
