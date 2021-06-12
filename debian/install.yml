@@ -656,6 +656,18 @@
     become: yes
     when: ansible_distribution == 'Linux Mint'
 #https://www.kali.org/docs/general-use/kali-linux-sources-list-repositories/
+#
+
+#
+# sources.list for kali
+#
+  - name: sources.list
+    copy: >
+      src=./kali.sources.list
+      dest=/etc/apt/sources.list
+      mode=0644
+    become: true
+    when: ansible_distribution == 'Kali GNU/Linux'
 
 #
 # fcitx mozc
@@ -1003,6 +1015,9 @@
         - libopenraw7
         - libopenrawgnome7
         - imagemagick
+        - dcraw
+        - ufraw
+        - ufraw-batch
         - krita
         - mesa-utils
           #- glxgears
