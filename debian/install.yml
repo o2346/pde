@@ -1006,6 +1006,7 @@
       name:
         - vlc
         - smplayer
+        - mpv
         - k3b
         - ffmpeg
         - sox
