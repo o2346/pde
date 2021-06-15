@@ -19,7 +19,8 @@ p = 0.6
 
 #long_press_command = "xdotool search --onlyvisible --name VLC | grep \"`xdotool search --onlyvisible --name \\.mp4`\"  | xargs -I{} xdotool key --window {} XF86AudioNext"
 #Works on Kali, assuming no 2nd and after vlc(s) were present
-long_press_command = "xdotool search --limit 1 --onlyvisible --name VLC | xargs -I{} xdotool key --window {} XF86AudioNext"
+long_press_command = "xdotool search --name mpv | head | xargs -I{} xdotool key --window {} XF86AudioNext"
+#long_press_command = "xdotool search --limit 1 --onlyvisible --name VLC | xargs -I{} xdotool key --window {} XF86AudioNext"
 
 # clock_wise_command = "" # Default: increases the volume by p%
 # counter_clock_wise_command = "" # Default: decreases the volume by p%
