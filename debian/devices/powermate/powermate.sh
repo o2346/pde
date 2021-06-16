@@ -9,7 +9,8 @@
 
 readonly current_script_path=$(dirname $(readlink -f $0))
 
-cd /opt/
+cd $current_script_path
+pwd
 
 if ! ls powermate-linux > /dev/null; then
   echo "Newly installing powermante.." >&2
@@ -29,21 +30,16 @@ else
 fi
 
 setup() {
-  flag=/tmp/powermate_invoked
   echo "Setting up powermate with custom config" >&2
 
-  #if [ -f "/tmp/powermate_invoked" ]; then
-  #  echo "It looks like already invoked at boot. Abort" >&2
-  #  return 1
-  #fi
-
-  if ps aux | grep 'powermate \-c'; then
-    echo "It looks like already invoked at boot. Abort" >&2
-    return 1
+  if ps aux | grep 'powermate \-c' > /dev/null; then
+    #echo "It looks like already invoked at boot. Abort" >&2
+    echo 'killing current process'
+    ps aux | grep 'powermate \-c' | awk '{print $2}' | xargs kill
+    #return 1
   fi
 
   echo "starging powermate" >&2
-  touch $flag
   (./powermate -c $current_script_path/powermate.toml) &
   return 0
 }
