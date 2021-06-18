@@ -1081,6 +1081,7 @@
         - build-essential
           #      - wopr
         - speedtest-cli
+        - peek
     become: true
     #when: avoid_some is failed
 
