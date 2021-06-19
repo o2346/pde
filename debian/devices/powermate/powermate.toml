@@ -1,4 +1,3 @@
-# https://github.com/stefansundin/powermate-linux
 # The program checks for configuration files in the following order:
 # - $XDG_CONFIG_HOME/powermate.toml (usually ~/.config/powermate.toml)
 # - /etc/powermate.toml
@@ -17,14 +16,7 @@ p = 0.6
 # Custom commands (will disable default behavior).
 # Set to an empty string to disable the default behavior without executing a custom command.
 press_command = "xdotool search --name mpv | xargs -I{} xdotool key --window {} XF86AudioPlay" # Default: mute/unmute
-
-#long_press_command = "xdotool search --onlyvisible --name VLC | grep \"`xdotool search --onlyvisible --name \\.mp4`\"  | xargs -I{} xdotool key --window {} XF86AudioNext"
 long_press_command = "(xfce4-panel &); (xfwm4 --replace &)" #https://www.makeuseof.com/tag/refresh-linux-desktop-without-rebooting/
-#Works on Kali, assuming no 2nd and after vlc(s) were present
-#long_press_command = 'xdotool search --name mpv | xargs -I{} xdotool key --window {} XF86AudioNext'
-#long_press_command = 'xdotool search --name mpv | xargs -I{} xdotool key --window {} XF86AudioMute'
-#long_press_command = "xdotool search --limit 1 --onlyvisible --name VLC | xargs -I{} xdotool key --window {} XF86AudioNext"
-
 # clock_wise_command = "" # Default: increases the volume by p%
 # counter_clock_wise_command = "" # Default: decreases the volume by p%
 press_clock_wise_command = "xdotool search --name mpv | xargs -I{} xdotool key --window {} XF86AudioNext"
