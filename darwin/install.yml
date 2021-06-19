@@ -2,11 +2,11 @@
 - hosts: "{{ given_host | default('localhost') }}"
   vars:
     homebrew_taps:
-      - caskroom/cask
-      - caskroom/versions
-      - homebrew/boneyard
+      - homebrew/cask
+      - homebrew/cask-versions
+        #- homebrew/boneyard
       - sanemat/font # ricty
-      - caskroom/fonts #migmix, migu
+      - homebrew/cask-fonts #migmix, migu
 
     homebrew_cask_packages:
       - name: appcleaner
@@ -52,7 +52,6 @@
       - name: doxygen
       - name: emacs
       - name: ffmpeg
-        install_options: with-tools
       - name: fontconfig
       - name: fontforge
       - name: freetype
@@ -91,7 +90,6 @@
       #   install_options: with-qt
       - name: wxmac
       - name: yasm
-      - name: jq
       - name: fswatch
       - name: make
         install_options: with-default-names
@@ -137,7 +135,7 @@
     homebrew:
       name: '{{ item.name }}'
       state: '{{ item.state | default("latest") }}'
-      install_options: '{{ item.install_options | default("None") }}'
+      install_options: '{{ item.install_options | default(omit) }}'
     with_items: '{{ homebrew_packages }}'
     when: not ansible_check_mode
 

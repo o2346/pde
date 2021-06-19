@@ -187,6 +187,11 @@
     #https://opensource.com/article/18/11/how-swap-ctrl-and-caps-lock-your-keyboard
     become: true
     when: is_xps13_9310 is succeeded
+#pm-suspend/pm-utils
+#https://www.reddit.com/r/linuxhardware/comments/nhl63r/dell_xps_13_9310_suspended_battery_drain/
+#https://unix.stackexchange.com/questions/128068/changing-systemd-handlelidswitch-setting-during-run-time
+#https://sites.google.com/site/easytipsforlinux/shutdown-laptop-by-closing-lid
+#https://wiki.archlinux.org/title/Dell_XPS_13_(9310)
 
 #
 # Wifi general
@@ -651,6 +656,18 @@
     become: yes
     when: ansible_distribution == 'Linux Mint'
 #https://www.kali.org/docs/general-use/kali-linux-sources-list-repositories/
+#
+
+#
+# sources.list for kali
+#
+  - name: sources.list
+    copy: >
+      src=./kali.sources.list
+      dest=/etc/apt/sources.list
+      mode=0644
+    become: true
+    when: ansible_distribution == 'Kali GNU/Linux'
 
 #
 # fcitx mozc
@@ -989,14 +1006,19 @@
       name:
         - vlc
         - smplayer
+        - mpv
         - k3b
         - ffmpeg
+        - sox
         - shotwell #image viewer for .NEF https://www.linuxquestions.org/questions/linux-newbie-8/viewing-nef-4175596548/
           # https://yermakov.net/adding-nef-preview-to-linux-mint-file-manager-nemo/
           #- gnome-raw-thumbnailer
         - libopenraw7
         - libopenrawgnome7
         - imagemagick
+        - dcraw
+        - ufraw
+        - ufraw-batch
         - krita
         - mesa-utils
           #- glxgears
@@ -1059,6 +1081,7 @@
         - build-essential
           #      - wopr
         - speedtest-cli
+        - peek
     become: true
     #when: avoid_some is failed
 

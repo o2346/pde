@@ -15,17 +15,15 @@ p = 0.6
 
 # Custom commands (will disable default behavior).
 # Set to an empty string to disable the default behavior without executing a custom command.
-# knob_command = "" # Default: mute/unmute
-
-#long_press_command = "xdotool search --onlyvisible --name VLC | grep \"`xdotool search --onlyvisible --name \\.mp4`\"  | xargs -I{} xdotool key --window {} XF86AudioNext"
-#Works on Kali, assuming no 2nd and after vlc(s) were present
-long_press_command = "xdotool search --limit 1 --onlyvisible --name VLC | xargs -I{} xdotool key --window {} XF86AudioNext"
-
+press_command = "xdotool search --name mpv | xargs -I{} xdotool key --window {} XF86AudioPlay" # Default: mute/unmute
+long_press_command = "(xfce4-panel &); (xfwm4 --replace &)" #https://www.makeuseof.com/tag/refresh-linux-desktop-without-rebooting/
 # clock_wise_command = "" # Default: increases the volume by p%
 # counter_clock_wise_command = "" # Default: decreases the volume by p%
+press_clock_wise_command = "xdotool search --name mpv | xargs -I{} xdotool key --window {} XF86AudioNext"
+press_counter_clock_wise_command = "xdotool search --name mpv | xargs -I{} xdotool key --window {} XF86AudioPrev"
 
 # Timeouts (in milliseconds)
-long_press_ms = 1000
+long_press_ms = 2400
 
 # Handy commands:
 # xdotool key XF86AudioPlay
@@ -35,3 +33,4 @@ long_press_ms = 1000
 # xdotool key XF86AudioRaiseVolume
 # xdotool key XF86AudioMute
 # systemctl suspend
+
