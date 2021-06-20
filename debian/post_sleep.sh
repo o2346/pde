@@ -10,5 +10,5 @@ fi
 if [ "${1}" == "post" ]; then
   date > /tmp/postsuspend.log
   uuidgen >> /tmp/postsuspend.log
-  /opt/onwakeup/onwakeup.sh
+  /var/tmp/onwakeup.sh
 fi
