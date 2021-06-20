@@ -20,7 +20,7 @@ PDE(Provision Development Environment) is system configration for local developm
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Version</td>
-<td bgcolor="#FFFFFF" valign="top">2.1.1</td>
+<td bgcolor="#FFFFFF" valign="top">2.1.2</td>
 </tr>
 <tr>
 <th bgcolor="#D0CDCD" align="left" nowrap>Written in</td>

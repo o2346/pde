@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo '#!/bin/bash'
-
+echo 'readonly pwd=$PWD'
 find $PWD -type f -name config | grep '.git/config' | while read gitconfig; do
   cd "$(dirname $(dirname $gitconfig))"
   remote_origin_url=$(git config --get remote.origin.url)
@@ -12,3 +12,5 @@ find $PWD -type f -name config | grep '.git/config' | while read gitconfig; do
   fi
   echo "git clone $remote_origin_url $local_toplevel_name"
 done | sort
+
+echo 'ls $pwd | while read repo; do cd $pwd/$repo; git checkout develop; done'
