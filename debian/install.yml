@@ -910,6 +910,16 @@
       mode: '0660'
 
 #
+# git
+#
+#
+#hint: Pulling without specifying how to reconcile divergent branches is
+#hint: discouraged. You can squelch this message by running one of the following
+#hint: commands sometime before your next pull:
+  - name: suppress hint message at git pull
+    command: git config --global pull.ff only
+
+#
 # Packages for Fulfillment
 #
   - name: Packages - Critical
