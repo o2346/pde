@@ -191,12 +191,13 @@
       - eslint
       - eslint_d
 
-# ricty font
-  - name: ricty font
-    shell: cp -f /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
-  - name: ricty font
-    command: fc-cache -vf
-# curl -L 'https://gist.github.com/ysaotome/7286145/raw/installing_ricty_on_MacOSX.sh' | bash
+        #Error:
+        ## ricty font
+        #  - name: ricty font
+        #    shell: cp -f /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
+        #  - name: ricty font
+        #    command: fc-cache -vf
+        ## curl -L 'https://gist.github.com/ysaotome/7286145/raw/installing_ricty_on_MacOSX.sh' | bash
 
 #
 # Dotfiles
