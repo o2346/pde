@@ -81,12 +81,19 @@ preinstall_brew() {
     sudo xcodebuild -license
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew update
+    ### PATH is not present yet at this point so
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/`whoami`/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
   fi
+
   if [ -z `which ansible` ]; then
     brew install ansible
   fi
   if [ -z `which git` ]; then
     brew install git
+  fi
+  if [ -z `which realpath` ]; then
+    brew install coreutils
   fi
 
 }

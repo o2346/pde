@@ -40,6 +40,8 @@
       # java for plantuml
       - name: java
     homebrew_packages:
+      - name: rxvt-unicode
+      - name: neovim
       - name: awscli
       - name: python
       - name: python3
@@ -61,7 +63,7 @@
       - name: jasper
       - name: jpeg
       - name: lame
-      - name: vim # https://qiita.com/iwaseasahi/items/a45b99a484966662adbe  vim --with-override-system-vi
+        #- name: vim # https://qiita.com/iwaseasahi/items/a45b99a484966662adbe  vim --with-override-system-vi
         #https://github.com/Homebrew/legacy-homebrew/issues/43983
       - name: mp3splt
       - name: nasm
@@ -247,7 +249,6 @@
       - pip
       - setuptools
       - csvkit
-      - yq
     become: true
 
 # after playing
