@@ -170,17 +170,17 @@
   - name: show hidden files and directorys
     command: killall Finder
 
-  - name: download NeoBundle
-    get_url:
-      url: https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
-      dest: '{{tmp_dir.stdout}}'
-    when: not ansible_check_mode
-  - name: install NeoBundle
-    command: bash "{{tmp_dir.stdout}}"/install.sh
-    when: not ansible_check_mode
-    # not idempotent yet
-    #- name: NeoBundleInstall
-    #- command: vim +NeoBundleInstall +qall
+    #  - name: download NeoBundle
+    #    get_url:
+    #      url: https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
+    #      dest: '{{tmp_dir.stdout}}'
+    #    when: not ansible_check_mode
+    #  - name: install NeoBundle
+    #    command: bash "{{tmp_dir.stdout}}"/install.sh
+    #    when: not ansible_check_mode
+    #    # not idempotent yet
+    #    #- name: NeoBundleInstall
+    #    #- command: vim +NeoBundleInstall +qall
 
 #
 # eslint
