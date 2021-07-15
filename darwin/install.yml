@@ -12,11 +12,11 @@
       - name: appcleaner
       - name: virtualbox
       - name: vagrant
-      - name: google-chrome
+        #Error: installed by default? - name: google-chrome
       - name: firefox
       - name: diffmerge
       - name: google-japanese-ime
-      - name: p4merge
+        #Error: deprecated? - name: p4merge
       - name: vlc
       - name: iterm2
       - name: skitch
@@ -37,8 +37,7 @@
       - name: font-migu-2m
       - name: chromium
       - name: burp-suite
-      # java for plantuml
-      - name: java
+      # java for plantuml -> merged, they say
     homebrew_packages:
       - name: rxvt-unicode
       - name: neovim
