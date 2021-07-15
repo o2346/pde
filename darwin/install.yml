@@ -231,11 +231,6 @@
       repo: https://github.com/o2346/happy-scripts
       dest: ~/Documents/happy-scripts
 
-# login shell
-  - name: zsh for login shell
-    user: name={{ansible_user_id}} shell=/bin/zsh
-    become: true
-
   - name: brew upgrade
     homebrew:
       upgrade_all: yes
