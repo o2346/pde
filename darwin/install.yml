@@ -86,7 +86,7 @@
       - name: w3m
       - name: webp
       - name: wget
-      - name: wine
+        #error - name: wine
       # consider it's really necessary
       # - name: wireshark
       #   install_options: with-qt
@@ -94,7 +94,8 @@
       - name: yasm
       - name: fswatch
       - name: make
-        install_options: with-default-names
+        #install_options: with-default-names
+        #https://stackoverflow.com/questions/56930917/error-invalid-option-with-default-names
       - name: watch
       - name: qemu
       - name: ghostscript #https://superuser.com/questions/819277/cant-convert-pdf-into-image-because-of-no-images-defined-error
