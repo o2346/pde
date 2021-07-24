@@ -202,22 +202,90 @@
 #
 # Dotfiles
 #
-  - name: check if .dotfiles exists
-    stat: path=~/Documents/.dotfiles
-    register: has_dotfiles
-  - name: download dotfiles
-    git:
-      repo: https://gist.githubusercontent.com/whateverjp/6ea3445379a6cdf87037c1be97ef7b16
-      dest: ~/Documents/.dotfiles
-    when: not has_dotfiles.stat.exists
-  - name: deploy dotfiles
-    command: sh ~/Documents/.dotfiles/deploy.sh
-    when: not has_dotfiles.stat.exists
-  - name: copy .tmux.pd.conf
-    copy: >
-      src=.tmux.pd.conf
-      dest=~/
-    when: not has_dotfiles.stat.exists
+  - name: Dotfiles - Check
+    command: ls .uc
+    register: is_uc_installed
+    ignore_errors: true
+    args:
+      chdir: ~/
+  - name:  Dotfiles - Print if already there
+    debug:
+      msg: "{{ is_uc_installed.stdout }}"
+    when: is_uc_installed is succeeded
+  - name:  Dotfiles - Print if not
+    debug:
+      msg: "nothing found"
+    when: is_uc_installed is failed
+  - name: Move Default .zshrc
+    command: mv ~/.zshrc ~/_zshrc_default
+    when: is_uc_installed is failed
+    ignore_errors: true
+  - name: install Dotfiles
+    shell: curl 'https://raw.githubusercontent.com/o2346/happy-scripts/develop/install.uc.sh' | bash -s - https://gist.github.com/o2346/e091ea8f6bf963d6a170a88579a3db08
+    args:
+      chdir: ~/
+    register: uc_install_log
+    when: is_uc_installed is failed
+  - name: Dotfiles - Print what has been done
+    debug:
+      msg: "{{ uc_install_log.stdout }}"
+    when: is_uc_installed is failed
+  - name: pull Dotfiles
+    shell: /usr/bin/git --git-dir=$PWD --work-tree=`dirname $PWD` pull
+    args:
+      chdir: ~/.uc
+#  - name: check if .dotfiles exists
+#    stat: path=~/Documents/.dotfiles
+#    register: has_dotfiles
+#  - name: download dotfiles
+#    git:
+#      repo: https://gist.githubusercontent.com/whateverjp/6ea3445379a6cdf87037c1be97ef7b16
+#      dest: ~/Documents/.dotfiles
+#    when: not has_dotfiles.stat.exists
+#  - name: deploy dotfiles
+#    command: sh ~/Documents/.dotfiles/deploy.sh
+#    when: not has_dotfiles.stat.exists
+#  - name: copy .tmux.pd.conf
+#    copy: >
+#      src=.tmux.pd.conf
+#      dest=~/
+#    when: not has_dotfiles.stat.exists
+
+#
+# dein
+#
+  - name: dein - checking already installed
+    command: test -d ~/.cache/dein
+    register: is_dein_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing dein"
+    when: is_dein_installed is failed
+  - name: dein - install
+    shell: curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh | sh -s -- ~/.cache/dein
+    when: is_dein_installed is failed
+  - name: create ~/.vim/colors directory if it doesn't exist
+    file:
+      path: ~/.vim/colors
+      state: directory
+      mode: 0755
+
+#
+# neovim
+#
+#
+  - name: Create a directory if it does not exist
+    file:
+      path: ~/.config/nvim/
+      state: directory
+      mode: '0755'
+  - name: Create symbolic link for neovim vimrc
+    file:
+      src: "~/.vimrc"
+      dest: "~/.config/nvim/init.vim"
+      state: link
+      #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
 
 # w3m
   - name: download .w3m
