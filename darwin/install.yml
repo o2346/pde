@@ -114,6 +114,7 @@
       # Preferences > accessibility
       # View > display theme > dark gray
       - name: exiftool
+      - name: neofetch
 
   become: no
   tasks:
