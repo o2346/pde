@@ -115,6 +115,7 @@
       # View > display theme > dark gray
       - name: exiftool
       - name: neofetch
+      - name: speedtest-cli
 
   become: no
   tasks:
