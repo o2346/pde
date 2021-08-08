@@ -102,6 +102,7 @@ File Menu > Edit > Profile Preferenses > [As I like]
 |name|kind|discription|
 |---|---|---|
 |[Dark Reader](https://chrome.google.com/webstore/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)|plugin|Darken pages|
+|dark theme for miscs|chrome://flags/ -> search by "dark" -> enable 2 items on results|
 |[Batch Link Downloader](https://chrome.google.com/webstore/detail/batch-link-downloader/aiahkbnnpafepcgnhhecilboebmmolnn/related)|plugin||
 |go to chrome://settings/ and click "Use GTK+ theme".||
 |fonts||
@@ -109,7 +110,6 @@ File Menu > Edit > Profile Preferenses > [As I like]
 |Vimium||plugin|
 |adblock||plugin|
 |dictionary||plugin|
-|translator||plugin|
 |[Adblock for Youtube](https://chrome.google.com/webstore/detail/adblock-for-youtube/cmedhionkhpnakcndndgjdbohmhepckk/related?hl=en)||plugin|
 
 ### others
