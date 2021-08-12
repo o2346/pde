@@ -117,6 +117,9 @@
       - name: neofetch
       - name: speedtest-cli
 
+#Prevent screensaver
+#https://apps.apple.com/us/app/owly-prevent-display-sleep/id882812218?mt=12
+
   become: no
   tasks:
   - name: homebrew update
