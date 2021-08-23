@@ -985,6 +985,7 @@
         - socat
         - neofetch
         - tsung
+        - maven
     become: true
   - name: Packages - Programming
     apt:
@@ -1036,6 +1037,7 @@
         - exiftool
         - xsane
         - inkscape
+        - mediainfo
           #- darktable
           #https://www.darktable.org/ TODO
         # nvidia-smi -q -d temperature #https://askubuntu.com/questions/34449/how-to-see-the-video-card-temperature-nvidia-ati-intel
