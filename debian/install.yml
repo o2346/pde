@@ -1059,6 +1059,7 @@
         #driver   : nvidia-418 - third-party free
         #driver   : nvidia-410 - third-party free
         #driver   : nvidia-415 - third-party free
+        - jpegoptim
     become: true
   - name: Packages - Miscs
     apt:
