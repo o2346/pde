@@ -1421,8 +1421,12 @@
       state: directory
       mode: 0755
     when: is_onedrive_installed is failed
+  #https://github.com/abraunegg/onedrive/blob/master/docs/USAGE.md#configuration
   - name: copy onedrive.conf
-    command: cp /opt/onedrive/config ~/.config/onedrive/config
+    get_url:
+      url: https://raw.githubusercontent.com/abraunegg/onedrive/master/config
+      dest: ~/.config/onedrive/config
+      mode: 0555
     when: is_onedrive_installed is failed
       #  - name: systemd onedrive enabled
       #    command: systemctl --user enable onedrive
