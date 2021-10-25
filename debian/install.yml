@@ -284,17 +284,17 @@
 #
 # ntp
 #
-# https://www.tecmint.com/synchronize-time-with-ntp-in-linux/
+# https://www.server-world.info/query?os=Debian_10&p=ntp&f=1
   - name: ntp - install chrony
     apt:
       name:
-        - chrony
+        - ntp
       state: latest
     become: true
   - name: ntp - enable chrony
     systemd:
-      state: started
-      name: chrony
+      state: enabled
+      name: ntp
     become: true
 
 #
