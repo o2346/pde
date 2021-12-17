@@ -284,17 +284,16 @@
 #
 # ntp
 #
-# https://www.server-world.info/query?os=Debian_10&p=ntp&f=1
-  - name: ntp - install chrony
+# https://askubuntu.com/a/1355660
+# (old) https://www.server-world.info/query?os=Debian_10&p=ntp&f=1
+  - name: ntp - install systemd-timesyncd
     apt:
       name:
-        - ntp
+        - systemd-timesyncd
       state: latest
     become: true
-  - name: ntp - enable chrony
-    systemd:
-      state: enabled
-      name: ntp
+  - name: ntp - enable
+    command: timedatectl set-ntp true
     become: true
 
 #
