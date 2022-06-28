@@ -1009,6 +1009,7 @@
         - cmake
         - rsync
         - bc
+        - adb
     become: true
   - name: Packages - Multimedia
     apt:
