@@ -108,6 +108,7 @@
       #latex: https://texwiki.texjp.org/?TeX%20Live%2FMac#texlive-install-brew
       #to large & consumes too much time to install, so do it afterword
 
+      # okular https://gist.github.com/7468696e6b/ec8fa5d6cdb4e80633b9df95869b70c0
       # PDF reader, okular alternative
       # https://get.adobe.com/reader/download/?installer=Reader_DC_2019.010.20098_for_Mac_Intel&stype=7504&standalone=1
       # https://apple.stackexchange.com/questions/317845/is-there-the-dark-mode-inverted-colors-in-the-preview-application-for-pdf-re
