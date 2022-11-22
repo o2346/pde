@@ -1099,6 +1099,7 @@
           #      - wopr
         - speedtest-cli
         - peek
+        - kazam
         - libreoffice
     become: true
     #when: avoid_some is failed
