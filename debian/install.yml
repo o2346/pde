@@ -1234,6 +1234,7 @@
         - curl
         - gnupg-agent
         - software-properties-common
+        - docker-compose
     become: true
     when: is_docker_installed is failed
   - name: add GPG key
