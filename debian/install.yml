@@ -599,6 +599,11 @@
       dest: /usr/local/sbin/.mydevices
       line: '/opt/trackball/trackball.sh'
     become: true
+  - name: Device - Slimblade Trackball - Make sure a watch version of the service is running
+    lineinfile:
+      dest: /usr/local/sbin/.mydevices
+      line: '/opt/trackball/trackballw.sh'
+    become: true
 
 #
 # Griffin Powermate
