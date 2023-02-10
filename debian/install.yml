@@ -1805,3 +1805,7 @@
 #https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/766
 #>FOR THOSE USING THE snd_hda_intelMODULE:
 #It even happens on kernel 6.0.0
+#
+#https://unix.stackexchange.com/questions/257322/no-audio-on-kali-linux
+#https://www.maketecheasier.com/fix-sound-kali-linux/
+#https://gist.github.com/RuCodee/5482ca50b81d1379a35ce49d280344fa
