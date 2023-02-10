@@ -1799,3 +1799,9 @@
 #https://wiki.ubuntu.com/Multitouch/AppleMagicTrackpad
 #https://blog.hanhans.net/2019/03/03/ubuntu-magictrackpad2/
 #https://ourcodeworld.com/articles/read/406/how-to-enable-the-sound-on-kali-linux
+#
+#soundissue on DELL XPS 13 9310
+#https://www.linuxuprising.com/2018/06/fix-no-sound-dummy-output-issue-in.html
+#https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/766
+#>FOR THOSE USING THE snd_hda_intelMODULE:
+#It even happens on kernel 6.0.0
