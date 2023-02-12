@@ -1109,6 +1109,8 @@
           #https://askubuntu.com/questions/283559/how-can-i-run-disk-utility-in-terminal-via-a-comand-line
           #https://www.ubuntubuzz.com/2017/01/how-to-create-iso-image-back-from-bootable-usb-drive.html
         - gnome-disk-utility
+        - wmctrl
+        - rename
     become: true
     #when: avoid_some is failed
 
