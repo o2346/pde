@@ -1475,6 +1475,15 @@
     with_items:
       - fast-cli
 
+# Adobe aio
+#
+#https://opensource.com/article/20/1/internet-speed-tests
+  - name: fast-cli - alternative for speedtest-cli
+    npm: name={{ item }} global=yes
+    with_items:
+      - @adobe/aio-cli
+        #https://github.com/adobe/aio-cli-plugin-cloudmanager#aio-cloudmanagertail-log-environmentid-service-name
+
 #
 # misc Settings
 #
