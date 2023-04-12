@@ -377,13 +377,14 @@
 # Get rid of, annoying
 #
 #https://community.linuxmint.com/tutorial/view/916
+#https://askubuntu.com/questions/1400790/how-do-i-completely-remove-keyrings-from-system
   - name: Get rid of keyring, annoying
     apt:
       name:
         - gnome-keyring
+        - seahorse
       state: absent
     become: true
-
 #
 # Get rid of old driver causes problem
 #
