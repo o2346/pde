@@ -3,7 +3,7 @@
 ---
 - hosts: "{{ target | default('localhost') }}"
   vars:
-    gituser: user
+    gituser: gituser
     gitemail: ""
     font: 'MigMix 1M 16'
     font_monospace: 'Ricty Diminished Regular 15'
@@ -1483,11 +1483,11 @@
 
 # Adobe aio
 #
-#https://opensource.com/article/20/1/internet-speed-tests
-  - name: fast-cli - alternative for speedtest-cli
+  - name: aio-cli
     npm: name={{ item }} global=yes
     with_items:
-      - @adobe/aio-cli
+      - '@adobe/aio-cli'
+        #https://github.com/adobe/aio-cli
         #https://github.com/adobe/aio-cli-plugin-cloudmanager#aio-cloudmanagertail-log-environmentid-service-name
 
 #
@@ -1729,6 +1729,36 @@
     command: pip3 install --ignore-installed mitmproxy
     become: true
     when: avoid_some is failed
+
+#Android Studio
+#https://developer.android.com/studio/install
+#
+# Check 'omit some packages' flag
+#
+  - name: download Android Studio
+    shell: cd /tmp; curl https://developer.android.com/studio | grep -iEoh "http.*linux\.tar\.gz" | xargs wget -P /tmp/
+    ignore_errors: true
+  - name: Extract saved Android Studio
+    shell: ls /tmp/android-studio*.tar.gz | xargs tar -xf
+    ignore_errors: true
+  - name: Move Android Studio
+    command: mv /tmp/android-studio /opt/
+    ignore_errors: true
+    become: true
+  - name: install dependencies for Android studio
+    apt:
+      name:
+        - python3-dev
+        - libc6:i386
+        - libncurses5:i386
+        - libstdc++6:i386
+        - lib32z1
+        - libbz2-1.0:i386
+      state: latest
+    become: true
+
+
+#Java https://www.oracle.com/java/technologies/downloads/#java11
 
 #
 # vmplayer
