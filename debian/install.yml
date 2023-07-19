@@ -892,7 +892,7 @@
     when: is_configreload_installed is failed
   - name: urxvt config-reload - Dependencies
     shell: "yes | sudo cpan AnyEvent Linux::FD common::sense"
-    when: is_configreload_installed is failed
+      #when: is_configreload_installed is failed
     become: true
   - name: urxvt config-reload - Clone a repo with separate git directory
     #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/git_module.html
