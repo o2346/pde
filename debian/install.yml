@@ -1753,7 +1753,7 @@
     ignore_errors: true
     when: is_androidstudio_installed is failed
   - name: Extract saved Android Studio
-    shell: ls /tmp/android-studio*.tar.gz | xargs tar -xf -C /tmp/
+    shell: ls /tmp/android-studio*.tar.gz | xargs -I{} tar -xf {} -C /tmp/
     ignore_errors: true
     when: is_androidstudio_installed is failed
   - name: Move Android Studio
