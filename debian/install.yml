@@ -891,6 +891,7 @@
       msg: "nothing found, newly installing"
     when: is_configreload_installed is failed
   - name: urxvt config-reload - Dependencies
+      #https://www.google.com/search?q=config-reload%3A+Can%27t+locate+AnyEvent.pm+in+%40INC+(you+may+need+to+install+the+AnyEvent+module)&oq=config-reload%3A+Can%27t+locate+AnyEvent.pm+in+%40INC+(you+may+need+to+install+the+AnyEvent+module)&aqs=chrome..69i57j69i58.181j0j7&sourceid=chrome&ie=UTF-8
     shell: "yes | sudo cpan AnyEvent Linux::FD common::sense"
       #when: is_configreload_installed is failed
     become: true
@@ -1048,6 +1049,7 @@
           #- gwenview
           #- viewnior
         - ristretto
+        - gnome-sound-recorder
           #- darktable
           #https://www.darktable.org/ TODO
         # nvidia-smi -q -d temperature #https://askubuntu.com/questions/34449/how-to-see-the-video-card-temperature-nvidia-ati-intel
@@ -1762,6 +1764,9 @@
     become: true
     when: is_androidstudio_installed is failed
 
+#Another option
+#https://www.fosshub.com/Android-x86.html
+
 
 #Java https://www.oracle.com/java/technologies/downloads/#java11
 
@@ -1860,6 +1865,11 @@
 #https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/766
 #>FOR THOSE USING THE snd_hda_intelMODULE:
 #It even happens on kernel 6.0.0
+#
+#https://wiki.archlinux.org/title/Advanced_Linux_Sound_Architecture#ALSA_firmware
+#https://www.kali.org/tools/firmware-sof/
+#https://www.reddit.com/r/Ubuntu/comments/u74hkq/how_to_install_soffirmare_step_by_step_new_to/
+#https://forums.linuxmint.com/viewtopic.php?t=394728
 #
 #https://unix.stackexchange.com/questions/257322/no-audio-on-kali-linux
 #https://www.maketecheasier.com/fix-sound-kali-linux/
