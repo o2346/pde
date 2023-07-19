@@ -1735,16 +1735,6 @@
 #
 # Check 'omit some packages' flag
 #
-  - name: download Android Studio
-    shell: cd /tmp; curl https://developer.android.com/studio | grep -iEoh "http.*linux\.tar\.gz" | xargs wget -P /tmp/
-    ignore_errors: true
-  - name: Extract saved Android Studio
-    shell: ls /tmp/android-studio*.tar.gz | xargs tar -xf
-    ignore_errors: true
-  - name: Move Android Studio
-    command: mv /tmp/android-studio /opt/
-    ignore_errors: true
-    become: true
   - name: install dependencies for Android studio
     apt:
       name:
@@ -1754,7 +1744,20 @@
         - libstdc++6:i386
         - lib32z1
         - libbz2-1.0:i386
+        - wget
+        - curl
+        - xargs
       state: latest
+    become: true
+  - name: download Android Studio
+    shell: curl https://developer.android.com/studio | grep -iEoh "http.*linux\.tar\.gz" | xargs wget -P /tmp/
+    ignore_errors: true
+  - name: Extract saved Android Studio
+    shell: ls /tmp/android-studio*.tar.gz | xargs tar -xf -C /tmp/
+    ignore_errors: true
+  - name: Move Android Studio
+    command: mv /tmp/android-studio /opt/
+    ignore_errors: true
     become: true
 
 
