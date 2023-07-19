@@ -1735,30 +1735,33 @@
 #
 # Check 'omit some packages' flag
 #
+  - name: refer flag that indicates dist-upgrade has been done
+    command: ls /tmp/android-studio
+    register: is_android-studio_installed
+    ignore_errors: true
   - name: install dependencies for Android studio
     apt:
       name:
         - python3-dev
-        - libc6:i386
-        - libncurses5:i386
-        - libstdc++6:i386
-        - lib32z1
-        - libbz2-1.0:i386
         - wget
         - curl
         - xargs
       state: latest
     become: true
+    when:  is_android-studio_installed is failed
   - name: download Android Studio
     shell: curl https://developer.android.com/studio | grep -iEoh "http.*linux\.tar\.gz" | xargs wget -P /tmp/
     ignore_errors: true
+    when:  is_android-studio_installed is failed
   - name: Extract saved Android Studio
     shell: ls /tmp/android-studio*.tar.gz | xargs tar -xf -C /tmp/
     ignore_errors: true
+    when:  is_android-studio_installed is failed
   - name: Move Android Studio
     command: mv /tmp/android-studio /opt/
     ignore_errors: true
     become: true
+    when:  is_android-studio_installed is failed
 
 
 #Java https://www.oracle.com/java/technologies/downloads/#java11
