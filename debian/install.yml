@@ -1735,11 +1735,11 @@
 #
 # Check 'omit some packages' flag
 #
-  - name: refer flag that indicates dist-upgrade has been done
+  - name: refer a sign of android-studio
     command: ls /tmp/android-studio
     register: is_androidstudio_installed
     ignore_errors: true
-  - name: install dependencies for Android studio
+  - name: install dependencies for Android studio installation
     apt:
       name:
         - python3-dev
@@ -1757,7 +1757,7 @@
     ignore_errors: true
     when: is_androidstudio_installed is failed
   - name: Move Android Studio
-    command: mv /tmp/android-studio /opt/
+    command: cp /tmp/android-studio /opt/
     ignore_errors: true
     become: true
     when: is_androidstudio_installed is failed
