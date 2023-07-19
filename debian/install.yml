@@ -1737,7 +1737,7 @@
 #
   - name: refer flag that indicates dist-upgrade has been done
     command: ls /tmp/android-studio
-    register: is_android-studio_installed
+    register: is_androidstudio_installed
     ignore_errors: true
   - name: install dependencies for Android studio
     apt:
@@ -1748,20 +1748,20 @@
         - xargs
       state: latest
     become: true
-    when:  is_android-studio_installed is failed
+    when: is_androidstudio_installed is failed
   - name: download Android Studio
     shell: curl https://developer.android.com/studio | grep -iEoh "http.*linux\.tar\.gz" | xargs wget -P /tmp/
     ignore_errors: true
-    when:  is_android-studio_installed is failed
+    when: is_androidstudio_installed is failed
   - name: Extract saved Android Studio
     shell: ls /tmp/android-studio*.tar.gz | xargs tar -xf -C /tmp/
     ignore_errors: true
-    when:  is_android-studio_installed is failed
+    when: is_androidstudio_installed is failed
   - name: Move Android Studio
     command: mv /tmp/android-studio /opt/
     ignore_errors: true
     become: true
-    when:  is_android-studio_installed is failed
+    when: is_androidstudio_installed is failed
 
 
 #Java https://www.oracle.com/java/technologies/downloads/#java11
