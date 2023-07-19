@@ -1745,7 +1745,6 @@
         - python3-dev
         - wget
         - curl
-        - xargs
       state: latest
     become: true
     when: is_androidstudio_installed is failed
