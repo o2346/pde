@@ -1131,7 +1131,8 @@
     apt:
       state: latest
       name:
-        - mp3splt
+        - mp3wrap
+          #https://mp3wrap.sourceforge.net/
     become: true
     # following may not need anymore, now apt supports it on even kali
     #when: ansible_distribution == 'Linux Mint'
