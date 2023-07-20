@@ -1335,9 +1335,9 @@
     debug:
       msg: "nothing found, newly installing dein"
     when: is_dein_installed is failed
-  - name: dein - install
-    shell: curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh | sh -s -- ~/.cache/dein
-    when: is_dein_installed is failed
+      #  - name: dein - install
+      #    shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein-installer.vim/master/installer.sh)"
+      #    when: is_dein_installed is failed
   - name: create ~/.vim/colors directory if it doesn't exist
     file:
       path: ~/.vim/colors
