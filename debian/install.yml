@@ -1242,7 +1242,7 @@
       update_cache: yes
       state: latest
       name:
-        - docker-io
+        - docker.io
         - docker-compose
     become: true
     when: is_docker_installed is failed
