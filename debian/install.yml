@@ -1156,8 +1156,8 @@
     #      deb: http://ftp.us.debian.org/debian/pool/main/m/mp3splt/mp3splt_2.6.2+20170630-3+b1_amd64.deb
     #    become: true
     #    when: is_mp3splt_installed is failed
-  - name: mp3splt - Confirm
-    command: which mp3splt
+    #- name: mp3splt - Confirm
+    #  command: which mp3splt
 #\end{mp3splt}
 
 #\begin{glmark2}
