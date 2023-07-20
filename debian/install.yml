@@ -1636,8 +1636,7 @@
   - name: kvm install packages
     apt:
       name:
-        - qemu #https://fosspost.org/tutorials/use-qemu-test-operating-systems-distributions
-        - qemu-kvm
+        - qemu-system-x86
         - virt-manager
           #- ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
         - bridge-utils
