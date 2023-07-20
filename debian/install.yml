@@ -1437,36 +1437,43 @@
     #      chdir: /opt/onedrive
     #    become: true
     #    when: is_onedrive_installed is failed
-  - name: Add an Apt signing key, uses whichever key is at the URL
-    ansible.builtin.apt_key:
-      url: https://download.opensuse.org/repositories/home:/npreining:/debian-ubuntu-onedrive/Debian_10/Release.key
-      state: present
-    become: yes
-    when: is_onedrive_installed is failed
-  - name: install onedrive
-    apt:
-      name:
-        - onedrive
-      state: latest
-    become: true
-    when: is_onedrive_installed is failed
-  - name: create ~/.config/onedrive directory if it doesn't exist
-    file:
-      path: ~/.config/onedrive
-      state: directory
-      mode: 0755
-    when: is_onedrive_installed is failed
-  #https://github.com/abraunegg/onedrive/blob/master/docs/USAGE.md#configuration
-  - name: copy onedrive.conf
-    get_url:
-      url: https://raw.githubusercontent.com/abraunegg/onedrive/master/config
-      dest: ~/.config/onedrive/config
-      mode: 0555
-    when: is_onedrive_installed is failed
+    #  - name: Add an Apt signing key, uses whichever key is at the URL
+    #    ansible.builtin.apt_key:
+    #      url: https://download.opensuse.org/repositories/home:/npreining:/debian-ubuntu-onedrive/Debian_10/Release.key
+    #      state: present
+    #    become: yes
+    #    when: is_onedrive_installed is failed
+    #  - name: install onedrive
+    #    apt:
+    #      name:
+    #        - onedrive
+    #      state: latest
+    #    become: true
+    #    when: is_onedrive_installed is failed
+    #  - name: create ~/.config/onedrive directory if it doesn't exist
+    #    file:
+    #      path: ~/.config/onedrive
+    #      state: directory
+    #      mode: 0755
+    #    when: is_onedrive_installed is failed
+    #  #https://github.com/abraunegg/onedrive/blob/master/docs/USAGE.md#configuration
+    #  - name: copy onedrive.conf
+    #    get_url:
+    #      url: https://raw.githubusercontent.com/abraunegg/onedrive/master/config
+    #      dest: ~/.config/onedrive/config
+    #      mode: 0555
+    #    when: is_onedrive_installed is failed
       #  - name: systemd onedrive enabled
       #    command: systemctl --user enable onedrive
       #  - name: systemd onedrive start
       #    command: systemctl --user start onedrive
+  - name: onedtive - install
+    apt:
+      state: latest
+      name:
+        - onedrive
+      update_cache: yes
+    become: true
 
 
 #
