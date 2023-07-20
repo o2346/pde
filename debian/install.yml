@@ -934,7 +934,8 @@
       name:
         - neovim
         - tmux
-        - rxvt-unicode-256color
+          #- rxvt-unicode-256color
+        - rxvt-unicode
           #https://wiki.archlinux.org/index.php/Rxvt-unicode
           #https://superuser.com/questions/454825/linux-terminal-emulator-with-custom-line-height-and-character-spacing
           #http://malkalech.com/urxvt_terminal_emulator
