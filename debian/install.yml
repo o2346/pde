@@ -1357,10 +1357,10 @@
     debug:
       msg: "nothing found, newly installing dein"
     when: is_dein_installed is failed
-      # It's interactive..
-      #  - name: dein - install
-      #    shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein-installer.vim/master/installer.sh)"
-      #    when: is_dein_installed is failed
+  #Update --use-vim-config to --use-neovim-config if primary vim was switched to nvim. see the source of the script for detail
+  - name: dein - install
+    shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein-installer.vim/master/installer.sh)" - --overwrite-config "$HOME/.cache/dein" --use-vim-config
+    when: is_dein_installed is failed
   - name: create ~/.vim/colors directory if it doesn't exist
     file:
       path: ~/.vim/colors
