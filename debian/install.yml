@@ -1335,6 +1335,7 @@
     debug:
       msg: "nothing found, newly installing dein"
     when: is_dein_installed is failed
+      # It's interactive..
       #  - name: dein - install
       #    shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein-installer.vim/master/installer.sh)"
       #    when: is_dein_installed is failed
@@ -1636,7 +1637,7 @@
   - name: kvm install packages
     apt:
       name:
-        - qemu-system-x86
+        - qemu-system-x86 #https://www.thegeekdiary.com/qemu-system-x86_64-command-not-found/
         - virt-manager
           #- ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
         - bridge-utils
@@ -1768,15 +1769,12 @@
     when: is_androidstudio_installed is failed
   - name: download Android Studio
     shell: curl https://developer.android.com/studio | grep -iEoh "http.*linux\.tar\.gz" | xargs wget -P /tmp/
-    ignore_errors: true
     when: is_androidstudio_installed is failed
   - name: Extract saved Android Studio
     shell: ls /tmp/android-studio*.tar.gz | xargs -I{} tar -xf {} -C /tmp/
-    ignore_errors: true
     when: is_androidstudio_installed is failed
   - name: Move Android Studio
-    command: cp /tmp/android-studio /opt/
-    ignore_errors: true
+    command: cp -r /tmp/android-studio /opt/
     become: true
     when: is_androidstudio_installed is failed
 
