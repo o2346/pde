@@ -1328,6 +1328,23 @@
 
 # randomize screen saver
 # TODO: http://applocator.blogspot.com/2017/01/random-screensaver-with-linux-mint.html
+#
+#
+#Vim with clipboard support
+#
+  - name: vim - setup
+    apt:
+      state: absent
+      name:
+        - vim
+    become: true
+  - name: vim - setup
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        - vim-gtk3
+    become: true
 
 #
 # dein
