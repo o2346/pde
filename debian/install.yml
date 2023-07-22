@@ -187,6 +187,11 @@
     #https://opensource.com/article/18/11/how-swap-ctrl-and-caps-lock-your-keyboard
     become: true
     when: is_xps13_9310 is succeeded
+  - name: swap capslock and ctrl key permanently
+    lineinfile: dest=/etc/default/keyboard
+              regexp="^XKBOPTIONS="
+              line='XKBOPTIONS="ctrl:swapcaps"'
+              state=present
 #pm-suspend/pm-utils
 #https://www.reddit.com/r/linuxhardware/comments/nhl63r/dell_xps_13_9310_suspended_battery_drain/
 #https://unix.stackexchange.com/questions/128068/changing-systemd-handlelidswitch-setting-during-run-time
