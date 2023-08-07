@@ -182,15 +182,15 @@
       update_cache: yes
     become: true
     when: is_xps13_9310 is succeeded
-  - name: swap capslock and ctrl key
+  - name: overwrite capslock as ctrl key
     command: /usr/bin/setxkbmap -option "ctrl:nocaps"
     #https://opensource.com/article/18/11/how-swap-ctrl-and-caps-lock-your-keyboard
     become: true
     when: is_xps13_9310 is succeeded
-  - name: swap capslock and ctrl key permanently
+  - name: overwrite capslock as ctrl key
     lineinfile: dest=/etc/default/keyboard
               regexp="^XKBOPTIONS="
-              line='XKBOPTIONS="ctrl:swapcaps"'
+              line='XKBOPTIONS="ctrl:nocaps"
               state=present
 #pm-suspend/pm-utils
 #https://www.reddit.com/r/linuxhardware/comments/nhl63r/dell_xps_13_9310_suspended_battery_drain/
