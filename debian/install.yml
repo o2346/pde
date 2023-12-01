@@ -189,9 +189,9 @@
     when: is_xps13_9310 is succeeded
   - name: overwrite capslock as ctrl key
     lineinfile: dest=/etc/default/keyboard
-              regexp="^XKBOPTIONS="
-              line='XKBOPTIONS="ctrl:nocaps"
-              state=present
+      regexp="^XKBOPTIONS="
+      line='XKBOPTIONS="ctrl:nocaps"
+      state=present
 #pm-suspend/pm-utils
 #https://www.reddit.com/r/linuxhardware/comments/nhl63r/dell_xps_13_9310_suspended_battery_drain/
 #https://unix.stackexchange.com/questions/128068/changing-systemd-handlelidswitch-setting-during-run-time
