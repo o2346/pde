@@ -169,6 +169,7 @@
 #https://wiki.debian.org/iwlwifi
 #https://wiki.archlinux.org/title/Dell_XPS_13_(9310)#Wifi
 #
+#https://opensource.com/article/18/11/how-swap-ctrl-and-caps-lock-your-keyboard
   - name: Wifi - check current system is xps13(9310) or not
     shell: dmidecode -s system-product-name | grep 'XPS 13 9310'
     register: is_xps13_9310
@@ -184,7 +185,6 @@
     when: is_xps13_9310 is succeeded
   - name: overwrite capslock as ctrl key
     command: /usr/bin/setxkbmap -option "ctrl:nocaps"
-    #https://opensource.com/article/18/11/how-swap-ctrl-and-caps-lock-your-keyboard
     become: true
     when: is_xps13_9310 is succeeded
   - name: overwrite capslock as ctrl key
