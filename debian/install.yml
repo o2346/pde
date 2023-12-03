@@ -193,6 +193,7 @@
       regexp: "^XKBOPTIONS="
       line: 'XKBOPTIONS="ctrl:nocaps"'
       state: present
+    become: true
 
 #pm-suspend/pm-utils
 #https://www.reddit.com/r/linuxhardware/comments/nhl63r/dell_xps_13_9310_suspended_battery_drain/
@@ -995,7 +996,12 @@
           # https://github.com/adrianlopezroche/fdupes
           # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
         - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
-        - transmission-cli
+          #brew is only the effective way found
+          #https://docs.brew.sh/Homebrew-on-Linux
+          #https://formulae.brew.sh/formula/transmission-cli
+          #https://github.com/transmission/transmission
+          #https://github.com/transmission/transmission/issues/4142#issuecomment-1434752805
+          #        - transmission-cli
         - socat
         - neofetch
         - tsung
