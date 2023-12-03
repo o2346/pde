@@ -10,6 +10,8 @@
     font_titlebar: 'Migu 2M Bold 14'
       # font_good_for_terminal: Migu 1M Regular # just memo
       # http://malkalech.com/urxvt_terminal_emulator
+    homebrew_packages:
+      - name: transmission-cli
   become: no
   tasks:
 
@@ -1813,6 +1815,37 @@
 
 
 #Java https://www.oracle.com/java/technologies/downloads/#java11
+
+#
+# brew
+#
+  - name: Check brew is executable
+    command: which brew
+    register: brew_installed
+    ignore_errors: true
+
+      #  - name: Print on succeeded confirmation
+      #    debug:
+      #      msg: "{{ brew_installed.stdout }}"
+      #    when: brew_installed is succeeded
+
+  #https://brew.sh/
+  #/home/linuxbrew/.linuxbrew/bin/brew
+  - name: homebrew
+    shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    when: brew_installed is failed
+
+  - name: homebrew update
+    homebrew:
+      update_homebrew: yes
+
+  #https://formulae.brew.sh/formula/transmission-cli
+  - name: homebrew packages install
+    homebrew:
+      name: '{{ item.name }}'
+      state: '{{ item.state | default("latest") }}'
+      install_options: '{{ item.install_options | default(omit) }}'
+    with_items: '{{ homebrew_packages }}'
 
 #
 # vmplayer
