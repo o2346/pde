@@ -1137,6 +1137,28 @@
     #https://github.com/yuezk/GlobalProtect-openconnect
     #
     #https://stackoverflow.com/questions/35942754/how-can-i-save-username-and-password-in-git
+    #
+        #  - name: gpclient - Clone a repo with separate git directory
+        #    git:
+        #      repo: https://github.com/yuezk/GlobalProtect-openconnect.git
+        #      dest: /tmp/gpclient
+        #https://github.com/yuezk/GlobalProtect-openconnect
+  - name: gpclient - checking already installed
+    command: which gpclient
+    register: is_gpclient_installed
+    ignore_errors: true
+
+  - name: gpclient - Clone a repo with separate git directory
+    command: git clone https://github.com/yuezk/GlobalProtect-openconnect.git /tmp/gpclient
+    when: is_gpclient_installed is failed
+    ignore_errors: true
+
+  - name: gpclient - Configure, compile and install gpclient in Debian
+    command: ./scripts/install-debian.sh
+    args:
+      chdir: /tmp/gpclient
+    when: is_gpclient_installed is failed
+
 
 #\begin{mp3splt}
 #
