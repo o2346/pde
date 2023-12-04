@@ -1893,6 +1893,7 @@
       state: latest
       update_cache: yes
     become: true
+    when: brave_prep is failed
 
 #
 # vmplayer
