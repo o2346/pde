@@ -1869,6 +1869,31 @@
       install_options: '{{ item.install_options | default(omit) }}'
     with_items: '{{ homebrew_packages }}'
 
+#https://brave.com/linux/#release-channel-installation
+#
+#
+  - name: Brave - Check
+    #command: ls /usr/share/keyrings/brave-browser-archive-keyring.gpg
+    command: which brave-browser
+    register: brave_prep
+    ignore_errors: true
+    become: yes
+  - name: Brave - installation
+    command: sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+    become: yes
+    when: brave_prep is failed
+  - name: Brave - installation
+    shell: echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+    become: yes
+    when: brave_prep is failed
+  - name: Brave - installation
+    apt:
+      name:
+        - brave-browser
+      state: latest
+      update_cache: yes
+    become: true
+
 #
 # vmplayer
 #
