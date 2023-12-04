@@ -1869,8 +1869,8 @@
       install_options: '{{ item.install_options | default(omit) }}'
     with_items: '{{ homebrew_packages }}'
 
-#https://brave.com/linux/#release-channel-installation
 #
+# Brave https://brave.com/linux/#release-channel-installation
 #
   - name: Brave - Check
     #command: ls /usr/share/keyrings/brave-browser-archive-keyring.gpg
