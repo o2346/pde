@@ -1896,6 +1896,34 @@
     when: brave_prep is failed
 
 #
+# teams-for-linux https://github.com/IsmaelMartinez/teams-for-linux
+#
+  - name: Teams - Check
+    shell: sudo apt search teams-for-linux | grep installed
+    register: teams_prep
+    ignore_errors: true
+    become: yes
+  - name: Teams - installation
+    command: sudo mkdir -p /etc/apt/keyrings
+    become: yes
+    when: teams_prep is failed
+  - name: Teams - installation
+    command: sudo wget -qO /etc/apt/keyrings/teams-for-linux.asc https://repo.teamsforlinux.de/teams-for-linux.asc
+    become: yes
+    when: teams_prep is failed
+  - name: Teams - installation
+    shell: echo "deb [signed-by=/etc/apt/keyrings/teams-for-linux.asc arch=$(dpkg --print-architecture)] https://repo.teamsforlinux.de/debian/ stable main" | sudo tee /etc/apt/sources.list.d/teams-for-linux-packages.list
+    become: yes
+    when: teams_prep is failed
+  - name: Teams - installation
+    apt:
+      name:
+        - teams-for-linux
+      state: latest
+      update_cache: yes
+    become: true
+    when: teams_prep is failed
+#
 # vmplayer
 #
 #https://labunix.hateblo.jp/entry/20150411/1428762367
