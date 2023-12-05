@@ -1109,6 +1109,7 @@
         # ~/.config/chromium/Default/History
         - sqlite3
         # benchmark https://www.howtoforge.com/how-to-benchmark-your-system-cpu-file-io-mysql-with-sysbench
+        #https://ss.scphys.kyoto-u.ac.jp/person/yonezawa/contents/program/gnuplot/index.html
         - gnuplot
         # - pandoc apt has old version. see  https://pandoc.org/installing.html
         - pv
@@ -1732,6 +1733,7 @@
 #
 # plantUML
 # https://www.hiroom2.com/2018/07/02/ubuntu-1804-plantuml-en/
+# https://plantuml.com/sequence-diagram
   - name: install dependencies for PlantUML
     apt:
       name:
@@ -1923,6 +1925,13 @@
       update_cache: yes
     become: true
     when: teams_prep is failed
+
+#
+# https://askubuntu.com/a/1233759
+#
+  - name: Suppress notifications, annoying
+    command: gsettings set org.gnome.desktop.notifications show-banners false
+
 #
 # vmplayer
 #
