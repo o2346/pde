@@ -968,6 +968,7 @@
         - zsh
         - zsh-syntax-highlighting
         - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
+        - software-properties-common
     become: true
   - name: Packages - Tools (may not depend on others)
     apt:
