@@ -1845,7 +1845,7 @@
 # brew
 #
   - name: Check brew is executable
-    command: which brew
+    command: ls /home/linuxbrew/.linuxbrew/bin/brew
     register: brew_installed
     ignore_errors: true
 
@@ -1863,6 +1863,7 @@
   - name: homebrew update
     homebrew:
       update_homebrew: yes
+    when: brew_installed is failed
 
   #https://formulae.brew.sh/formula/transmission-cli
   - name: homebrew packages install
@@ -1871,6 +1872,7 @@
       state: '{{ item.state | default("latest") }}'
       install_options: '{{ item.install_options | default(omit) }}'
     with_items: '{{ homebrew_packages }}'
+    when: brew_installed is failed
 
 #
 # Brave https://brave.com/linux/#release-channel-installation
