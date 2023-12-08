@@ -1864,6 +1864,7 @@
     homebrew:
       update_homebrew: yes
     when: brew_installed is failed
+    ignore_errors: true
 
   #https://formulae.brew.sh/formula/transmission-cli
   - name: homebrew packages install
@@ -1873,6 +1874,7 @@
       install_options: '{{ item.install_options | default(omit) }}'
     with_items: '{{ homebrew_packages }}'
     when: brew_installed is failed
+    ignore_errors: true
 
 #
 # Brave https://brave.com/linux/#release-channel-installation
