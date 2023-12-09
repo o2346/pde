@@ -12,6 +12,8 @@
       # http://malkalech.com/urxvt_terminal_emulator
     homebrew_packages:
       - name: transmission-cli
+      - name: graphviz
+        #https://graphviz.org/download/
   become: no
   tasks:
 
@@ -1754,6 +1756,8 @@
   - name: download PlantUML
     get_url:
       url: http://sourceforge.net/projects/plantuml/files/plantuml.jar/download
+#curl -O -J -L
+#https://unix.stackexchange.com/questions/74334/how-to-download-files-with-wget-where-the-page-makes-you-wait-for-download
       dest: /opt/plantuml/
       mode: 0555
     become: true
