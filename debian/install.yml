@@ -175,6 +175,11 @@
 #https://wiki.archlinux.org/title/Dell_XPS_13_(9310)#Wifi
 #
 #https://opensource.com/article/18/11/how-swap-ctrl-and-caps-lock-your-keyboard
+  - name: check current system is xps13(9310/9320) or not
+    shell: dmidecode -s system-product-name | grep -E 'XPS.*93[12]0'
+    register: is_xps13
+    ignore_errors: true
+    become: true
   - name: Wifi - check current system is xps13(9310) or not
     shell: dmidecode -s system-product-name | grep 'XPS 13 9310'
     register: is_xps13_9310
@@ -191,7 +196,7 @@
   - name: overwrite capslock as ctrl key
     command: /usr/bin/setxkbmap -option "ctrl:nocaps"
     become: true
-    when: is_xps13_9310 is succeeded
+    when: is_xps13 is succeeded
   - name: overwrite capslock as ctrl key
     lineinfile:
       dest: /etc/default/keyboard
@@ -199,6 +204,7 @@
       line: 'XKBOPTIONS="ctrl:nocaps"'
       state: present
     become: true
+    when: is_xps13 is succeeded
 
 #pm-suspend/pm-utils
 #https://www.reddit.com/r/linuxhardware/comments/nhl63r/dell_xps_13_9310_suspended_battery_drain/
