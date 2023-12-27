@@ -1860,7 +1860,10 @@
       install_options: '{{ item.install_options | default(omit) }}'
     with_items: '{{ homebrew_packages }}'
     when: brew_installed is failed
-    ignore_errors: true
+
+  - name: homebrew upgrade
+    homebrew:
+      upgrade_all: true
 
 #
 #SAM
