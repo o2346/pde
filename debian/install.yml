@@ -14,6 +14,7 @@
       - name: transmission-cli
       - name: graphviz
         #https://graphviz.org/download/
+      - name: aws-sam-cli
   become: no
   tasks:
 
@@ -845,30 +846,6 @@
       state: absent
     become: true
     when: ansible_distribution == 'Linux Mint'
-
-#
-#SAM
-#
-#https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
-  - name: homwbrew - checking already installed
-    command: test -d /home/linuxbrew/.linuxbrew
-    register: is_brew_installed
-    ignore_errors: true
-  - name: install homebrew and sam
-    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/brew-sam.sh | bash -s
-    when: is_brew_installed is failed
-  - name: install sam - stupidly 2nd invocation
-    shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
-    when: is_brew_installed is failed
-    # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
-  - name: Create symbolic link for sam
-    file:
-      src: "/home/linuxbrew/.linuxbrew/bin/sam"
-      dest: "/usr/local/bin/sam"
-      state: link
-    become: true
-    # In addition, ensure path to '/home/linuxbrew/.linuxbrew/bin/sam'. Then finally you could invoke the command 'sam'
-    # Gave up adding to PATH or alias in .zshenv, .zshrc, did not work
 
 #
 # urxvt plugins
@@ -1879,6 +1856,33 @@
     with_items: '{{ homebrew_packages }}'
     when: brew_installed is failed
     ignore_errors: true
+
+#
+#SAM
+#
+#https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+#  - name: homwbrew - checking already installed
+#    command: test -d /home/linuxbrew/.linuxbrew
+#    register: is_brew_installed
+#    ignore_errors: true
+#  - name: install homebrew
+#    shell: '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+#    when: is_brew_installed is failed
+#      #- name: install homebrew and sam
+#      #  shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/brew-sam.sh | bash -s
+#      #  when: is_brew_installed is failed
+#      # - name: install sam
+#      #   shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
+#      #     #when: is_brew_installed is failed
+#      #   # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
+  - name: Create symbolic link for sam
+    file:
+      src: "/home/linuxbrew/.linuxbrew/bin/sam"
+      dest: "/usr/local/bin/sam"
+      state: link
+    become: true
+    # In addition, ensure path to '/home/linuxbrew/.linuxbrew/bin/sam'. Then finally you could invoke the command 'sam'
+    # Gave up adding to PATH or alias in .zshenv, .zshrc, did not work
 
 #
 # Brave https://brave.com/linux/#release-channel-installation
