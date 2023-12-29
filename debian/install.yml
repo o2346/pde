@@ -1787,6 +1787,13 @@
     become: true
     when: avoid_some is failed
 
+  - name: upgrade pip
+    pip:
+      name: pip
+      state: latest
+    become: true
+    when: avoid_some is failed
+
   - name: mitmproxy
     command: pip3 install --ignore-installed mitmproxy
     become: true
@@ -1956,6 +1963,46 @@
 #
   - name: Suppress notifications, annoying
     command: gsettings set org.gnome.desktop.notifications show-banners false
+
+
+#
+# pip misc tools
+#
+  - name: install tools  pip misc tool
+    pip:
+      name:
+        - uploadserver
+      executable: pip3
+
+#
+# pip all packages upgrade
+#
+#https://www.activestate.com/resources/quick-reads/how-to-update-all-python-packages/
+  - name: pip upgrade
+    shell: "pip install -U --user $(pip list -o | cut -f1 -d' ' | tr ' ' '\n' | awk '{if(NR>=3)print}' | cut -d' ' -f1)"
+    ignore_errors: true
+  - name: pip3 upgrade
+    shell: "pip3 install -U --user $(pip3 list -o | cut -f1 -d' ' | tr ' ' '\n' | awk '{if(NR>=3)print}' | cut -d' ' -f1)"
+    ignore_errors: true
+
+#
+# npm all packages upgrade
+#
+#https://docs.npmjs.com/updating-packages-downloaded-from-the-registry
+  - name: npm upgrade
+    command: npm update -g
+
+#
+# brew
+#
+#https://docs.npmjs.com/updating-packages-downloaded-from-the-registry
+  - name: brew
+    command: /home/linuxbrew/.linuxbrew/bin/brew update
+  - name: brew
+    command: /home/linuxbrew/.linuxbrew/bin/brew upgrade
+  - name: brew
+    command: /home/linuxbrew/.linuxbrew/bin/brew autoremove
+
 
 #
 # vmplayer
