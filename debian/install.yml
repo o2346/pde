@@ -1019,6 +1019,7 @@
         - rsync
         - bc
         - adb
+        - sshuttle
     become: true
   - name: Packages - Multimedia
     apt:
