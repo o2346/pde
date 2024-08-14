@@ -1081,6 +1081,7 @@
       state: latest
       name:
         - chromium
+        - vivaldi-stable
         # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
         - guile-3.0
         - guile-3.0-dev
