@@ -778,73 +778,6 @@
     when: is_aws_installed is failed
     become: true
 
-# Tools for aws
-  - name: Tools for aws - install prerequisites
-    apt:
-      name:
-        - python3-pip
-      state: latest
-      install_recommends: yes
-    become: true
-  - name: upgrade pip
-    ansible.builtin.pip:
-      name: pip
-      executable: pip3
-      state: forcereinstall
-    become: true
-  - name: install tools for AWS
-    pip:
-      name:
-        - cfn-lint
-        - rdk
-      #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
-      executable: pip3
-      #become: true
-      #consider to add more tools for handy
-      #https://github.com/awslabs/aws-data-wrangler
-      #https://github.com/awslabs/cloudwatch-api-tracker
-      #https://github.com/awslabs/aws-reserved-instance-expiration-notification
-      #https://github.com/awslabs/cloudwatch-logs-analyze-data
-      #https://github.com/awslabs/serverless-photo-recognition
-      #https://github.com/awslabs/aws-sam-cli
-      #https://github.com/awslabs/aws-cloudformation-templates
-      #https://github.com/awslabs/aws-deployment-framework
-  - name: aws - checking version of aws
-    shell: aws --version
-    register: awsversion
-    ignore_errors: true
-  - name: Print for aws version
-    debug:
-      msg: "{{ awsversion.stdout }}"
-  - name: aws - checking version of aws
-    shell: aws --version | grep 'aws-cli/2'
-    register: is_awscliv2_present
-
-## jpterm/jmespath
-#https://pypi.org/project/jmespath-terminal/
-  - name: jpterm/jmespath - checking already installed
-    command: which jpterm
-    register: is_jmespath_installed
-    ignore_errors: true
-  - name: Print on failed
-    debug:
-      msg: "nothing found, newly installing jmespath"
-    when: is_jmespath_installed is failed
-  - name: install tools for jmespath
-    shell: sudo wget https://github.com/jmespath/jp/releases/download/0.1.2/jp-linux-amd64 -O /usr/local/bin/jpterm && sudo chmod +x /usr/local/bin/jpterm
-    become: true
-    when: is_jmespath_installed is failed
-      # does not work on mine
-      #  - name: install tools for jmespath
-      #    pip: name={{ item }} extra_args="-U"
-      #    with_items:
-      #      - install jmespath-terminal #https://github.com/jmespath/jmespath.terminal
-      #    become: true
-      #
-      #in pip, an error below
-      #ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
-      #jmespath-terminal 0.2.1 requires urwid==1.2.2, but you have urwid 2.1.2 which is incompatible.
-
   - name: uninstall packages
     apt:
       name:
@@ -1081,7 +1014,8 @@
       state: latest
       name:
         - chromium
-        - vivaldi-stable
+        #https://help.vivaldi.com/desktop/install-update/manual-setup-vivaldi-linux-repositories/
+        #- vivaldi-stable
         # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
         - guile-3.0
         - guile-3.0-dev
@@ -1109,9 +1043,7 @@
           #http://zairyo.susi.oita-u.ac.jp/wordpress/?p=7385
           #convert: not authorized `show:' @ error/constitute.c/WriteImage/1028.
         - build-essential
-          #      - wopr
         - speedtest-cli
-        - peek
         - kazam
         - libreoffice
           #https://askubuntu.com/questions/283559/how-can-i-run-disk-utility-in-terminal-via-a-comand-line
@@ -1124,30 +1056,7 @@
 
     #VPN tool
     #https://github.com/yuezk/GlobalProtect-openconnect
-    #
     #https://stackoverflow.com/questions/35942754/how-can-i-save-username-and-password-in-git
-    #
-        #  - name: gpclient - Clone a repo with separate git directory
-        #    git:
-        #      repo: https://github.com/yuezk/GlobalProtect-openconnect.git
-        #      dest: /tmp/gpclient
-        #https://github.com/yuezk/GlobalProtect-openconnect
-  - name: gpclient - checking already installed
-    command: which gpclient
-    register: is_gpclient_installed
-    ignore_errors: true
-
-  - name: gpclient - Clone a repo with separate git directory
-    command: git clone https://github.com/yuezk/GlobalProtect-openconnect.git /tmp/gpclient
-    when: is_gpclient_installed is failed
-    ignore_errors: true
-
-  - name: gpclient - Configure, compile and install gpclient in Debian
-    command: ./scripts/install-debian.sh
-    args:
-      chdir: /tmp/gpclient
-    when: is_gpclient_installed is failed
-
 
 #\begin{mp3splt}
 #
@@ -1347,10 +1256,6 @@
       - eslint
       - eslint_d
 
-# randomize screen saver
-# TODO: http://applocator.blogspot.com/2017/01/random-screensaver-with-linux-mint.html
-#
-#
 #Vim with clipboard support
 #
   - name: vim - setup
@@ -1613,29 +1518,6 @@
     when: ansible_distribution == 'Linux Mint'
 
 #
-# Virtualbox
-#
-#
-  - name: Virtualbox - install
-    apt:
-      state: latest
-      name:
-        # https://sites.google.com/site/linuxnomemo/mint-use/virtualbox
-        - virtualbox
-        - virtualbox-qt
-        - virtualbox-dkms
-        - virtualbox-guest-additions-iso
-    become: true
-    when: avoid_some is failed
-  - name: add "{{ansible_user_id}}" into group netdev
-    user:
-      name: "{{ansible_user_id}}"
-      groups: vboxusers
-      append: yes
-    become: true
-    when: avoid_some is failed
-
-#
 # pip
 #
   - name: pip - install general packages
@@ -1656,26 +1538,6 @@
         sys.setdefaultencoding('utf-8')
     become: true
     when: avoid_some is failed
-
-#
-# mail command settings
-#
-#  - name: mail utils install
-#    apt:
-#      name:
-#        - mailutils
-#        - exim4
-#      update_cache: yes
-#      state: latest
-#    become: true
-#  - name: copy exim4 cfg file
-#    copy: >
-#      src=./src/update-exim4.conf.conf
-#      dest=/etc/exim4/update-exim4.conf.conf
-#    become: true
-#  - shell: update-exim4.conf
-#    become: true
-# tail -f /var/log/exim4/mainlog
 
   - name: kvm install packages
     apt:
@@ -1843,24 +1705,16 @@
     command: ls /home/linuxbrew/.linuxbrew/bin/brew
     register: brew_installed
     ignore_errors: true
-
-      #  - name: Print on succeeded confirmation
-      #    debug:
-      #      msg: "{{ brew_installed.stdout }}"
-      #    when: brew_installed is succeeded
-
   #https://brew.sh/
   #/home/linuxbrew/.linuxbrew/bin/brew
   - name: homebrew
     shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     when: brew_installed is failed
-
   - name: homebrew update
     homebrew:
       update_homebrew: yes
     when: brew_installed is failed
     ignore_errors: true
-
   #https://formulae.brew.sh/formula/transmission-cli
   - name: homebrew packages install
     homebrew:
@@ -1869,7 +1723,6 @@
       install_options: '{{ item.install_options | default(omit) }}'
     with_items: '{{ homebrew_packages }}'
     when: brew_installed is failed
-
   - name: homebrew upgrade
     homebrew:
       upgrade_all: true
@@ -1878,23 +1731,8 @@
 #SAM
 #
 #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
-#  - name: homwbrew - checking already installed
-#    command: test -d /home/linuxbrew/.linuxbrew
-#    register: is_brew_installed
-#    ignore_errors: true
-#  - name: install homebrew
-#    shell: '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
-#    when: is_brew_installed is failed
-#      #- name: install homebrew and sam
-#      #  shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/brew-sam.sh | bash -s
-#      #  when: is_brew_installed is failed
-#      # - name: install sam
-#      #   shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
-#      #     #when: is_brew_installed is failed
-#      #   # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
   - name: install sam 2nd invocation for unkown reason
     shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
-      #when: is_brew_installed is failed
     # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
   - name: Create symbolic link for sam
     file:
@@ -1966,7 +1804,6 @@
   - name: Suppress notifications, annoying
     command: gsettings set org.gnome.desktop.notifications show-banners false
 
-
 #
 # pip misc tools
 #
@@ -2005,14 +1842,6 @@
   - name: brew
     command: /home/linuxbrew/.linuxbrew/bin/brew autoremove
 
-
-#
-# vmplayer
-#
-#https://labunix.hateblo.jp/entry/20150411/1428762367
-#https://netlog.jpn.org/r271-635/2019/06/ubuntu_vmware_remember_recent.html
-#sudo mkdir -p /etc/vmware/hostd && echo -e "<config>\n</config>" | sudo tee /etc/vmware/hostd/proxy.xml
-#
 #
 # apt autoclean, autoremove
 #
@@ -2024,11 +1853,6 @@
     apt:
       autoremove: yes
     become: true
-
-    #  handlers:
-    #  - name: restart ssh
-    #    service: name=sshd state=restarted
-    #    become: true
 
 # todo: add useful tools https://qiita.com/onokatio/items/50fb616f71bf3c5021b9
 # todo: apt-fast https://news.mynavi.jp/article/20161101-a177/
