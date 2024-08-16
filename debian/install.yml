@@ -3,13 +3,18 @@
 ---
 - hosts: "{{ target | default('localhost') }}"
   vars:
-    gituser: user
+    gituser: gituser
     gitemail: ""
     font: 'MigMix 1M 16'
     font_monospace: 'Ricty Diminished Regular 15'
     font_titlebar: 'Migu 2M Bold 14'
       # font_good_for_terminal: Migu 1M Regular # just memo
       # http://malkalech.com/urxvt_terminal_emulator
+    homebrew_packages:
+      - name: transmission-cli
+      - name: graphviz
+        #https://graphviz.org/download/
+      - name: aws-sam-cli
   become: no
   tasks:
 
@@ -169,6 +174,12 @@
 #https://wiki.debian.org/iwlwifi
 #https://wiki.archlinux.org/title/Dell_XPS_13_(9310)#Wifi
 #
+#https://opensource.com/article/18/11/how-swap-ctrl-and-caps-lock-your-keyboard
+  - name: check current system is xps13(9310/9320) or not
+    shell: dmidecode -s system-product-name | grep -E 'XPS.*93[12]0'
+    register: is_xps13
+    ignore_errors: true
+    become: true
   - name: Wifi - check current system is xps13(9310) or not
     shell: dmidecode -s system-product-name | grep 'XPS 13 9310'
     register: is_xps13_9310
@@ -182,11 +193,19 @@
       update_cache: yes
     become: true
     when: is_xps13_9310 is succeeded
-  - name: swap capslock and ctrl key
+  - name: overwrite capslock as ctrl key
     command: /usr/bin/setxkbmap -option "ctrl:nocaps"
-    #https://opensource.com/article/18/11/how-swap-ctrl-and-caps-lock-your-keyboard
     become: true
-    when: is_xps13_9310 is succeeded
+    when: is_xps13 is succeeded
+  - name: overwrite capslock as ctrl key
+    lineinfile:
+      dest: /etc/default/keyboard
+      regexp: "^XKBOPTIONS="
+      line: 'XKBOPTIONS="ctrl:nocaps"'
+      state: present
+    become: true
+    when: is_xps13 is succeeded
+
 #pm-suspend/pm-utils
 #https://www.reddit.com/r/linuxhardware/comments/nhl63r/dell_xps_13_9310_suspended_battery_drain/
 #https://unix.stackexchange.com/questions/128068/changing-systemd-handlelidswitch-setting-during-run-time
@@ -284,17 +303,16 @@
 #
 # ntp
 #
-# https://www.tecmint.com/synchronize-time-with-ntp-in-linux/
-  - name: ntp - install chrony
+# https://askubuntu.com/a/1355660
+# (old) https://www.server-world.info/query?os=Debian_10&p=ntp&f=1
+  - name: ntp - install systemd-timesyncd
     apt:
       name:
-        - chrony
+        - systemd-timesyncd
       state: latest
     become: true
-  - name: ntp - enable chrony
-    systemd:
-      state: started
-      name: chrony
+  - name: ntp - enable
+    command: timedatectl set-ntp true
     become: true
 
 #
@@ -378,13 +396,14 @@
 # Get rid of, annoying
 #
 #https://community.linuxmint.com/tutorial/view/916
+#https://askubuntu.com/questions/1400790/how-do-i-completely-remove-keyrings-from-system
   - name: Get rid of keyring, annoying
     apt:
       name:
         - gnome-keyring
+        - seahorse
       state: absent
     become: true
-
 #
 # Get rid of old driver causes problem
 #
@@ -600,6 +619,11 @@
       dest: /usr/local/sbin/.mydevices
       line: '/opt/trackball/trackball.sh'
     become: true
+  - name: Device - Slimblade Trackball - Make sure a watch version of the service is running
+    lineinfile:
+      dest: /usr/local/sbin/.mydevices
+      line: '/opt/trackball/trackballw.sh'
+    become: true
 
 #
 # Griffin Powermate
@@ -763,10 +787,10 @@
       install_recommends: yes
     become: true
   - name: upgrade pip
-    pip:
+    ansible.builtin.pip:
       name: pip
       executable: pip3
-      state: latest
+      state: forcereinstall
     become: true
   - name: install tools for AWS
     pip:
@@ -830,30 +854,6 @@
     when: ansible_distribution == 'Linux Mint'
 
 #
-#SAM
-#
-#https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
-  - name: homwbrew - checking already installed
-    command: test -d /home/linuxbrew/.linuxbrew
-    register: is_brew_installed
-    ignore_errors: true
-  - name: install homebrew and sam
-    shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/brew-sam.sh | bash -s
-    when: is_brew_installed is failed
-  - name: install sam - stupidly 2nd invocation
-    shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
-    when: is_brew_installed is failed
-    # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
-  - name: Create symbolic link for sam
-    file:
-      src: "/home/linuxbrew/.linuxbrew/bin/sam"
-      dest: "/usr/local/bin/sam"
-      state: link
-    become: true
-    # In addition, ensure path to '/home/linuxbrew/.linuxbrew/bin/sam'. Then finally you could invoke the command 'sam'
-    # Gave up adding to PATH or alias in .zshenv, .zshrc, did not work
-
-#
 # urxvt plugins
 #
   - name: urxvt - Create a directory if it does not exist
@@ -886,8 +886,9 @@
       msg: "nothing found, newly installing"
     when: is_configreload_installed is failed
   - name: urxvt config-reload - Dependencies
+      #https://www.google.com/search?q=config-reload%3A+Can%27t+locate+AnyEvent.pm+in+%40INC+(you+may+need+to+install+the+AnyEvent+module)&oq=config-reload%3A+Can%27t+locate+AnyEvent.pm+in+%40INC+(you+may+need+to+install+the+AnyEvent+module)&aqs=chrome..69i57j69i58.181j0j7&sourceid=chrome&ie=UTF-8
     shell: "yes | sudo cpan AnyEvent Linux::FD common::sense"
-    when: is_configreload_installed is failed
+      #when: is_configreload_installed is failed
     become: true
   - name: urxvt config-reload - Clone a repo with separate git directory
     #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/git_module.html
@@ -910,6 +911,16 @@
       mode: '0660'
 
 #
+# git
+#
+#
+#hint: Pulling without specifying how to reconcile divergent branches is
+#hint: discouraged. You can squelch this message by running one of the following
+#hint: commands sometime before your next pull:
+  - name: suppress hint message at git pull
+    command: git config --global pull.ff only
+
+#
 # Packages for Fulfillment
 #
   - name: Packages - Critical
@@ -918,7 +929,8 @@
       name:
         - neovim
         - tmux
-        - rxvt-unicode-256color
+          #- rxvt-unicode-256color
+        - rxvt-unicode
           #https://wiki.archlinux.org/index.php/Rxvt-unicode
           #https://superuser.com/questions/454825/linux-terminal-emulator-with-custom-line-height-and-character-spacing
           #http://malkalech.com/urxvt_terminal_emulator
@@ -941,6 +953,7 @@
         - zsh
         - zsh-syntax-highlighting
         - xinput #https://unix.stackexchange.com/questions/453069/configuring-kensington-slimblade-in-linux
+        - software-properties-common
     become: true
   - name: Packages - Tools (may not depend on others)
     apt:
@@ -971,10 +984,16 @@
           # https://github.com/adrianlopezroche/fdupes
           # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
         - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
-        - transmission-cli
+          #brew is only the effective way found
+          #https://docs.brew.sh/Homebrew-on-Linux
+          #https://formulae.brew.sh/formula/transmission-cli
+          #https://github.com/transmission/transmission
+          #https://github.com/transmission/transmission/issues/4142#issuecomment-1434752805
+          #        - transmission-cli
         - socat
         - neofetch
         - tsung
+        - maven
     become: true
   - name: Packages - Programming
     apt:
@@ -999,6 +1018,8 @@
         - cmake
         - rsync
         - bc
+        - adb
+        - sshuttle
     become: true
   - name: Packages - Multimedia
     apt:
@@ -1017,8 +1038,8 @@
         - libopenrawgnome7
         - imagemagick
         - dcraw
-        - ufraw
-        - ufraw-batch
+          #- ufraw
+          #- ufraw-batch
         - krita
         - mesa-utils
           #- glxgears
@@ -1026,6 +1047,12 @@
         - exiftool
         - xsane
         - inkscape
+        - mediainfo
+        - mirage
+          #- gwenview
+          #- viewnior
+        - ristretto
+        - gnome-sound-recorder
           #- darktable
           #https://www.darktable.org/ TODO
         # nvidia-smi -q -d temperature #https://askubuntu.com/questions/34449/how-to-see-the-video-card-temperature-nvidia-ati-intel
@@ -1047,12 +1074,14 @@
         #driver   : nvidia-418 - third-party free
         #driver   : nvidia-410 - third-party free
         #driver   : nvidia-415 - third-party free
+        - jpegoptim
     become: true
   - name: Packages - Miscs
     apt:
       state: latest
       name:
         - chromium
+        - vivaldi-stable
         # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
         - guile-3.0
         - guile-3.0-dev
@@ -1068,6 +1097,7 @@
         # ~/.config/chromium/Default/History
         - sqlite3
         # benchmark https://www.howtoforge.com/how-to-benchmark-your-system-cpu-file-io-mysql-with-sysbench
+        #https://ss.scphys.kyoto-u.ac.jp/person/yonezawa/contents/program/gnuplot/index.html
         - gnuplot
         # - pandoc apt has old version. see  https://pandoc.org/installing.html
         - pv
@@ -1082,8 +1112,42 @@
           #      - wopr
         - speedtest-cli
         - peek
+        - kazam
+        - libreoffice
+          #https://askubuntu.com/questions/283559/how-can-i-run-disk-utility-in-terminal-via-a-comand-line
+          #https://www.ubuntubuzz.com/2017/01/how-to-create-iso-image-back-from-bootable-usb-drive.html
+        - gnome-disk-utility
+        - wmctrl
+        - rename
     become: true
     #when: avoid_some is failed
+
+    #VPN tool
+    #https://github.com/yuezk/GlobalProtect-openconnect
+    #
+    #https://stackoverflow.com/questions/35942754/how-can-i-save-username-and-password-in-git
+    #
+        #  - name: gpclient - Clone a repo with separate git directory
+        #    git:
+        #      repo: https://github.com/yuezk/GlobalProtect-openconnect.git
+        #      dest: /tmp/gpclient
+        #https://github.com/yuezk/GlobalProtect-openconnect
+  - name: gpclient - checking already installed
+    command: which gpclient
+    register: is_gpclient_installed
+    ignore_errors: true
+
+  - name: gpclient - Clone a repo with separate git directory
+    command: git clone https://github.com/yuezk/GlobalProtect-openconnect.git /tmp/gpclient
+    when: is_gpclient_installed is failed
+    ignore_errors: true
+
+  - name: gpclient - Configure, compile and install gpclient in Debian
+    command: ./scripts/install-debian.sh
+    args:
+      chdir: /tmp/gpclient
+    when: is_gpclient_installed is failed
+
 
 #\begin{mp3splt}
 #
@@ -1093,7 +1157,8 @@
     apt:
       state: latest
       name:
-        - mp3splt
+        - mp3wrap
+          #https://mp3wrap.sourceforge.net/
     become: true
     # following may not need anymore, now apt supports it on even kali
     #when: ansible_distribution == 'Linux Mint'
@@ -1117,8 +1182,8 @@
     #      deb: http://ftp.us.debian.org/debian/pool/main/m/mp3splt/mp3splt_2.6.2+20170630-3+b1_amd64.deb
     #    become: true
     #    when: is_mp3splt_installed is failed
-  - name: mp3splt - Confirm
-    command: which mp3splt
+    #- name: mp3splt - Confirm
+    #  command: which mp3splt
 #\end{mp3splt}
 
 #\begin{glmark2}
@@ -1186,46 +1251,42 @@
     command: which glmark2
 #\end{glmark2}
 
+#\begin{docker}
 #
-# Docker
-#
-#          #docker - complicated
-#          #https://docs.docker.com/engine/install/ubuntu/
-#          #https://www.liquidweb.com/kb/install-docker-ubuntu-16-04/
-#          #https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket
-#          #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
-#
-    #https://github.com/geerlingguy/ansible-role-docker/issues/77
-#TODO: https://github.com/geerlingguy/ansible-role-docker/issues/77#issuecomment-433856996
-#https://www.gesource.jp/weblog/?p=8493
+# Docker for kali
+#https://www.kali.org/docs/containers/installing-docker-on-kali/
   - name: docker - checking already installed
     command: which docker
     register: is_docker_installed
     ignore_errors: true
   - name: Print on failed
     debug:
-      msg: "nothing found, newly installing docker"
+      msg: "Newly installing docker"
     when: is_docker_installed is failed
   - name: Docker - setup
     apt:
+      update_cache: yes
       state: latest
       name:
-        - apt-transport-https
-        - ca-certificates
-        - curl
-        - gnupg-agent
-        - software-properties-common
+        - docker.io
+        - docker-compose
     become: true
     when: is_docker_installed is failed
-  - name: add GPG key
-    shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - name: Enable docker
+    command: sudo systemctl enable docker --now
     become: true
     when: is_docker_installed is failed
-  # Verify that you now have the key with the fingerprint 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88, by searching for the last 8 characters of the fingerprint.
-  - name: add repo
-    shell: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+      #  - name: user for docker
+      #    command: sudo usermod -aG docker $USER
+      #    become: true
+      #    when: is_docker_installed is failed
+  - name: docker-ce
+    shell: printf '%s\n' "deb https://download.docker.com/linux/debian bullseye stable" | sudo tee /etc/apt/sources.list.d/docker-ce.list
     become: true
-    ignore_errors: true
+    when: is_docker_installed is failed
+  - name: docker-ce
+    shell: curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker-ce-archive-keyring.gpg
+    become: true
     when: is_docker_installed is failed
   - name: Docker - setup
     apt:
@@ -1243,7 +1304,20 @@
       groups: docker
       append: yes
     become: true
-    when: is_docker_installed is failed
+      #    when: is_docker_installed is failed
+#    old infos
+# https://www.kali.org/docs/containers/installing-docker-on-kali/
+#          #docker - complicated
+#          #https://docs.docker.com/engine/install/ubuntu/
+#          #https://www.liquidweb.com/kb/install-docker-ubuntu-16-04/
+#          #https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket
+#          #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+#
+    #https://github.com/geerlingguy/ansible-role-docker/issues/77
+#TODO: https://github.com/geerlingguy/ansible-role-docker/issues/77#issuecomment-433856996
+#https://www.gesource.jp/weblog/?p=8493
+#
+#\end{docker}
 
 #
 # npm Global Problem fix
@@ -1275,6 +1349,23 @@
 
 # randomize screen saver
 # TODO: http://applocator.blogspot.com/2017/01/random-screensaver-with-linux-mint.html
+#
+#
+#Vim with clipboard support
+#
+  - name: vim - setup
+    apt:
+      state: absent
+      name:
+        - vim
+    become: true
+  - name: vim - setup
+    apt:
+      update_cache: yes
+      state: latest
+      name:
+        - vim-gtk3
+    become: true
 
 #
 # dein
@@ -1287,8 +1378,9 @@
     debug:
       msg: "nothing found, newly installing dein"
     when: is_dein_installed is failed
+  #Update --use-vim-config to --use-neovim-config if primary vim was switched to nvim. see the source of the script for detail
   - name: dein - install
-    shell: curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh | sh -s -- ~/.cache/dein
+    shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/Shougo/dein-installer.vim/master/installer.sh)" - --overwrite-config "$HOME/.cache/dein" --use-vim-config
     when: is_dein_installed is failed
   - name: create ~/.vim/colors directory if it doesn't exist
     file:
@@ -1315,6 +1407,7 @@
 # Onedrive client Install
 # https://memo.laughk.org/2016/12/22/0000.html
 # https://github.com/skilion/onedrive
+# https://github.com/abraunegg/onedrive/blob/master/docs/ubuntu-package-install.md
 #
   - name: onedrive - checking already installed
     command: which onedrive
@@ -1324,81 +1417,108 @@
     debug:
       msg: "nothing found, newly installing onedrive"
     when: is_onedrive_installed is failed
-  - name: install packages
-    apt:
-      name:
-        # https://ubuntuforums.org/showthread.php?t=1774516
-        - libcurl4-gnutls-dev
-        #- libcurl-dev
-        - libsqlite3-dev
-      state: latest
-    become: true
-    when: is_onedrive_installed is failed
-      #  - name: download for Onedrive
-      #    get_url:
-      #      url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
-      #      dest: /etc/apt/sources.list.d/d-apt.list
-      #    become: true
-      #  - name: apt-key
-      #    shell: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EBCF975E5BA24D5E
-      #    become: true
-      #  - name: apt-key add for Onedrive
-      #    apt_key:
-      #      url: "http://dlang.org/d-keyring.gpg"
-      #      state: present
-      #    become: true
-      #  - name: Run the equivalent of "apt-get update" as a separate step
-      #    apt:
-      #      update_cache: yes
-      #    become: true
-      #    when: not ansible_check_mode
-  #https://d-apt.sourceforge.io/
-  - name: dmd
-    shell: wget https://netcologne.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
-    become: true
-    when: is_onedrive_installed is failed
-  - name: dmd
-    shell: sudo apt-get update --allow-insecure-repositories && sudo apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring && sudo apt-get update
-    become: true
-    when: is_onedrive_installed is failed
-  - name: dmd - install
-    apt:
-      update_cache: yes
-      state: latest
-      name:
-        - dmd-compiler
-        - dmd-tools
-    become: true
-    when: is_onedrive_installed is failed
-  - name: clone Onedrive
-    git:
-      repo: https://github.com/skilion/onedrive
-      dest: /opt/onedrive
-    become: true
-    when: is_onedrive_installed is failed
-  - name: make all
-    make:
-      chdir: /opt/onedrive
-      target: /opt/onedrive/Makefile
-    when: is_onedrive_installed is failed
-    become: true
-  - name: make install
-    command: make install
-    args:
-      chdir: /opt/onedrive
-    become: true
-    when: is_onedrive_installed is failed
-  - name: create ~/.config/onedrive directory if it doesn't exist
-    file:
-      path: ~/.config/onedrive
-      state: directory
-      mode: 0755
-  - name: copy onedrive.conf
-    command: cp /opt/onedrive/config ~/.config/onedrive/config
+    #  - name: install packages
+    #    apt:
+    #      name:
+    #        # https://ubuntuforums.org/showthread.php?t=1774516
+    #        - libcurl4-gnutls-dev
+    #        #- libcurl-dev
+    #        - libsqlite3-dev
+    #      state: latest
+    #    become: true
+    #    when: is_onedrive_installed is failed
+    #      #  - name: download for Onedrive
+    #      #    get_url:
+    #      #      url: http://master.dl.sourceforge.net/project/d-apt/files/d-apt.list
+    #      #      dest: /etc/apt/sources.list.d/d-apt.list
+    #      #    become: true
+    #      #  - name: apt-key
+    #      #    shell: apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EBCF975E5BA24D5E
+    #      #    become: true
+    #      #  - name: apt-key add for Onedrive
+    #      #    apt_key:
+    #      #      url: "http://dlang.org/d-keyring.gpg"
+    #      #      state: present
+    #      #    become: true
+    #      #  - name: Run the equivalent of "apt-get update" as a separate step
+    #      #    apt:
+    #      #      update_cache: yes
+    #      #    become: true
+    #      #    when: not ansible_check_mode
+    #  #https://d-apt.sourceforge.io/
+    #  - name: dmd
+    #    shell: wget https://netcologne.dl.sourceforge.net/project/d-apt/files/d-apt.list -O /etc/apt/sources.list.d/d-apt.list
+    #    become: true
+    #    when: is_onedrive_installed is failed
+    #  - name: dmd
+    #    shell: sudo apt-get update --allow-insecure-repositories && sudo apt-get -y --allow-unauthenticated install --reinstall d-apt-keyring && sudo apt-get update
+    #    become: true
+    #    when: is_onedrive_installed is failed
+    #  - name: dmd - install
+    #    apt:
+    #      update_cache: yes
+    #      state: latest
+    #      name:
+    #        - dmd-compiler
+    #        - dmd-tools
+    #    become: true
+    #    when: is_onedrive_installed is failed
+    #  - name: clone Onedrive
+    #    git:
+    #      repo: https://github.com/skilion/onedrive
+    #      dest: /opt/onedrive
+    #    become: true
+    #    when: is_onedrive_installed is failed
+    #  - name: make all
+    #    make:
+    #      chdir: /opt/onedrive
+    #      target: /opt/onedrive/Makefile
+    #    when: is_onedrive_installed is failed
+    #    become: true
+    #  - name: make install
+    #    command: make install
+    #    args:
+    #      chdir: /opt/onedrive
+    #    become: true
+    #    when: is_onedrive_installed is failed
+    #  - name: Add an Apt signing key, uses whichever key is at the URL
+    #    ansible.builtin.apt_key:
+    #      url: https://download.opensuse.org/repositories/home:/npreining:/debian-ubuntu-onedrive/Debian_10/Release.key
+    #      state: present
+    #    become: yes
+    #    when: is_onedrive_installed is failed
+    #  - name: install onedrive
+    #    apt:
+    #      name:
+    #        - onedrive
+    #      state: latest
+    #    become: true
+    #    when: is_onedrive_installed is failed
+    #  - name: create ~/.config/onedrive directory if it doesn't exist
+    #    file:
+    #      path: ~/.config/onedrive
+    #      state: directory
+    #      mode: 0755
+    #    when: is_onedrive_installed is failed
+    #  #https://github.com/abraunegg/onedrive/blob/master/docs/USAGE.md#configuration
+    #  - name: copy onedrive.conf
+    #    get_url:
+    #      url: https://raw.githubusercontent.com/abraunegg/onedrive/master/config
+    #      dest: ~/.config/onedrive/config
+    #      mode: 0555
+    #    when: is_onedrive_installed is failed
       #  - name: systemd onedrive enabled
       #    command: systemctl --user enable onedrive
       #  - name: systemd onedrive start
       #    command: systemctl --user start onedrive
+  - name: onedtive - install
+    apt:
+      state: latest
+      name:
+        - onedrive
+      update_cache: yes
+    become: true
+
 
 #
 # rclone
@@ -1423,6 +1543,15 @@
     npm: name={{ item }} global=yes
     with_items:
       - fast-cli
+
+# Adobe aio
+#
+  - name: aio-cli
+    npm: name={{ item }} global=yes
+    with_items:
+      - '@adobe/aio-cli'
+        #https://github.com/adobe/aio-cli
+        #https://github.com/adobe/aio-cli-plugin-cloudmanager#aio-cloudmanagertail-log-environmentid-service-name
 
 #
 # misc Settings
@@ -1551,8 +1680,7 @@
   - name: kvm install packages
     apt:
       name:
-        - qemu #https://fosspost.org/tutorials/use-qemu-test-operating-systems-distributions
-        - qemu-kvm
+        - qemu-system-x86 #https://www.thegeekdiary.com/qemu-system-x86_64-command-not-found/
         - virt-manager
           #- ppa-purge # https://discourse.roots.io/t/could-not-fetch-updated-apt-files/6254/7
         - bridge-utils
@@ -1593,10 +1721,10 @@
 #
 # plantUML
 # https://www.hiroom2.com/2018/07/02/ubuntu-1804-plantuml-en/
+# https://plantuml.com/sequence-diagram
   - name: install dependencies for PlantUML
     apt:
       name:
-        - graphviz
         - default-jre
       state: latest
     become: true
@@ -1612,6 +1740,8 @@
   - name: download PlantUML
     get_url:
       url: http://sourceforge.net/projects/plantuml/files/plantuml.jar/download
+#curl -O -J -L
+#https://unix.stackexchange.com/questions/74334/how-to-download-files-with-wget-where-the-page-makes-you-wait-for-download
       dest: /opt/plantuml/
       mode: 0555
     become: true
@@ -1659,10 +1789,222 @@
     become: true
     when: avoid_some is failed
 
+  - name: upgrade pip
+    pip:
+      name: pip
+      state: latest
+    become: true
+    when: avoid_some is failed
+
   - name: mitmproxy
     command: pip3 install --ignore-installed mitmproxy
     become: true
     when: avoid_some is failed
+
+#Android Studio
+#https://developer.android.com/studio/install
+#
+# Check 'omit some packages' flag
+#
+  - name: refer a sign of android-studio
+    command: ls /tmp/android-studio
+    register: is_androidstudio_installed
+    ignore_errors: true
+  - name: install dependencies for Android studio installation
+    apt:
+      name:
+        - python3-dev
+        - wget
+        - curl
+      state: latest
+    become: true
+    when: is_androidstudio_installed is failed
+  - name: download Android Studio
+    shell: curl https://developer.android.com/studio | grep -iEoh "http.*linux\.tar\.gz" | xargs wget -P /tmp/
+    when: is_androidstudio_installed is failed
+  - name: Extract saved Android Studio
+    shell: ls /tmp/android-studio*.tar.gz | xargs -I{} tar -xf {} -C /tmp/
+    when: is_androidstudio_installed is failed
+  - name: Move Android Studio
+    command: cp -r /tmp/android-studio /opt/
+    become: true
+    when: is_androidstudio_installed is failed
+
+#Another option
+#https://www.fosshub.com/Android-x86.html
+
+
+#Java https://www.oracle.com/java/technologies/downloads/#java11
+
+#
+# brew
+#
+  - name: Check brew is executable
+    command: ls /home/linuxbrew/.linuxbrew/bin/brew
+    register: brew_installed
+    ignore_errors: true
+
+      #  - name: Print on succeeded confirmation
+      #    debug:
+      #      msg: "{{ brew_installed.stdout }}"
+      #    when: brew_installed is succeeded
+
+  #https://brew.sh/
+  #/home/linuxbrew/.linuxbrew/bin/brew
+  - name: homebrew
+    shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    when: brew_installed is failed
+
+  - name: homebrew update
+    homebrew:
+      update_homebrew: yes
+    when: brew_installed is failed
+    ignore_errors: true
+
+  #https://formulae.brew.sh/formula/transmission-cli
+  - name: homebrew packages install
+    homebrew:
+      name: '{{ item.name }}'
+      state: '{{ item.state | default("latest") }}'
+      install_options: '{{ item.install_options | default(omit) }}'
+    with_items: '{{ homebrew_packages }}'
+    when: brew_installed is failed
+
+  - name: homebrew upgrade
+    homebrew:
+      upgrade_all: true
+
+#
+#SAM
+#
+#https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
+#  - name: homwbrew - checking already installed
+#    command: test -d /home/linuxbrew/.linuxbrew
+#    register: is_brew_installed
+#    ignore_errors: true
+#  - name: install homebrew
+#    shell: '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+#    when: is_brew_installed is failed
+#      #- name: install homebrew and sam
+#      #  shell: curl https://raw.githubusercontent.com/o2346/pde/develop/debian/brew-sam.sh | bash -s
+#      #  when: is_brew_installed is failed
+#      # - name: install sam
+#      #   shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
+#      #     #when: is_brew_installed is failed
+#      #   # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
+  - name: install sam 2nd invocation for unkown reason
+    shell: 'test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) && brew install aws-sam-cli'
+      #when: is_brew_installed is failed
+    # 2nd invocation of 'brew install aws-sam-cli' is necessary to complete. I have no idea why
+  - name: Create symbolic link for sam
+    file:
+      src: "/home/linuxbrew/.linuxbrew/bin/sam"
+      dest: "/usr/local/bin/sam"
+      state: link
+    become: true
+    # In addition, ensure path to '/home/linuxbrew/.linuxbrew/bin/sam'. Then finally you could invoke the command 'sam'
+    # Gave up adding to PATH or alias in .zshenv, .zshrc, did not work
+
+#
+# Brave https://brave.com/linux/#release-channel-installation
+#
+  - name: Brave - Check
+    #command: ls /usr/share/keyrings/brave-browser-archive-keyring.gpg
+    command: which brave-browser
+    register: brave_prep
+    ignore_errors: true
+    become: yes
+  - name: Brave - installation
+    command: sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+    become: yes
+    when: brave_prep is failed
+  - name: Brave - installation
+    shell: echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+    become: yes
+    when: brave_prep is failed
+  - name: Brave - installation
+    apt:
+      name:
+        - brave-browser
+      state: latest
+      update_cache: yes
+    become: true
+    when: brave_prep is failed
+
+#
+# teams-for-linux https://github.com/IsmaelMartinez/teams-for-linux
+#
+  - name: Teams - Check
+    shell: sudo apt search teams-for-linux | grep installed
+    register: teams_prep
+    ignore_errors: true
+    become: yes
+  - name: Teams - installation
+    command: sudo mkdir -p /etc/apt/keyrings
+    become: yes
+    when: teams_prep is failed
+  - name: Teams - installation
+    command: sudo wget -qO /etc/apt/keyrings/teams-for-linux.asc https://repo.teamsforlinux.de/teams-for-linux.asc
+    become: yes
+    when: teams_prep is failed
+  - name: Teams - installation
+    shell: echo "deb [signed-by=/etc/apt/keyrings/teams-for-linux.asc arch=$(dpkg --print-architecture)] https://repo.teamsforlinux.de/debian/ stable main" | sudo tee /etc/apt/sources.list.d/teams-for-linux-packages.list
+    become: yes
+    when: teams_prep is failed
+  - name: Teams - installation
+    apt:
+      name:
+        - teams-for-linux
+      state: latest
+      update_cache: yes
+    become: true
+    when: teams_prep is failed
+
+#
+# https://askubuntu.com/a/1233759
+#
+  - name: Suppress notifications, annoying
+    command: gsettings set org.gnome.desktop.notifications show-banners false
+
+
+#
+# pip misc tools
+#
+  - name: install tools  pip misc tool
+    pip:
+      name:
+        - uploadserver
+      executable: pip3
+
+#
+# pip all packages upgrade
+#
+#https://www.activestate.com/resources/quick-reads/how-to-update-all-python-packages/
+  - name: pip upgrade
+    shell: "pip install -U --user $(pip list -o | cut -f1 -d' ' | tr ' ' '\n' | awk '{if(NR>=3)print}' | cut -d' ' -f1)"
+    ignore_errors: true
+  - name: pip3 upgrade
+    shell: "pip3 install -U --user $(pip3 list -o | cut -f1 -d' ' | tr ' ' '\n' | awk '{if(NR>=3)print}' | cut -d' ' -f1)"
+    ignore_errors: true
+
+#
+# npm all packages upgrade
+#
+#https://docs.npmjs.com/updating-packages-downloaded-from-the-registry
+  - name: npm upgrade
+    command: npm update -g
+
+#
+# brew
+#
+#https://docs.npmjs.com/updating-packages-downloaded-from-the-registry
+  - name: brew
+    command: /home/linuxbrew/.linuxbrew/bin/brew update
+  - name: brew
+    command: /home/linuxbrew/.linuxbrew/bin/brew upgrade
+  - name: brew
+    command: /home/linuxbrew/.linuxbrew/bin/brew autoremove
+
 
 #
 # vmplayer
@@ -1748,3 +2090,32 @@
 #Error: PythonPipBuilder:Validation - Binary validation failed for python, searched for python in following locations  : ['/usr/bin/python', '/bin/python'] which did not satisfy constraints for runtime: python3.8. Do you have python for runtime: python3.8 on your PATH?
 #% sudo unlink python
 #% sudo ln -s python3.8 ./python
+#
+#TODO:
+#https://wiki.ubuntu.com/Multitouch/AppleMagicTrackpad
+#https://blog.hanhans.net/2019/03/03/ubuntu-magictrackpad2/
+#https://ourcodeworld.com/articles/read/406/how-to-enable-the-sound-on-kali-linux
+#
+#soundissue on DELL XPS 13 9310
+#https://www.linuxuprising.com/2018/06/fix-no-sound-dummy-output-issue-in.html
+#https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/766
+#>FOR THOSE USING THE snd_hda_intelMODULE:
+#It even happens on kernel 6.0.0
+#
+#https://wiki.archlinux.org/title/Advanced_Linux_Sound_Architecture#ALSA_firmware
+#https://www.kali.org/tools/firmware-sof/
+#https://www.reddit.com/r/Ubuntu/comments/u74hkq/how_to_install_soffirmare_step_by_step_new_to/
+#https://forums.linuxmint.com/viewtopic.php?t=394728
+#
+#https://unix.stackexchange.com/questions/257322/no-audio-on-kali-linux
+#https://www.maketecheasier.com/fix-sound-kali-linux/
+#https://gist.github.com/RuCodee/5482ca50b81d1379a35ce49d280344fa
+#
+#increase swap space
+#https://askubuntu.com/questions/178712/how-to-increase-swap-space/1177939#1177939
+#
+#git save username & pass
+#https://stackoverflow.com/a/35942890
+#
+#chrome settings  migration
+# https://www.geeksmint.com/backup-and-restore-google-chrome-profile-on-linux/ 

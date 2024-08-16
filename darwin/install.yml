@@ -12,11 +12,11 @@
       - name: appcleaner
       - name: virtualbox
       - name: vagrant
-      - name: google-chrome
+        #Error: installed by default? - name: google-chrome
       - name: firefox
       - name: diffmerge
       - name: google-japanese-ime
-      - name: p4merge
+        #Error: deprecated? - name: p4merge
       - name: vlc
       - name: iterm2
       - name: skitch
@@ -37,9 +37,10 @@
       - name: font-migu-2m
       - name: chromium
       - name: burp-suite
-      # java for plantuml
-      - name: java
+      # java for plantuml -> merged, they say
     homebrew_packages:
+      - name: rxvt-unicode
+      - name: neovim
       - name: awscli
       - name: python
       - name: python3
@@ -61,7 +62,7 @@
       - name: jasper
       - name: jpeg
       - name: lame
-      - name: vim # https://qiita.com/iwaseasahi/items/a45b99a484966662adbe  vim --with-override-system-vi
+        #- name: vim # https://qiita.com/iwaseasahi/items/a45b99a484966662adbe  vim --with-override-system-vi
         #https://github.com/Homebrew/legacy-homebrew/issues/43983
       - name: mp3splt
       - name: nasm
@@ -84,7 +85,7 @@
       - name: w3m
       - name: webp
       - name: wget
-      - name: wine
+        #error - name: wine
       # consider it's really necessary
       # - name: wireshark
       #   install_options: with-qt
@@ -92,7 +93,8 @@
       - name: yasm
       - name: fswatch
       - name: make
-        install_options: with-default-names
+        #install_options: with-default-names
+        #https://stackoverflow.com/questions/56930917/error-invalid-option-with-default-names
       - name: watch
       - name: qemu
       - name: ghostscript #https://superuser.com/questions/819277/cant-convert-pdf-into-image-because-of-no-images-defined-error
@@ -106,12 +108,18 @@
       #latex: https://texwiki.texjp.org/?TeX%20Live%2FMac#texlive-install-brew
       #to large & consumes too much time to install, so do it afterword
 
+      # okular https://gist.github.com/7468696e6b/ec8fa5d6cdb4e80633b9df95869b70c0
       # PDF reader, okular alternative
       # https://get.adobe.com/reader/download/?installer=Reader_DC_2019.010.20098_for_Mac_Intel&stype=7504&standalone=1
       # https://apple.stackexchange.com/questions/317845/is-there-the-dark-mode-inverted-colors-in-the-preview-application-for-pdf-re
       # Preferences > accessibility
       # View > display theme > dark gray
       - name: exiftool
+      - name: neofetch
+      - name: speedtest-cli
+
+#Prevent screensaver
+#https://apps.apple.com/us/app/owly-prevent-display-sleep/id882812218?mt=12
 
   become: no
   tasks:
@@ -168,17 +176,17 @@
   - name: show hidden files and directorys
     command: killall Finder
 
-  - name: download NeoBundle
-    get_url:
-      url: https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
-      dest: '{{tmp_dir.stdout}}'
-    when: not ansible_check_mode
-  - name: install NeoBundle
-    command: bash "{{tmp_dir.stdout}}"/install.sh
-    when: not ansible_check_mode
-    # not idempotent yet
-    #- name: NeoBundleInstall
-    #- command: vim +NeoBundleInstall +qall
+    #  - name: download NeoBundle
+    #    get_url:
+    #      url: https://raw.githubusercontent.com/Shougo/neobundle.vim/master/bin/install.sh
+    #      dest: '{{tmp_dir.stdout}}'
+    #    when: not ansible_check_mode
+    #  - name: install NeoBundle
+    #    command: bash "{{tmp_dir.stdout}}"/install.sh
+    #    when: not ansible_check_mode
+    #    # not idempotent yet
+    #    #- name: NeoBundleInstall
+    #    #- command: vim +NeoBundleInstall +qall
 
 #
 # eslint
@@ -189,32 +197,101 @@
       - eslint
       - eslint_d
 
-# ricty font
-  - name: ricty font
-    shell: cp -f /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
-  - name: ricty font
-    command: fc-cache -vf
-# curl -L 'https://gist.github.com/ysaotome/7286145/raw/installing_ricty_on_MacOSX.sh' | bash
+        #Error:
+        ## ricty font
+        #  - name: ricty font
+        #    shell: cp -f /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
+        #  - name: ricty font
+        #    command: fc-cache -vf
+        ## curl -L 'https://gist.github.com/ysaotome/7286145/raw/installing_ricty_on_MacOSX.sh' | bash
 
 #
 # Dotfiles
 #
-  - name: check if .dotfiles exists
-    stat: path=~/Documents/.dotfiles
-    register: has_dotfiles
-  - name: download dotfiles
-    git:
-      repo: https://gist.githubusercontent.com/whateverjp/6ea3445379a6cdf87037c1be97ef7b16
-      dest: ~/Documents/.dotfiles
-    when: not has_dotfiles.stat.exists
-  - name: deploy dotfiles
-    command: sh ~/Documents/.dotfiles/deploy.sh
-    when: not has_dotfiles.stat.exists
-  - name: copy .tmux.pd.conf
-    copy: >
-      src=.tmux.pd.conf
-      dest=~/
-    when: not has_dotfiles.stat.exists
+  - name: Dotfiles - Check
+    command: ls .uc
+    register: is_uc_installed
+    ignore_errors: true
+    args:
+      chdir: ~/
+  - name:  Dotfiles - Print if already there
+    debug:
+      msg: "{{ is_uc_installed.stdout }}"
+    when: is_uc_installed is succeeded
+  - name:  Dotfiles - Print if not
+    debug:
+      msg: "nothing found"
+    when: is_uc_installed is failed
+  - name: Move Default .zshrc
+    command: mv ~/.zshrc ~/_zshrc_default
+    when: is_uc_installed is failed
+    ignore_errors: true
+  - name: install Dotfiles
+    shell: curl 'https://raw.githubusercontent.com/o2346/happy-scripts/develop/install.uc.sh' | bash -s - https://gist.github.com/o2346/e091ea8f6bf963d6a170a88579a3db08
+    args:
+      chdir: ~/
+    register: uc_install_log
+    when: is_uc_installed is failed
+  - name: Dotfiles - Print what has been done
+    debug:
+      msg: "{{ uc_install_log.stdout }}"
+    when: is_uc_installed is failed
+  - name: pull Dotfiles
+    shell: /usr/bin/git --git-dir=$PWD --work-tree=`dirname $PWD` pull
+    args:
+      chdir: ~/.uc
+#  - name: check if .dotfiles exists
+#    stat: path=~/Documents/.dotfiles
+#    register: has_dotfiles
+#  - name: download dotfiles
+#    git:
+#      repo: https://gist.githubusercontent.com/whateverjp/6ea3445379a6cdf87037c1be97ef7b16
+#      dest: ~/Documents/.dotfiles
+#    when: not has_dotfiles.stat.exists
+#  - name: deploy dotfiles
+#    command: sh ~/Documents/.dotfiles/deploy.sh
+#    when: not has_dotfiles.stat.exists
+#  - name: copy .tmux.pd.conf
+#    copy: >
+#      src=.tmux.pd.conf
+#      dest=~/
+#    when: not has_dotfiles.stat.exists
+
+#
+# dein
+#
+  - name: dein - checking already installed
+    command: test -d ~/.cache/dein
+    register: is_dein_installed
+    ignore_errors: true
+  - name: Print on failed
+    debug:
+      msg: "nothing found, newly installing dein"
+    when: is_dein_installed is failed
+  - name: dein - install
+    shell: curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh | sh -s -- ~/.cache/dein
+    when: is_dein_installed is failed
+  - name: create ~/.vim/colors directory if it doesn't exist
+    file:
+      path: ~/.vim/colors
+      state: directory
+      mode: 0755
+
+#
+# neovim
+#
+#
+  - name: Create a directory if it does not exist
+    file:
+      path: ~/.config/nvim/
+      state: directory
+      mode: '0755'
+  - name: Create symbolic link for neovim vimrc
+    file:
+      src: "~/.vimrc"
+      dest: "~/.config/nvim/init.vim"
+      state: link
+      #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html
 
 # w3m
   - name: download .w3m
@@ -227,11 +304,6 @@
     git:
       repo: https://github.com/o2346/happy-scripts
       dest: ~/Documents/happy-scripts
-
-# login shell
-  - name: zsh for login shell
-    user: name={{ansible_user_id}} shell=/bin/zsh
-    become: true
 
   - name: brew upgrade
     homebrew:
@@ -247,7 +319,6 @@
       - pip
       - setuptools
       - csvkit
-      - yq
     become: true
 
 # after playing
