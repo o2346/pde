@@ -13,7 +13,6 @@
     homebrew_packages:
       - name: transmission-cli
       - name: graphviz
-        #https://graphviz.org/download/
       - name: aws-sam-cli
   become: no
   tasks:
@@ -1044,7 +1043,6 @@
         - wmctrl
         - rename
     become: true
-    #when: avoid_some is failed
 
     #VPN tool
     #https://github.com/yuezk/GlobalProtect-openconnect
@@ -1401,11 +1399,6 @@
       name:
         - rclone
     become: true
-    #  - name: rclone install
-    #    shell: which rclone || curl https://rclone.org/install.sh | sudo bash
-    #    become: true
-    #    when: avoid_some is failed
-    #TODO: consider to do it through apt, availabe both mint & kali lately
 
 #
 # fast-cli - alternative for speedtest-cli
@@ -1495,8 +1488,8 @@
         - csvkit
         - uploadserver
     become: true
-    when: avoid_some is failed
 
+#https://laugh-labo.blogspot.com/2012/02/sitecustomizepy.html
   - name: sitecustomize.py
     blockinfile:
       dest: /etc/python2.7/sitecustomize.py
@@ -1505,7 +1498,6 @@
         import sys
         sys.setdefaultencoding('utf-8')
     become: true
-    when: avoid_some is failed
 
   - name: kvm install packages
     apt:
@@ -1518,11 +1510,6 @@
         - libvirt-clients
       state: latest
     become: true
-    when: avoid_some is failed
-      #  - name: start libvirt-bin
-      #    service: name=libvirt-bin state=restarted enabled=yes
-      #    become: true
-  #http://acchi-muite-hoi.hatenablog.com/entry/2016/08/18/102709
   - name: add vhost_net to load module
     lineinfile:
       dest: /etc/modules
@@ -1536,8 +1523,6 @@
       append=true
     become: true
     when: avoid_some is failed
-
-      #https://linuxhint.com/install_kvm_virtualization_ubuntu/
 
 # w3m
   - name: create ~/.w3m directory if it doesn't exist
@@ -1570,7 +1555,6 @@
   - name: download PlantUML
     get_url:
       url: http://sourceforge.net/projects/plantuml/files/plantuml.jar/download
-#curl -O -J -L
 #https://unix.stackexchange.com/questions/74334/how-to-download-files-with-wget-where-the-page-makes-you-wait-for-download
       dest: /opt/plantuml/
       mode: 0555
@@ -1580,8 +1564,6 @@
 #
 # latex
 #
-# do it manually for now, because it's time-consuming
-#  - command: sudo apt install texlive-full
   - name: install latex(instead of texlive-full)
     apt:
       name:
@@ -1589,7 +1571,6 @@
         - texlive-lang-japanese
         - texlive-xetex
         - pandoc
-          #        - texlive-fonts-recommended
       state: latest
     become: true
     when: avoid_some is failed
@@ -1599,6 +1580,7 @@
 #
 # Android Studio
 # https://developer.android.com/studio/install
+# https://www.fosshub.com/Android-x86.html
 #
   - name: refer a sign of android-studio
     command: ls /opt/android-studio
@@ -1624,12 +1606,6 @@
     shell: ls /tmp/android-studio*.tar.gz | xargs -I{} tar -xf {} -C /opt/
     when: is_androidstudio_installed is failed
     become: true
-
-#Another option
-#https://www.fosshub.com/Android-x86.html
-
-
-#Java https://www.oracle.com/java/technologies/downloads/#java11
 
 #
 # brew
