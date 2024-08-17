@@ -1610,12 +1610,12 @@
 #
 # brew
 #
+  #https://brew.sh/
+  #/home/linuxbrew/.linuxbrew/bin/brew
   - name: Check brew is executable
     command: ls /home/linuxbrew/.linuxbrew/bin/brew
     register: brew_installed
     ignore_errors: true
-  #https://brew.sh/
-  #/home/linuxbrew/.linuxbrew/bin/brew
   - name: homebrew
     shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     when: brew_installed is failed
@@ -1624,7 +1624,6 @@
       update_homebrew: yes
     when: brew_installed is failed
     ignore_errors: true
-  #https://formulae.brew.sh/formula/transmission-cli
   - name: homebrew packages install
     homebrew:
       name: '{{ item.name }}'
@@ -1651,7 +1650,7 @@
     become: true
     # In addition, ensure path to '/home/linuxbrew/.linuxbrew/bin/sam'. Then finally you could invoke the command 'sam'
     # Gave up adding to PATH or alias in .zshenv, .zshrc, did not work
-    
+
 #
 #Mitmproxy
 #
@@ -1670,7 +1669,6 @@
 # Brave https://brave.com/linux/#release-channel-installation
 #
   - name: Brave - Check
-    #command: ls /usr/share/keyrings/brave-browser-archive-keyring.gpg
     command: which brave-browser
     register: brave_prep
     ignore_errors: true
@@ -1784,7 +1782,6 @@
 
 #transfer host repo to guest for development
 #scp -r -P 47122 ~/Documents/pde mint@localhost:/tmp/
-#port may vary
 #
 #https://stackoverflow.com/questions/34333058/ansible-change-ssh-port-in-playbook
 
@@ -1795,18 +1792,8 @@
 #restart monitor
 #https://askubuntu.com/questions/143838/how-do-i-restart-cinnamon-from-the-tty
 #
-#preinstall packages for time saving in develop
-#sudo apt install -y 
-#https://stackoverflow.com/questions/27305177/how-can-i-remove-the-last-character-of-a-file-in-unix
-#cat debian/preinstallpacks.txt | sed -e 's/ *-//g' | sed -e 's/$/ \\/g' | sed '$ s/.$//'
-#cat debian/preinstallpacks.txt | sed -e 's/^ \+-//g' | tr -d '\n'
-#consider automate to generate preinstallpacks.txt like #<!--preinstall-dev [some-packs...] -->
-#
 #for 2nd invocation;
 #ansible-playbook /tmp/pde/debian/install.yml -K --connection=local
-#
-#TODO: a path 'python' must be redirected to appropriate version, for instance python3.8
-#%sam build
 #
 #TODO:
 #https://wiki.ubuntu.com/Multitouch/AppleMagicTrackpad
@@ -1835,4 +1822,4 @@
 #https://stackoverflow.com/a/35942890
 #
 #chrome settings  migration
-# https://www.geeksmint.com/backup-and-restore-google-chrome-profile-on-linux/ 
+#https://www.geeksmint.com/backup-and-restore-google-chrome-profile-on-linux/ 
