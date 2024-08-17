@@ -938,16 +938,8 @@
         - openssh-server
           #https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-enable-ssh-on-ubuntu-18-04-linux-mint-19-debian-9.html
         - firewall-applet #replacement of ufw
-        #You are using pip version 8.1.1, however version 9.0.1 is available.
-        #You should consider upgrading via the 'pip install --upgrade pip' command.
+        # https://www.kali.org/tools/python-pip/
         - python3-pip
-        # pip broken problem:
-        #   sudo apt-get remove --purge python-pip
-        #   wget https://bootstrap.pypa.io/get-pip.py
-        #   python3 ./get-pip.py
-        # https://github.com/pypa/setuptools/issues/937
-        # sudo pip install -U setuptools
-        # sudo pip install csvkit
         - cmake
         - rsync
         - bc
@@ -1066,33 +1058,8 @@
     apt:
       state: latest
       name:
-        - mp3wrap
-          #https://mp3wrap.sourceforge.net/
+        - mp3splt
     become: true
-    # following may not need anymore, now apt supports it on even kali
-    #when: ansible_distribution == 'Linux Mint'
-    #    # Task Abobe does not work on kali. Build from source following
-    #    # https://packages.debian.org/search?keywords=mp3splt
-    #  - name: mp3splt - checking already installed
-    #    command: which mp3splt
-    #    register: is_mp3splt_installed
-    #    ignore_errors: true
-    #  - name: Print on failed
-    #    debug:
-    #      msg: "nothing found, newly installing mp3splt"
-    #    when: is_mp3splt_installed is failed
-    #  - name: mp3splt - Install a .deb package
-    #    apt:
-    #      deb: http://ftp.us.debian.org/debian/pool/main/m/mp3splt/libmp3splt_0.9.2-3+b1_amd64.deb
-    #    become: true
-    #    when: is_mp3splt_installed is failed
-    #  - name: mp3splt - Install a .deb package
-    #    apt:
-    #      deb: http://ftp.us.debian.org/debian/pool/main/m/mp3splt/mp3splt_2.6.2+20170630-3+b1_amd64.deb
-    #    become: true
-    #    when: is_mp3splt_installed is failed
-    #- name: mp3splt - Confirm
-    #  command: which mp3splt
 #\end{mp3splt}
 
 #\begin{glmark2}
@@ -1526,6 +1493,7 @@
         - pip
         - setuptools
         - csvkit
+        - uploadserver
     become: true
     when: avoid_some is failed
 
@@ -1629,53 +1597,21 @@
 # https://linuxconfig.org/how-to-install-latex-on-ubuntu-20-04-focal-fossa-linux
 
 #
-# mitmdump
-#
-#consider to migrate the way by apt. Available on latest distros
-  - name: install dependencies for mitmproxy
-    apt:
-      name:
-        - python3-dev
-        - python3-pip
-        - libffi-dev
-        - libssl-dev
-      state: latest
-    become: true
-    when: avoid_some is failed
-
-  - name: upgrade pip
-    pip:
-      name: pip
-      executable: pip3
-      state: latest
-    become: true
-    when: avoid_some is failed
-
-  - name: upgrade pip
-    pip:
-      name: pip
-      state: latest
-    become: true
-    when: avoid_some is failed
-
-  - name: mitmproxy
-    command: pip3 install --ignore-installed mitmproxy
-    become: true
-    when: avoid_some is failed
-
-#Android Studio
-#https://developer.android.com/studio/install
-#
-# Check 'omit some packages' flag
+# Android Studio
+# https://developer.android.com/studio/install
 #
   - name: refer a sign of android-studio
-    command: ls /tmp/android-studio
+    command: ls /opt/android-studio
     register: is_androidstudio_installed
     ignore_errors: true
+  - name: refer a sign of android-studio
+    shell: ls /tmp/android-studio*tar.gz
+    register: is_androidstudio_downloaded
+    ignore_errors: true
+    when: is_androidstudio_installed is failed
   - name: install dependencies for Android studio installation
     apt:
       name:
-        - python3-dev
         - wget
         - curl
       state: latest
@@ -1683,14 +1619,11 @@
     when: is_androidstudio_installed is failed
   - name: download Android Studio
     shell: curl https://developer.android.com/studio | grep -iEoh "http.*linux\.tar\.gz" | xargs wget -P /tmp/
-    when: is_androidstudio_installed is failed
+    when: is_androidstudio_downloaded is failed
   - name: Extract saved Android Studio
-    shell: ls /tmp/android-studio*.tar.gz | xargs -I{} tar -xf {} -C /tmp/
+    shell: ls /tmp/android-studio*.tar.gz | xargs -I{} tar -xf {} -C /opt/
     when: is_androidstudio_installed is failed
-  - name: Move Android Studio
-    command: cp -r /tmp/android-studio /opt/
     become: true
-    when: is_androidstudio_installed is failed
 
 #Another option
 #https://www.fosshub.com/Android-x86.html
@@ -1742,6 +1675,20 @@
     become: true
     # In addition, ensure path to '/home/linuxbrew/.linuxbrew/bin/sam'. Then finally you could invoke the command 'sam'
     # Gave up adding to PATH or alias in .zshenv, .zshrc, did not work
+    
+#
+#Mitmproxy
+#
+#https://docs.mitmproxy.org/stable/overview-installation/
+  - name: Mitmproxy - install pipx
+    apt:
+      name:
+        - pipx
+      state: latest
+      update_cache: yes
+    become: true
+  - name: Mitmproxy - install
+    command: pipx install mitmproxy
 
 #
 # Brave https://brave.com/linux/#release-channel-installation
@@ -1805,23 +1752,11 @@
     command: gsettings set org.gnome.desktop.notifications show-banners false
 
 #
-# pip misc tools
-#
-  - name: install tools  pip misc tool
-    pip:
-      name:
-        - uploadserver
-      executable: pip3
-
-#
 # pip all packages upgrade
 #
 #https://www.activestate.com/resources/quick-reads/how-to-update-all-python-packages/
   - name: pip upgrade
-    shell: "pip install -U --user $(pip list -o | cut -f1 -d' ' | tr ' ' '\n' | awk '{if(NR>=3)print}' | cut -d' ' -f1)"
-    ignore_errors: true
-  - name: pip3 upgrade
-    shell: "pip3 install -U --user $(pip3 list -o | cut -f1 -d' ' | tr ' ' '\n' | awk '{if(NR>=3)print}' | cut -d' ' -f1)"
+    command: "pip install --upgrade pip"
     ignore_errors: true
 
 #
@@ -1880,21 +1815,6 @@
 #https://stackoverflow.com/a/60301387
 #ansible-playbook --extra-vars "ansible_sudo_pass=UNDEFINED" install.yml
 
-#It starts from host which has ansible 2.9.16,python2.7.12 Mint18.3
-#ansible-playbook -u mint -e target=localguest --extra-vars "ansible_sudo_pass=UNDEFINED" -i hosts  install.yml
-#but following error
-#
-# ____________________
-#< TASK [upgrade pip] >
-# --------------------
-#        \   ^__^
-#         \  (oo)\_______
-#            (__)\       )\/\
-#                ||----w |
-#                ||     ||
-#
-#An exception occurred during task execution. To see the full traceback, use -vvv. The error was: ImportError: No module named pkg_resources
-#fatal: [localhost]: FAILED! => {"changed": false, "msg": "Failed to import the required Python library (setuptools) on mint-Standard-PC-i440FX-PIIX-1996's Python /usr/bin/python2.7. Please read module documentation and install in the appropriate location. If the required library is installed, but Ansible is using the wrong Python interpreter, please consult the documentation on ansible_python_interpreter"}
 #
 #restart monitor
 #https://askubuntu.com/questions/143838/how-do-i-restart-cinnamon-from-the-tty
@@ -1911,9 +1831,6 @@
 #
 #TODO: a path 'python' must be redirected to appropriate version, for instance python3.8
 #%sam build
-#Error: PythonPipBuilder:Validation - Binary validation failed for python, searched for python in following locations  : ['/usr/bin/python', '/bin/python'] which did not satisfy constraints for runtime: python3.8. Do you have python for runtime: python3.8 on your PATH?
-#% sudo unlink python
-#% sudo ln -s python3.8 ./python
 #
 #TODO:
 #https://wiki.ubuntu.com/Multitouch/AppleMagicTrackpad
