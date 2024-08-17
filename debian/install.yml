@@ -285,19 +285,6 @@
       groups: netdev
       append: yes
     become: true
-    #https://devconnected.com/how-to-list-users-and-groups-on-linux/
-      #  - name: install package wicd
-      #    apt: name={{ item }} update_cache=yes state=latest
-      #    with_items:
-      #      - wicd
-      #    become: true
-      #    when: not ansible_check_mode
-      ##
-      ## wicd Settings
-      ##
-      #  - name: start wicd
-      #    service: name=wicd state=running enabled=yes
-      #    become: true
 
 #
 # ntp
@@ -349,11 +336,6 @@
     args:
       chdir: /opt/stderred
     become: true
-    #if https://www.google.co.jp/search?num=24&safe=off&hl=en&ei=AdvuX9ZUi_rAA6b3obgN&q=%22stderred%22+from+LD_PRELOAD+cannot+be+preloaded
-    #ERROR: ld.so: object '/home/uuuu/tmp/stderred/lib/libstderred.so' from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS32): ignored.
-    # then issue following command
-    #cd /opt/stderred && sudo make clean && make
-    #Occured on Mint 20
 
 #
 # Dotfiles
@@ -417,24 +399,6 @@
 #
 # Desktop Themes
 #
-#  - name: create ~/.themes directory if it doesn't exist
-#    file:
-#      path: ~/.themes
-#      state: directory
-#      mode: 0755
-#  - name: desktop themes
-#    unarchive: src={{ item }} dest=~/.themes copy=no
-#    with_items:
-#      # they likely renewed the site https://cinnamon-spices.linuxmint.com/themes
-#      # BlackMint
-#      - https://cinnamon-spices.linuxmint.com/uploads/themes/IQ3Q-WIFH-A9V3.zip
-#      # Hacktivist 1.4
-#      # Mint-X-Dark
-#      # mint-x-mod
-#      # Mint-Y-Gray
-#      # Mint-Y-Yltra-Dark
-#      # Mint Y Dark Blue
-#      # Modern Mint Dark 1
   - name: Theme - Window borders
     command: gsettings set org.cinnamon.desktop.wm.preferences theme "Mint-Y-Dark"
     when: ansible_distribution == 'Linux Mint'
@@ -450,32 +414,6 @@
   - name: Theme - Desktop
     command: gsettings set org.cinnamon.theme name "Mint-Y-Dark-Blue"
     when: ansible_distribution == 'Linux Mint'
-      #  - name: list themes
-      #    command: ls ~/.themes
-      #    register: themes
-##
-## Desktop Themes
-##
-#  - name: debug result var
-#    debug: var=themes
-#  - name: font size
-#    replace: >-
-#      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
-#      regexp='font-size.+$'
-#      replace='font-size: 12pt;'
-#    with_items: " {{themes.stdout_lines}} "
-#    when: not ansible_check_mode
-#  - name: font family
-#    replace: >-
-#      dest='~/.themes/{{ item }}/cinnamon/cinnamon.css'
-#      regexp='font-family.+$'
-#      replace='font-family: MigMix 1C;'
-#    with_items: " {{themes.stdout_lines}} "
-#    when: not ansible_check_mode
-#
-# TODO Make active window font punctuate
-# https://www.google.co.jp/search?safe=off&num=16&q=mint+active+window+cinnamon+-matome.naver.jp+-cookpad.com+-itpro.nikkeibp.co.jp+-rakuten.co.jp+-weblio.jp
-# It requires to modify cinnamon.css and a little complicated
 
 #
 # Set timezone
@@ -527,8 +465,6 @@
 #
 # My Configuration file
 #
-# .mydevices
-# .myservices
   - name: mydevices - copy scripts to autostart
     copy: >
       src=./.mydevices
@@ -705,11 +641,9 @@
       install_recommends: yes
     become: true
     when: avoid_some is failed
-    #when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
   - name: set fcitx as default, restarting is required
     command: im-config -n fcitx
     when: avoid_some is failed
-    #when: ansible_distribution == 'Linux Mint' or ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
     #https://stackoverflow.com/questions/52743147/changing-ansible-loop-due-to-v2-11-deprecation
 
 #
@@ -835,7 +769,6 @@
 #
 # urxvt icon
 #/var/tmp/urxvt.icon.png
-#wget https://gist.github.com/o2346/4d2787d27db42b7f68032127a2f0c888/raw/547a59803de8fedf94bac66570a7699356a5ab8a/ursvt.icon.png -o /var/tmp/urxvt.icon.png
   - name: Download urxvt.icon.png
     get_url:
       url: https://gist.github.com/o2346/4d2787d27db42b7f68032127a2f0c888/raw/547a59803de8fedf94bac66570a7699356a5ab8a/ursvt.icon.png
@@ -861,14 +794,7 @@
       name:
         - neovim
         - tmux
-          #- rxvt-unicode-256color
         - rxvt-unicode
-          #https://wiki.archlinux.org/index.php/Rxvt-unicode
-          #https://superuser.com/questions/454825/linux-terminal-emulator-with-custom-line-height-and-character-spacing
-          #http://malkalech.com/urxvt_terminal_emulator
-          #urxvtd
-          #urxvt-perls
-          #https://www.youtube.com/watch?v=_kjbj-Ez1vU
         - xsel
           #https://beyondjapan.com/blog/2017/01/japanese-gothic-fonts-on-linux/
         - fontforge
@@ -894,13 +820,11 @@
         - htop
         - nkf
         - keepassx
-        #https://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q11104779381
         - wine
         - tig
         - whois
         - tree
         - inotify-tools
-          #enable notify-send command
         - libnotify-bin
         - w3m
         - w3m-img
@@ -916,12 +840,6 @@
           # https://github.com/adrianlopezroche/fdupes
           # https://askubuntu.com/questions/3865/how-to-find-and-delete-duplicate-files
         - nvme-cli #https://www.percona.com/blog/2017/02/09/using-nvme-command-line-tools-to-check-nvme-flash-health/
-          #brew is only the effective way found
-          #https://docs.brew.sh/Homebrew-on-Linux
-          #https://formulae.brew.sh/formula/transmission-cli
-          #https://github.com/transmission/transmission
-          #https://github.com/transmission/transmission/issues/4142#issuecomment-1434752805
-          #        - transmission-cli
         - socat
         - neofetch
         - tsung
@@ -935,7 +853,6 @@
         - ssh
         - sshpass
         - openssh-server
-          #https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-enable-ssh-on-ubuntu-18-04-linux-mint-19-debian-9.html
         - firewall-applet #replacement of ufw
         # https://www.kali.org/tools/python-pip/
         - python3-pip
@@ -957,7 +874,6 @@
         - sox
         - shotwell #image viewer for .NEF https://www.linuxquestions.org/questions/linux-newbie-8/viewing-nef-4175596548/
           # https://yermakov.net/adding-nef-preview-to-linux-mint-file-manager-nemo/
-          #- gnome-raw-thumbnailer
         - libopenraw7
         - libopenrawgnome7
         - imagemagick
@@ -973,12 +889,9 @@
         - inkscape
         - mediainfo
         - mirage
-          #- gwenview
-          #- viewnior
         - ristretto
         - gnome-sound-recorder
           #- darktable
-          #https://www.darktable.org/ TODO
         # nvidia-smi -q -d temperature #https://askubuntu.com/questions/34449/how-to-see-the-video-card-temperature-nvidia-ati-intel
         #- nvidia-driver-430
         #- nvidia-settings
@@ -1005,24 +918,13 @@
       state: latest
       name:
         - chromium
-        #https://help.vivaldi.com/desktop/install-update/manual-setup-vivaldi-linux-repositories/
-        #- vivaldi-stable
         # http://laugh-labo.blogspot.jp/2012/02/sitecustomizepy.html
         - guile-3.0
         - guile-3.0-dev
-        # https://bw.org/ldcsql/
-        # preparation for - SID - SQL Interactive Demonstrator by Bill Weinman
-        # deploy sid into docroot afterward
-        #- apache2
-        #- php
-        #- libapache2-mod-php
-        #- php-sqlite3
-        #- php-common
         # http://www.mirandora.com/?p=697
-        # ~/.config/chromium/Default/History
         - sqlite3
         # benchmark https://www.howtoforge.com/how-to-benchmark-your-system-cpu-file-io-mysql-with-sysbench
-        #https://ss.scphys.kyoto-u.ac.jp/person/yonezawa/contents/program/gnuplot/index.html
+        # https://ss.scphys.kyoto-u.ac.jp/person/yonezawa/contents/program/gnuplot/index.html
         - gnuplot
         # - pandoc apt has old version. see  https://pandoc.org/installing.html
         - pv
@@ -1030,9 +932,6 @@
           #After installing the fonts, we need to update the font cache using command:
           #sudo fc-cache -f -v
           #https://www.ostechnix.com/install-microsoft-windows-fonts-ubuntu-16-04/
-
-          #http://zairyo.susi.oita-u.ac.jp/wordpress/?p=7385
-          #convert: not authorized `show:' @ error/constitute.c/WriteImage/1028.
         - build-essential
         - speedtest-cli
         - kazam
@@ -1043,9 +942,6 @@
         - wmctrl
         - rename
     become: true
-
-    #VPN tool
-    #https://github.com/yuezk/GlobalProtect-openconnect
     #https://stackoverflow.com/questions/35942754/how-can-i-save-username-and-password-in-git
 
 #\begin{mp3splt}
@@ -1150,10 +1046,6 @@
     command: sudo systemctl enable docker --now
     become: true
     when: is_docker_installed is failed
-      #  - name: user for docker
-      #    command: sudo usermod -aG docker $USER
-      #    become: true
-      #    when: is_docker_installed is failed
   - name: docker-ce
     shell: printf '%s\n' "deb https://download.docker.com/linux/debian bullseye stable" | sudo tee /etc/apt/sources.list.d/docker-ce.list
     become: true
@@ -1178,19 +1070,6 @@
       groups: docker
       append: yes
     become: true
-      #    when: is_docker_installed is failed
-#    old infos
-# https://www.kali.org/docs/containers/installing-docker-on-kali/
-#          #docker - complicated
-#          #https://docs.docker.com/engine/install/ubuntu/
-#          #https://www.liquidweb.com/kb/install-docker-ubuntu-16-04/
-#          #https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket
-#          #https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install-linux.html
-#
-    #https://github.com/geerlingguy/ansible-role-docker/issues/77
-#TODO: https://github.com/geerlingguy/ansible-role-docker/issues/77#issuecomment-433856996
-#https://www.gesource.jp/weblog/?p=8493
-#
 #\end{docker}
 
 #
