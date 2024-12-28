@@ -877,6 +877,7 @@
         - libopenraw7
         - libopenrawgnome7
         - imagemagick
+        - darktable
         - dcraw
           #- ufraw
           #- ufraw-batch
