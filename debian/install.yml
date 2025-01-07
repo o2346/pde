@@ -942,6 +942,8 @@
         - gnome-disk-utility
         - wmctrl
         - rename
+        #https://www.kali.org/tools/python-virtualenv/
+        - python3-virtualenv
     become: true
     #https://stackoverflow.com/questions/35942754/how-can-i-save-username-and-password-in-git
 
