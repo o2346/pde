@@ -1522,8 +1522,9 @@
       - asciidoctor-diagram-plantuml
     state: latest
       #sudo apt install -y asciidoc asciidoc-common asciidoctor ruby-asciidoctor-plantuml ruby-asciidoctor-include-ext%
-      #sudo gem install asciidoctor-diagram-plantuml asciidoctor-diagram%
+      #sudo gem install asciidoctor-diagram-plantuml asciidoctor-diagram
       #asciidoctor -r asciidoctor-diagram /tmp/uml.adoc
+      #https://discuss.asciidoctor.org/AsciiDoctor-PDF-amp-slide-show-presentations-td6053.html
 
 #
 # https://askubuntu.com/a/1233759
