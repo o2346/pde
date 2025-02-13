@@ -1516,11 +1516,15 @@
 # gem install asciidoc extentions
 #
 - name: Install latest available version of asciidoc plugins
-  community.general.gem:
+  gem:
     name:
       - asciidoctor-diagram
       - asciidoctor-diagram-plantuml
     state: latest
+      #sudo apt install -y asciidoc asciidoc-common asciidoctor ruby-asciidoctor-plantuml ruby-asciidoctor-include-ext%
+      #sudo gem install asciidoctor-diagram-plantuml asciidoctor-diagram%
+      #asciidoctor -r asciidoctor-diagram /tmp/uml.adoc
+
 #
 # https://askubuntu.com/a/1233759
 #
