@@ -844,6 +844,11 @@
         - neofetch
         - tsung
         - maven
+        - asciidoc
+        - asciidoc-common
+        - asciidoctor
+        - ruby-asciidoctor-plantuml
+        - ruby-asciidoctor-include-ext
     become: true
   - name: Packages - Programming
     apt:
@@ -1507,6 +1512,15 @@
     become: true
     when: teams_prep is failed
 
+#
+# gem install asciidoc extentions
+#
+- name: Install latest available version of asciidoc plugins
+  community.general.gem:
+    name:
+      - asciidoctor-diagram
+      - asciidoctor-diagram-plantuml
+    state: latest
 #
 # https://askubuntu.com/a/1233759
 #
