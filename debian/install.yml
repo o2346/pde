@@ -645,6 +645,9 @@
     command: im-config -n fcitx5
     when: avoid_some is failed
     #https://stackoverflow.com/questions/52743147/changing-ansible-loop-due-to-v2-11-deprecation
+    #Configure
+    #Addons -> Classic UI -> Theme -> Dark
+    #Input Method -> add Mozc
 
 #
 # Node.js
