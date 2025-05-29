@@ -635,14 +635,14 @@
   - name: install ime, fcitx mozc
     apt:
       name:
-        - fcitx
-        - fcitx-mozc
+        - fcitx5
+        - fcitx5-mozc
       state: latest
       install_recommends: yes
     become: true
     when: avoid_some is failed
   - name: set fcitx as default, restarting is required
-    command: im-config -n fcitx
+    command: im-config -n fcitx5
     when: avoid_some is failed
     #https://stackoverflow.com/questions/52743147/changing-ansible-loop-due-to-v2-11-deprecation
 
