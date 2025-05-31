@@ -936,6 +936,8 @@
         # https://ss.scphys.kyoto-u.ac.jp/person/yonezawa/contents/program/gnuplot/index.html
         - gnuplot
         # - pandoc apt has old version. see  https://pandoc.org/installing.html
+        - python3-tinycss2
+        - poppler-utils
         - pv
         - ttf-mscorefonts-installer
           #After installing the fonts, we need to update the font cache using command:
