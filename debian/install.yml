@@ -648,6 +648,10 @@
     #Configure
     #Addons -> Classic UI -> Theme -> Dark
     #Input Method -> add Mozc
+    #Issues
+    #https://www.google.com/search?q=linux+%E5%A4%89%E6%8F%9B%E5%80%99%E8%A3%9C+%E5%B7%A6%E4%B8%8B
+    #https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#Popup_candidate_window
+    #https://bbs.archlinux.org/viewtopic.php?id=191072
 
 #
 # Node.js
