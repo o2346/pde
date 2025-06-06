@@ -1056,31 +1056,30 @@
       state: latest
       name:
         - docker.io
-        - docker-compose
     become: true
     when: is_docker_installed is failed
-  - name: Enable docker
-    command: sudo systemctl enable docker --now
-    become: true
-    when: is_docker_installed is failed
-  - name: docker-ce
-    shell: printf '%s\n' "deb https://download.docker.com/linux/debian bullseye stable" | sudo tee /etc/apt/sources.list.d/docker-ce.list
-    become: true
-    when: is_docker_installed is failed
-  - name: docker-ce
-    shell: curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker-ce-archive-keyring.gpg
-    become: true
-    when: is_docker_installed is failed
-  - name: Docker - setup
-    apt:
-      update_cache: yes
-      state: latest
-      name:
-        - docker-ce
-        - docker-ce-cli
-        - containerd.io
-    become: true
-    when: is_docker_installed is failed
+    #  - name: Enable docker
+    #    command: sudo systemctl enable docker --now
+    #    become: true
+    #    when: is_docker_installed is failed
+    #  - name: docker-ce
+    #    shell: printf '%s\n' "deb https://download.docker.com/linux/debian bullseye stable" | sudo tee /etc/apt/sources.list.d/docker-ce.list
+    #    become: true
+    #    when: is_docker_installed is failed
+    #  - name: docker-ce
+    #    shell: curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker-ce-archive-keyring.gpg
+    #    become: true
+    #    when: is_docker_installed is failed
+    #  - name: Docker - setup
+    #    apt:
+    #      update_cache: yes
+    #      state: latest
+    #      name:
+    #        - docker-ce
+    #        - docker-ce-cli
+    #        - containerd.io
+    #    become: true
+    #    when: is_docker_installed is failed
   - name: add "{{ansible_user_id}}" into group docker
     user:
       name: "{{ansible_user_id}}"
