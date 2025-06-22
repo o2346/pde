@@ -14,6 +14,7 @@
       - name: transmission-cli
       - name: graphviz
       - name: aws-sam-cli
+      - name: arduino-cli
   become: no
   tasks:
 
